@@ -79,31 +79,7 @@ export default function Trivia() {
 
     if (isLoading || !question) return <div className={styles.main}><h3>Menghitung Hasil...</h3></div>;
 
-    if (timer === 0) {
-        const isFinalQuestion = currentQuestion >= 10;
-        return (
-            <div className={styles.triviaWrapper} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '60vh' }}>
-                <div className="glass" style={{ padding: '3rem', textAlign: 'center', width: '100%' }}>
-                    <h2 className="gradient-text" style={{ fontSize: '1.8rem', marginBottom: '1rem' }}>
-                        {isFinalQuestion ? 'Trivia Selesai!' : 'Waktu Habis!'}
-                    </h2>
-                    <p style={{ opacity: 0.8, marginBottom: '2rem' }}>
-                        {isFinalQuestion
-                            ? 'Anda sudah menjawab semua pertanyaan. Sekarang kita lanjut ke fase selanjutnya!'
-                            : 'Pilihan Anda sudah tersimpan. Harap fokus ke layar utama!'}
-                    </p>
-
-                    <div className={styles.waitingIcon}>
-                        <div className="pulse-dot"></div>
-                    </div>
-
-                    <p style={{ fontWeight: 600, fontSize: '0.9rem', marginTop: '2rem', letterSpacing: '1px' }}>
-                        {isFinalQuestion ? 'MENYIAPKAN FASE PENYIRAMAN...' : 'MENUNGGU SOAL BERIKUTNYA...'}
-                    </p>
-                </div>
-            </div>
-        );
-    }
+    const showResults = timer === 0 && (selectedOption !== null || isSubmitted);
 
     return (
         <div className={styles.triviaWrapper}>
@@ -114,7 +90,23 @@ export default function Trivia() {
                 <p className={styles.questionCounter}>Pertanyaan {currentQuestion} / 10</p>
             </header>
 
-            <div className="glass" style={{ padding: '2rem', marginTop: '2rem' }}>
+            <div className="glass" style={{ padding: '2rem', marginTop: '2rem', position: 'relative' }}>
+                {timer === 0 && (
+                    <div style={{
+                        position: 'absolute',
+                        top: '-15px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        background: '#ef4444',
+                        color: 'white',
+                        padding: '0.2rem 1rem',
+                        borderRadius: '1rem',
+                        fontSize: '0.7rem',
+                        fontWeight: 900,
+                        zIndex: 10
+                    }}>WAKTU HABIS</div>
+                )}
+
                 <h2 style={{ fontSize: '1.4rem', marginBottom: '2rem', textAlign: 'center', lineHeight: '1.4' }}>
                     {question.text}
                 </h2>
@@ -123,8 +115,17 @@ export default function Trivia() {
                     {question.options.map((opt, idx) => {
                         const isThisSelected = selectedOption === idx;
                         let extraStyle = {};
-                        if (isThisSelected && isCorrect === true) extraStyle = { border: '2px solid #22c55e', background: 'rgba(34, 197, 94, 0.2)' };
-                        if (isThisSelected && isCorrect === false) extraStyle = { border: '2px solid #ef4444', background: 'rgba(239, 68, 68, 0.2)' };
+
+                        if (isThisSelected) {
+                            if (showResults) {
+                                // Show Green/Red only when timer hits 0
+                                if (isCorrect === true) extraStyle = { border: '2px solid #22c55e', background: 'rgba(34, 197, 94, 0.2)' };
+                                if (isCorrect === false) extraStyle = { border: '2px solid #ef4444', background: 'rgba(239, 68, 68, 0.2)' };
+                            } else {
+                                // Just show blue selection while timer is running
+                                extraStyle = { border: '2px solid #3b82f6', background: 'rgba(59, 130, 246, 0.2)' };
+                            }
+                        }
 
                         return (
                             <button
@@ -142,7 +143,7 @@ export default function Trivia() {
                 </div>
             </div>
 
-            {selectedOption !== null && isCorrect !== null && (
+            {showResults && isCorrect !== null && (
                 <div style={{
                     textAlign: 'center',
                     marginTop: '2rem',
@@ -158,6 +159,12 @@ export default function Trivia() {
                     <p style={{ fontSize: '0.8rem', opacity: 0.7, marginTop: '0.3rem' }}>
                         {isCorrect ? 'Poin Anda bertambah. Keren!' : 'Jangan menyerah, coba lagi di soal berikutnya!'}
                     </p>
+                </div>
+            )}
+
+            {timer === 0 && !isSubmitted && (
+                <div style={{ textAlign: 'center', marginTop: '2rem', opacity: 0.5 }}>
+                    <p>Anda tidak memilih jawaban tepat waktu.</p>
                 </div>
             )}
         </div>
