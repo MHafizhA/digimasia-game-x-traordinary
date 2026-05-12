@@ -16,7 +16,7 @@ export default function WinnerRevealPage() {
             </header>
 
             <div className="glass" style={{ padding: '4rem' }}>
-                <WinnerAnnouncer category="team" />
+                <WinnerAnnouncer />
             </div>
         </main>
     );
