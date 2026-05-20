@@ -37,19 +37,22 @@ export const useSocket = () => {
 
                 if (store.user?.isAdmin) {
                     store.setToastMessage("SISTEM TELAH DI-RESET. DATA GAME TELAH DIKOSONGKAN.");
+                    // Force session wipe for Admin too! Avoids persisting 160 water.
+                    store.setSessionState({ timer: 0, currentQuestion: 0, treeStage: 0, totalWater: 0 });
                 } else {
                     console.log('User logout triggered by system reset');
                     // 1. Clear zustand store in-memory
                     store.reset();
-                    // 2. Clear persisted storage AFTER store reset
-                    try {
-                        localStorage.removeItem('x-celerate-storage');
-                    } catch (_) { }
                     // 3. Navigate back to root (clean URL, no params to avoid Next.js router errors)
                     if (typeof window !== 'undefined') {
                         window.location.href = '/';
                     }
                 }
+
+                // 2. Clear persisted storage globally so neither users nor admins hydrate old states.
+                try {
+                    localStorage.removeItem('x-celerate-storage');
+                } catch (_) { }
             } catch (err) {
                 console.error('Error handling system_resetted:', err);
                 // Fail-safe: just navigate to root

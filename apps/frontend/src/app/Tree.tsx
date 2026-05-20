@@ -161,7 +161,7 @@ export default function Tree() {
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px', maxWidth: '400px', width: '100%', textAlign: 'center' }}>
                 {/* Tree preview */}
                 <div className="card" style={{ width: '100%', padding: '0', overflow: 'hidden', border: '4px solid var(--black)', boxShadow: '6px 6px 0 var(--black)' }}>
-                    <div style={{ height: '200px', background: 'linear-gradient(to bottom, #f0fdf4, #dcfce7)', position: 'relative' }}>
+                    <div style={{ height: '200px', background: "url('/assets/branding/BG1.png') center/cover no-repeat", position: 'relative' }}>
                         <TreeVisual stage={treeStage} size="100%" />
                         <div style={{ position: 'absolute', top: '10px', left: '10px', background: 'var(--black)', color: 'var(--yellow)', fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 700, padding: '3px 10px', borderRadius: '20px' }}>
                             STAGE {treeStage + 1} / 10
@@ -217,9 +217,9 @@ export default function Tree() {
             {stageToast && (
                 <div style={{
                     position: 'fixed',
-                    top: '80px',
+                    top: '50%',
                     left: '50%',
-                    transform: 'translateX(-50%)',
+                    transform: 'translate(-50%, -50%)',
                     zIndex: 1000,
                     background: 'var(--lime)',
                     border: '3px solid var(--black)',
@@ -303,7 +303,7 @@ export default function Tree() {
                 {/* Tree image — hero zone */}
                 <div style={{
                     position: 'relative',
-                    height: 'clamp(240px, 50vw, 320px)',
+                    height: 'clamp(180px, 40vw, 240px)',
                     width: '100%',
                     background: 'linear-gradient(to bottom, #1565C0, #0D47A1)', // Solid blue fallback
                     backgroundImage: 'url(/assets/branding/BG1.png)',

@@ -35,7 +35,7 @@ export default function TreeMonitor() {
                 {/* Tree image — full-width hero */}
                 <div style={{
                     width: '100%',
-                    height: '400px', // Increased height to avoid squashed look
+                    height: '300px', // Reduced from 400px to avoid massive scaling on dashboard
                     background: "url('/assets/branding/BG1.png') center/cover no-repeat",
                     border: '3px solid var(--black)',
                     boxShadow: '4px 4px 0 var(--black)',

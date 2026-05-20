@@ -107,78 +107,24 @@ export function useTreeAudio(enabled = true) {
         activeOscillators.current.clear();
     }, []);
 
-    // ── BGM: Tree (Synthesized Loop) ──
-    const MELODY_DURATION = MELODY.reduce((sum, [, dur]) => sum + dur, 0);
-
     const scheduleBGMLoop = useCallback(() => {
-        if (isMutedRef.current || !audioCtxRef.current || !isBGMPlayingRef.current) return;
-        const ctx = audioCtxRef.current;
-        const master = masterGainRef.current;
-        if (!master) return;
-
-        const now = ctx.currentTime;
-        const startAt = Math.max(now, bgmStartTimeRef.current);
-
-        // Schedule melody (lead)
-        let time = startAt;
-        for (const [freq, dur] of MELODY) {
-            if (freq !== 0) {
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain);
-                gain.connect(master);
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(freq, time);
-                gain.gain.setValueAtTime(0.08, time);
-                gain.gain.setValueAtTime(0, time + dur - 0.01);
-                osc.start(time);
-                osc.stop(time + dur);
-                activeOscillators.current.add(osc);
-                osc.onended = () => activeOscillators.current.delete(osc);
-            }
-            time += dur;
-        }
-
-        // Schedule bass line
-        let bassTime = startAt;
-        while (bassTime < startAt + MELODY_DURATION) {
-            for (const [freq, dur] of BASS_LINE) {
-                if (freq !== 0) {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain);
-                    gain.connect(master);
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(freq, bassTime);
-                    gain.gain.setValueAtTime(0.04, bassTime);
-                    gain.gain.setValueAtTime(0, bassTime + dur - 0.01);
-                    osc.start(bassTime);
-                    osc.stop(bassTime + dur);
-                    activeOscillators.current.add(osc);
-                    osc.onended = () => activeOscillators.current.delete(osc);
-                }
-                bassTime += dur;
-            }
-        }
-
-        bgmStartTimeRef.current = startAt + MELODY_DURATION;
-
-        bgmSchedulerRef.current = setTimeout(
-            scheduleBGMLoop,
-            Math.max(0, (MELODY_DURATION - 0.1) * 1000)
-        );
-    }, [MELODY_DURATION]);
+        // Obsolete synthesized BGM loop removed per user asset request
+    }, []);
 
     const playBGM = useCallback(() => {
-        // If muted, we still mark it as playing so it can resume when unmuted
         isBGMPlayingRef.current = true;
-        if (isMutedRef.current) return;
-        try {
-            const ctx = getAudioCtx();
-            bgmStartTimeRef.current = ctx.currentTime;
-            scheduleBGMLoop();
-        } catch (_) { }
-    }, [getAudioCtx, scheduleBGMLoop]);
+
+        if (bgmRef.current) { bgmRef.current.pause(); bgmRef.current.src = ""; }
+
+        const audio = new Audio('/assets/audio/bgm-retro-grow-the-tree.mp3');
+        audio.loop = true;
+        audio.volume = 0.5;
+        bgmRef.current = audio;
+
+        if (!isMutedRef.current) {
+            audio.play().catch(() => { });
+        }
+    }, []);
 
     // ── BGM: Trivia (MP3 File) ──
     const playTriviaBGM = useCallback(() => {

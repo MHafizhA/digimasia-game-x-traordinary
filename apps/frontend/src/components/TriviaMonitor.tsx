@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '@/store/useGameStore';
 import { getBackendUrl } from '@/lib/config';
 import LeaderboardWidget from './LeaderboardWidget';
+import { useTreeAudio } from '@/hooks/useTreeAudio';
 
 interface TriviaStats {
     totalUsers: number;
@@ -22,9 +23,18 @@ export default function TriviaMonitor() {
     const { currentQuestion, phase, timer } = useGameStore();
     const [stats, setStats] = useState<TriviaStats | null>(null);
 
+    const { playComplete } = useTreeAudio(true); // default enabled for admin SFX
+    const hasPlayedCompleteRef = useRef(false);
+
     useEffect(() => {
         if (phase !== 'TRIVIA' && phase !== 'TRANSITION') return;
         if (currentQuestion === 0) return;
+
+        // Trigger SFX when trivia is finished
+        if ((phase === 'TRANSITION' || (currentQuestion >= 10 && timer === 0)) && !hasPlayedCompleteRef.current) {
+            hasPlayedCompleteRef.current = true;
+            playComplete();
+        }
 
         const controller = new AbortController();
 
@@ -44,7 +54,7 @@ export default function TriviaMonitor() {
             clearInterval(interval);
             controller.abort();
         };
-    }, [currentQuestion, phase]);
+    }, [currentQuestion, phase, timer, playComplete]);
 
     const handleNext = async () => {
         try {
@@ -187,7 +197,7 @@ export default function TriviaMonitor() {
                         }}>
                             🏆 THE LEADERBOARD
                         </div>
-                        <LeaderboardWidget />
+                        <LeaderboardWidget isPaused={timer > 0} />
                     </div>
                 </div>
 
@@ -368,7 +378,7 @@ export default function TriviaMonitor() {
                     🏆 TOP CONTRIBUTORS
                 </div>
                 <div style={{ maxHeight: 'calc(100vh - 250px)', minHeight: '300px', overflowY: 'auto', paddingRight: '8px' }}>
-                    <LeaderboardWidget />
+                    <LeaderboardWidget isPaused={timer > 0} />
                 </div>
             </div>
         </div>

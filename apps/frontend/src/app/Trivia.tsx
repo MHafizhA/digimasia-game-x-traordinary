@@ -47,12 +47,14 @@ export default function Trivia() {
     };
 
     // Stop BGM and play fanfare when Trivia ends (phase → TRANSITION)
+    const hasPlayedCompleteRef = useRef(false);
     useEffect(() => {
-        if (phase === 'TRANSITION') {
+        if ((phase === 'TRANSITION' || (currentQuestion >= 10 && timer === 0)) && !hasPlayedCompleteRef.current) {
+            hasPlayedCompleteRef.current = true;
             stopBGM();
             playComplete();
         }
-    }, [phase, stopBGM, playComplete]);
+    }, [phase, timer, currentQuestion, stopBGM, playComplete]);
 
     // Fetch question whenever currentQuestion changes
     useEffect(() => {

@@ -15,11 +15,12 @@ const getInitials = (name: string) =>
 
 const AVATAR_COLORS = ['var(--pink-hot)', 'var(--orange)', 'var(--lime)', 'var(--blue-bright)', 'var(--navy-dark)'];
 
-export default function LeaderboardWidget() {
+export default function LeaderboardWidget({ isPaused = false }: { isPaused?: boolean }) {
     const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
 
     useEffect(() => {
         const fetchLeaderboard = async () => {
+            if (isPaused) return;
             try {
                 const res = await fetch(`${getBackendUrl()}/leaderboard`);
                 const data = await res.json();
@@ -32,7 +33,7 @@ export default function LeaderboardWidget() {
         fetchLeaderboard();
         const interval = setInterval(fetchLeaderboard, 2000); // Faster polling
         return () => clearInterval(interval);
-    }, []);
+    }, [isPaused]);
 
     if (!leaderboard.length) return (
         <div style={{ textAlign: 'center', fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#888', letterSpacing: '1px', padding: '16px' }}>
