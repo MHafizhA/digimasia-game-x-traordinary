@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { getBackendUrl } from '@/lib/config';
+import { useTreeAudio } from '@/hooks/useTreeAudio';
 
 interface WinnerStats {
     id: string;
@@ -352,6 +353,8 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
     const [finalWinnerDigimer, setFinalWinnerDigimer] = useState(false);
     const [flashActive, setFlashActive] = useState(false);
 
+    const audio = useTreeAudio(true);
+
     const triggerCelebration = () => {
         setFlashActive(true);
         setTimeout(() => setFlashActive(false), 700);
@@ -372,6 +375,7 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
 
     const handleWinnerReveal = (type: 'team' | 'digimer') => {
         triggerCelebration();
+        audio.playComplete();
         if (type === 'team') setFinalWinnerTeam(true);
         else setFinalWinnerDigimer(true);
     };

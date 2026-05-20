@@ -2,14 +2,21 @@
 
 import { useGameStore } from '@/store/useGameStore';
 import TreeVisual from '@/components/TreeVisual';
+import { useTreeAudio } from '@/hooks/useTreeAudio';
+import { useEffect } from 'react';
 
 export default function Final() {
     const { totalWater } = useGameStore();
+    const audio = useTreeAudio(true);
+
+    useEffect(() => {
+        audio.playComplete();
+    }, [audio]);
 
     return (
         <div style={{
-            minHeight: 'calc(100vh - 120px)',
-            padding: '16px',
+            height: 'calc(100vh - 80px)',
+            padding: '12px',
             maxWidth: '480px',
             margin: '0 auto',
             display: 'flex',
@@ -94,10 +101,11 @@ export default function Final() {
                     <div style={{
                         position: 'relative',
                         width: 'clamp(200px, 60vw, 280px)',
-                        height: 'clamp(200px, 60vw, 280px)',
+                        height: 'clamp(140px, 35vh, 200px)',
+                        marginTop: 'auto',
                         margin: '0 auto 28px',
                         display: 'flex',
-                        alignItems: 'center',
+                        alignItems: 'flex-end',
                         justifyContent: 'center',
                     }}>
                         {/* Glow Disk */}

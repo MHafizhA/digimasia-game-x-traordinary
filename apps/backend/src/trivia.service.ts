@@ -97,30 +97,25 @@ export class TriviaService {
                 // Calculate speed bonus based on current timer state
                 const currentTimer = this.session.getState().timer;
                 pointsEarned = 10 + (currentTimer > 0 ? currentTimer : 0);
-
+                // Hanya tambahkan point dan saldo air ke user
+                // JANGAN tambahkan ke contributedWater ataupun global tree water, 
+                // agar pohon tetap 0% saat awal fase Grow the Tree dimulai.
                 await tx.user.update({
                     where: { id: userId },
                     data: {
                         collectedWater: { increment: pointsEarned },
-                        contributedWater: { increment: pointsEarned },
                         score: { increment: pointsEarned },
                     }
                 });
-                // Update global tree state INSIDE transaction
-                await this.session.incrementWaterInTransaction(tx, pointsEarned);
             } else if (!isCorrect && wasCorrect) {
-                // If they somehow change from correct to wrong, assume standard 10 deduction to be safe.
-                // Normally UI blocks multiple submissions, so this relies on basic 10 point assumption.
+                // If they somehow change from correct to wrong, deduct.
                 await tx.user.update({
                     where: { id: userId },
                     data: {
                         collectedWater: { decrement: 10 },
-                        contributedWater: { decrement: 10 },
                         score: { decrement: 10 },
                     }
                 });
-                // Update global tree state INSIDE transaction
-                await this.session.incrementWaterInTransaction(tx, -10);
             }
 
             return { correct: isCorrect, points: pointsEarned };

@@ -13,6 +13,7 @@ export default function TreeMonitorExternal() {
     const { totalWater, treeStage, _hasHydrated } = useGameStore();
     const [mounted, setMounted] = useState(false);
     const [isMuted, setIsMutedState] = useState(false);
+    const [isLevelingUp, setIsLevelingUp] = useState(false);
     const audio = useTreeAudio();
     const prevStageRef = useRef(treeStage);
     const bgmStarted = useRef(false);
@@ -31,11 +32,26 @@ export default function TreeMonitorExternal() {
         }
     }, [audio]);
 
+    // Attach global listeners for BGM Autoplay
+    useEffect(() => {
+        window.addEventListener('click', startBGMOnce, { once: true });
+        window.addEventListener('keydown', startBGMOnce, { once: true });
+        return () => {
+            window.removeEventListener('click', startBGMOnce);
+            window.removeEventListener('keydown', startBGMOnce);
+        };
+    }, [startBGMOnce]);
+
     // Stage-up SFX
     useEffect(() => {
         if (treeStage > prevStageRef.current) {
+            setIsLevelingUp(true);
             audio.playStageUp();
             if (treeStage >= 9) audio.playComplete();
+
+            const t = setTimeout(() => setIsLevelingUp(false), 3000);
+            prevStageRef.current = treeStage;
+            return () => clearTimeout(t);
         }
         prevStageRef.current = treeStage;
     }, [treeStage, audio]);
@@ -158,7 +174,7 @@ export default function TreeMonitorExternal() {
                     display: 'flex',
                     justifyContent: 'center'
                 }}>
-                    <TreeVisual stage={treeStage} size="100%" />
+                    <TreeVisual stage={treeStage} size="100%" isLevelingUp={isLevelingUp} />
                 </div>
 
                 {!isMaxStage && (
