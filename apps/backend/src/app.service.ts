@@ -1,12 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, forwardRef, Inject } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
+import { SessionService } from './session.service';
 
 @Injectable()
 export class AppService {
-  constructor(private prisma: PrismaService) { }
+  constructor(
+    private prisma: PrismaService,
+    @Inject(forwardRef(() => SessionService))
+    private session: SessionService,
+  ) { }
 
   getHello(): string {
     return 'X-Celerate API v1.0';
+  }
+
+  async getSessionState() {
+    return this.session.getState();
   }
 
   async getLeaderboard() {

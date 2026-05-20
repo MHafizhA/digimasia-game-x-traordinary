@@ -73,6 +73,15 @@ export function useTreeAudio(enabled = true) {
     const isBGMPlayingRef = useRef(false);
     const activeOscillators = useRef<Set<OscillatorNode>>(new Set());
 
+    // Sync isMutedRef if the 'enabled' prop changes from outside
+    useEffect(() => {
+        isMutedRef.current = !enabled;
+        if (masterGainRef.current && audioCtxRef.current) {
+            const time = audioCtxRef.current.currentTime;
+            masterGainRef.current.gain.setTargetAtTime(enabled ? 1 : 0, time, 0.05);
+        }
+    }, [enabled]);
+
     // ── Get or create shared AudioContext & Master Gain ──
     const getAudioCtx = useCallback(() => {
         if (!audioCtxRef.current) {
@@ -81,7 +90,7 @@ export function useTreeAudio(enabled = true) {
             masterGainRef.current = audioCtxRef.current.createGain();
             masterGainRef.current.connect(audioCtxRef.current.destination);
 
-            // Initial volume
+            // Initial volume based on isMutedRef
             masterGainRef.current.gain.value = isMutedRef.current ? 0 : 1;
         }
         if (audioCtxRef.current.state === 'suspended') {
@@ -161,8 +170,9 @@ export function useTreeAudio(enabled = true) {
     }, [MELODY_DURATION]);
 
     const playBGM = useCallback(() => {
-        if (isMutedRef.current || isBGMPlayingRef.current) return;
+        // If muted, we still mark it as playing so it can resume when unmuted
         isBGMPlayingRef.current = true;
+        if (isMutedRef.current) return;
         try {
             const ctx = getAudioCtx();
             bgmStartTimeRef.current = ctx.currentTime;
@@ -172,14 +182,16 @@ export function useTreeAudio(enabled = true) {
 
     // ── BGM: Trivia (MP3 File) ──
     const playTriviaBGM = useCallback(() => {
-        if (isMutedRef.current) return;
         if (bgmRef.current) { bgmRef.current.pause(); bgmRef.current.src = ""; }
 
         const audio = new Audio('/assets/audio/bgm-retro-trivia.mp3');
         audio.loop = true;
         audio.volume = 0.5;
         bgmRef.current = audio;
-        audio.play().catch(() => { });
+
+        if (!isMutedRef.current) {
+            audio.play().catch(() => { });
+        }
     }, []);
 
     const stopBGM = useCallback(() => {
@@ -260,13 +272,27 @@ export function useTreeAudio(enabled = true) {
 
     const setMuted = useCallback((muted: boolean) => {
         isMutedRef.current = muted;
+        const ctx = getAudioCtx();
         if (masterGainRef.current) {
-            masterGainRef.current.gain.setTargetAtTime(muted ? 0 : 1, getAudioCtx().currentTime, 0.05);
+            masterGainRef.current.gain.setTargetAtTime(muted ? 0 : 1, ctx.currentTime, 0.05);
         }
-        if (muted) {
-            stopBGM();
+
+        if (!muted) {
+            // Resume Context
+            if (ctx.state === 'suspended') ctx.resume();
+
+            // Resume BGM chiptune if it was supposed to play
+            if (isBGMPlayingRef.current && !bgmSchedulerRef.current) {
+                bgmStartTimeRef.current = ctx.currentTime;
+                scheduleBGMLoop();
+            }
+
+            // Resume Trivia BGM if it exists
+            if (bgmRef.current && bgmRef.current.paused) {
+                bgmRef.current.play().catch(() => { });
+            }
         }
-    }, [getAudioCtx, stopBGM]);
+    }, [getAudioCtx, scheduleBGMLoop]);
 
     return { playBGM, playTriviaBGM, stopBGM, playWaterDrop, playMenuSelect, playStageUp, playComplete, setMuted };
 }

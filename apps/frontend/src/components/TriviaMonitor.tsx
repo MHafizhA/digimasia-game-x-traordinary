@@ -78,14 +78,6 @@ export default function TriviaMonitor() {
         );
     }
 
-    if (!stats && currentQuestion > 0) return (
-        <div className="card" style={{ textAlign: 'center', padding: '24px' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#888', letterSpacing: '1px' }}>
-                MENGHUBUNGKAN KE STATISTIK TRIVIA...
-            </div>
-        </div>
-    );
-
     if (currentQuestion === 0) {
         const handleStartTriviaFromMonitor = async () => {
             try {
@@ -242,10 +234,10 @@ export default function TriviaMonitor() {
                         {/* Question Info */}
                         <div style={{ paddingTop: '4px' }}>
                             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#888', letterSpacing: '2px', marginBottom: '8px' }}>
-                                PERTANYAAN #{currentQuestion} · {stats.totalAnswers} JAWABAN
+                                PERTANYAAN #{currentQuestion} · {stats?.totalAnswers || 0} JAWABAN
                             </div>
                             <div style={{ fontFamily: 'var(--font-body)', fontSize: '20px', fontWeight: 800, color: '#000', lineHeight: 1.4 }}>
-                                {stats.questionText || 'Memuat pertanyaan...'}
+                                {stats?.questionText || 'Memuat pertanyaan...'}
                             </div>
                         </div>
                     </div>
@@ -253,10 +245,11 @@ export default function TriviaMonitor() {
                     {/* Option Bars Grid */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                         {[0, 1, 2, 3].map((optIdx) => {
-                            const count = stats.stats.find(s => s.option === optIdx)?.count || 0;
-                            const percent = stats.totalAnswers ? Math.round((count / stats.totalAnswers) * 100) : 0;
-                            const optionText = stats.options?.[optIdx] || `Option ${OPT_LETTERS[optIdx]}`;
-                            const isCorrect = timer === 0 && stats.correctAnswer === optIdx;
+                            const count = stats?.stats?.find(s => s.option === optIdx)?.count || 0;
+                            const totalAnswers = stats?.totalAnswers || 0;
+                            const percent = totalAnswers ? Math.round((count / totalAnswers) * 100) : 0;
+                            const optionText = stats?.options?.[optIdx] || `Option ${OPT_LETTERS[optIdx]}`;
+                            const isCorrect = timer === 0 && stats?.correctAnswer === optIdx;
 
                             return (
                                 <div key={optIdx} className="card" style={{

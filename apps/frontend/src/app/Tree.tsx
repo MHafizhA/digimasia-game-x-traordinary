@@ -23,7 +23,8 @@ export default function Tree() {
         totalWater,
         collectedWater,
         contributedWater,
-        setUserState
+        setUserState,
+        setSessionState
     } = useGameStore();
 
     const { emitWaterTap } = useSocket();
@@ -53,12 +54,30 @@ export default function Tree() {
                 }
             } catch (err) {
                 console.error('Tree: Failed to sync water balance', err);
+            }
+        };
+
+        const fetchSession = async () => {
+            try {
+                const res = await fetch(`${getBackendUrl()}/session-state`);
+                const data = await res.json();
+                if (data) {
+                    setSessionState({
+                        treeStage: data.treeStage ?? 0,
+                        totalWater: data.totalWater ?? 0,
+                        phase: data.phase
+                    });
+                }
+            } catch (err) {
+                console.error('Tree: Failed to sync session state', err);
             } finally {
                 setIsSyncing(false);
             }
         };
+
         fetchStats();
-    }, [user?.id, setUserState]);
+        fetchSession();
+    }, [user?.id, setUserState, setSessionState]);
 
     // Start BGM — wrapped in a one-shot callback triggered by user gesture
     const bgmStarted = useRef(false);
@@ -284,14 +303,17 @@ export default function Tree() {
                 {/* Tree image — hero zone */}
                 <div style={{
                     position: 'relative',
-                    height: 'clamp(260px, 55vw, 340px)',
+                    height: 'clamp(240px, 50vw, 320px)',
                     width: '100%',
-                    background: 'linear-gradient(to bottom, #1565C0, #0D47A1)',
+                    background: 'linear-gradient(to bottom, #1565C0, #0D47A1)', // Solid blue fallback
                     backgroundImage: 'url(/assets/branding/BG1.png)',
-                    backgroundSize: 'cover',
+                    backgroundSize: '100% 100%', // Stretch to fill exactly
+                    backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center',
                 }}>
-                    <TreeVisual stage={treeStage} size="100%" />
+                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', paddingBottom: '20px' }}>
+                        <TreeVisual stage={treeStage} size="85%" />
+                    </div>
 
                     {/* Stage badge top-left */}
                     <div style={{

@@ -170,20 +170,21 @@ export default function Trivia() {
 
     return (
         <div style={{
-            minHeight: 'calc(100dvh - 120px)',
-            padding: '24px',
+            minHeight: 'calc(100dvh - 200px)', // Adjusted to account for ticker, header, and footer
+            padding: '16px',
             maxWidth: '480px',
             margin: '0 auto',
             display: 'flex',
             flexDirection: 'column',
-            gap: '16px',
-            position: 'relative'
+            gap: '12px',
+            position: 'relative',
+            justifyContent: 'center'
         }}>
-            {/* Audio Toggle */}
+            {/* Audio Toggle - Lowered to avoid header overlap */}
             <button
                 onClick={toggleGlobalMute}
                 style={{
-                    position: 'absolute', top: '-10px', right: '16px',
+                    position: 'absolute', top: '10px', right: '16px',
                     width: '40px', height: '40px', borderRadius: '50%',
                     background: bgmEnabled ? 'var(--blue-bright)' : 'var(--gray-light)',
                     border: '3px solid var(--black)',
@@ -196,13 +197,13 @@ export default function Trivia() {
             </button>
 
             {/* Header: Timer + Question counter */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginTop: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginTop: '12px' }}>
                 <div
                     className={`timer-circle${timer <= 3 ? ' urgent' : ''}`}
-                    style={{ width: 'clamp(44px, 12vw, 56px)', height: 'clamp(44px, 12vw, 56px)' }}
+                    style={{ width: 'clamp(40px, 10vw, 50px)', height: 'clamp(40px, 10vw, 50px)' }}
                 >
-                    <div className="timer-num" style={{ fontSize: 'clamp(20px, 6vw, 24px)' }}>{timer}</div>
-                    <div className="timer-label">SECS</div>
+                    <div className="timer-num" style={{ fontSize: 'clamp(18px, 5vw, 22px)' }}>{timer}</div>
+                    <div className="timer-label" style={{ fontSize: '8px' }}>SECS</div>
                 </div>
                 <div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(255,255,255,0.9)', fontWeight: 800, letterSpacing: '1px' }}>
@@ -213,12 +214,12 @@ export default function Trivia() {
                             background: '#e53935',
                             color: 'white',
                             fontFamily: 'var(--font-mono)',
-                            fontSize: '10px',
+                            fontSize: '9px',
                             fontWeight: 700,
-                            padding: '2px 10px',
+                            padding: '1px 8px',
                             borderRadius: '4px',
                             display: 'inline-block',
-                            marginTop: '4px',
+                            marginTop: '2px',
                             letterSpacing: '1px',
                         }}>
                             WAKTU HABIS!
@@ -227,13 +228,13 @@ export default function Trivia() {
                 </div>
             </div>
 
-            {/* Question Card */}
-            <div className="card card-navy" style={{ padding: '20px' }}>
+            {/* Question Card - Compact padding */}
+            <div className="card card-navy" style={{ padding: '16px' }}>
                 <p style={{
                     fontFamily: 'var(--font-body)',
-                    fontSize: '18px',
+                    fontSize: 'clamp(15px, 4.5vw, 17px)',
                     fontWeight: 700,
-                    lineHeight: 1.5,
+                    lineHeight: 1.4,
                     color: 'var(--white)',
                 }}>
                     {question.text}

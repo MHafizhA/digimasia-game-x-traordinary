@@ -14,4 +14,9 @@ export class AppController {
   async getLeaderboard() {
     return this.appService.getLeaderboard();
   }
+
+  @Get('session-state')
+  async getSessionState() {
+    return this.appService.getSessionState();
+  }
 }
