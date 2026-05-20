@@ -85,7 +85,13 @@ export default function Vote({ type }: { type: 'team' | 'digimer' }) {
         }
     };
 
-    if (isLoading) return null;
+    if (isLoading) return (
+        <div style={{ minHeight: 'calc(100dvh - 120px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="card" style={{ padding: '24px 40px', textAlign: 'center' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '2px' }}>MEMUAT DATA KANDIDAT...</div>
+            </div>
+        </div>
+    );
 
     return (
         <div style={{
