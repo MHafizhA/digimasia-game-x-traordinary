@@ -286,7 +286,10 @@ export default function Tree() {
                     position: 'relative',
                     height: 'clamp(260px, 55vw, 340px)',
                     width: '100%',
-                    background: 'linear-gradient(to bottom, #f0fdf4, #dcfce7)',
+                    background: 'linear-gradient(to bottom, #1565C0, #0D47A1)',
+                    backgroundImage: 'url(/assets/branding/BG1.png)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
                 }}>
                     <TreeVisual stage={treeStage} size="100%" />
 

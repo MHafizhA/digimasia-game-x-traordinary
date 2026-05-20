@@ -21,16 +21,22 @@ export default function Trivia() {
     const [pointsEarned, setPointsEarned] = useState<number>(0);
     const [isLoading, setIsLoading] = useState(true);
 
-    const { user, currentQuestion, timer } = useGameStore();
+    const { user, currentQuestion, timer, phase } = useGameStore();
 
     // ── Audio Setup ──
-    const [bgmEnabled, setBgmEnabled] = useState(false);
-    const { playTriviaBGM, stopBGM, playMenuSelect, playStageUp, setMuted } = useTreeAudio(bgmEnabled);
+    // bgmEnabled = true means audio is ON by default (browser autoplay policy enforced by user first click)
+    const [bgmEnabled, setBgmEnabled] = useState(true);
+    const { playTriviaBGM, stopBGM, playMenuSelect, playStageUp, playComplete, setMuted } = useTreeAudio(true);
     const hasStartedBGM = useRef(false);
 
     const toggleGlobalMute = () => {
-        setBgmEnabled(!bgmEnabled);
-        setMuted(bgmEnabled); // if it was enabled, we are muting it, so true.
+        const nextEnabled = !bgmEnabled;
+        setBgmEnabled(nextEnabled);
+        setMuted(!nextEnabled); // setMuted(true) = silent, setMuted(false) = sound ON
+        if (nextEnabled && !hasStartedBGM.current) {
+            playTriviaBGM();
+            hasStartedBGM.current = true;
+        }
     };
 
     const startBGMOnce = () => {
@@ -39,6 +45,14 @@ export default function Trivia() {
             hasStartedBGM.current = true;
         }
     };
+
+    // Stop BGM and play fanfare when Trivia ends (phase → TRANSITION)
+    useEffect(() => {
+        if (phase === 'TRANSITION') {
+            stopBGM();
+            playComplete();
+        }
+    }, [phase, stopBGM, playComplete]);
 
     // Fetch question whenever currentQuestion changes
     useEffect(() => {
@@ -128,6 +142,7 @@ export default function Trivia() {
         }
     }, [showFeedback, isCorrect, playStageUp]);
 
+    // GET READY: show if quiz hasn't started OR phase is back to TRIVIA but quiz already finished
     if (currentQuestion === 0) return (
         <div style={{ minHeight: 'calc(100dvh - 120px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
             <div className="card card-lime animate-pop-in" style={{ padding: '40px', textAlign: 'center', border: '5px solid var(--black)', boxShadow: '8px 8px 0 var(--black)' }}>

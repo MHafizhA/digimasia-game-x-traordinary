@@ -44,6 +44,10 @@ export class SessionService implements OnModuleInit {
 
     async updatePhase(phase: GamePhase) {
         this.state.phase = phase;
+        // Reset trivia question counter when entering TRIVIA so GET READY shows
+        if (phase === 'TRIVIA') {
+            this.state.currentQuestion = 0;
+        }
         this.onStateChange(this.state);
         await this.saveToDb();
     }

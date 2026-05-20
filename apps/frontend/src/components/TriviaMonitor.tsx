@@ -22,21 +22,30 @@ export default function TriviaMonitor() {
     const [stats, setStats] = useState<TriviaStats | null>(null);
 
     useEffect(() => {
+        // Clear stale stats immediately when question changes to prevent flicker
+        setStats(null);
+
         if (phase !== 'TRIVIA' && phase !== 'TRANSITION') return;
+        if (currentQuestion === 0) return;
+
+        const controller = new AbortController();
 
         const fetchStats = async () => {
             try {
-                const res = await fetch(`${getBackendUrl()}/admin/trivia-stats?index=${currentQuestion}`);
+                const res = await fetch(`${getBackendUrl()}/admin/trivia-stats?index=${currentQuestion}`, { signal: controller.signal });
                 const data = await res.json();
                 setStats(data);
-            } catch (err) {
-                console.error('Failed to fetch trivia stats');
+            } catch (err: any) {
+                if (err.name !== 'AbortError') console.error('Failed to fetch trivia stats');
             }
         };
 
         fetchStats();
-        const interval = setInterval(fetchStats, 2000);
-        return () => clearInterval(interval);
+        const interval = setInterval(fetchStats, 3000);
+        return () => {
+            clearInterval(interval);
+            controller.abort(); // Cancel in-flight request for old question
+        };
     }, [currentQuestion, phase]);
 
     const handleNext = async () => {
