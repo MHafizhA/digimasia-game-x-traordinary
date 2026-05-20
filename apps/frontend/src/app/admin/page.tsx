@@ -195,14 +195,16 @@ export default function AdminPage() {
                             PHASE SELECTION
                         </div>
                         <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.1)', marginBottom: '12px' }} />
-
                         <div className="step-list">
                             {PHASES.map((p, idx) => {
                                 const phaseOrder = PHASES.map(x => x.targetPhase);
-                                const currentIdx = phaseOrder.indexOf(phase);
+                                let currentIdx = phaseOrder.indexOf(phase);
+                                if (phase === 'TRANSITION') currentIdx = phaseOrder.indexOf('TRIVIA') + 0.5;
+                                if (phase === 'FINAL') currentIdx = 99; // end of game
+
                                 const thisIdx = phaseOrder.indexOf(p.targetPhase);
                                 const isDone = thisIdx < currentIdx;
-                                const isActive = phase === p.targetPhase;
+                                const isActive = phase === p.targetPhase || (phase === 'TRANSITION' && p.targetPhase === 'TRIVIA');
 
                                 return (
                                     <button
@@ -331,90 +333,94 @@ export default function AdminPage() {
             </div>
 
             {/* ── QR MODAL ── */}
-            {showQRModal && (
-                <div
-                    style={{
-                        position: 'fixed', inset: 0,
-                        backgroundColor: 'var(--navy-dark)',
-                        backgroundImage: 'radial-gradient(var(--blue-bright) 1px, transparent 1px)',
-                        backgroundSize: '24px 24px',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        zIndex: 1000, padding: '24px',
-                        animation: 'pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
-                    }}
-                    onClick={() => setShowQRModal(false)}
-                >
+            {
+                showQRModal && (
                     <div
-                        className="card"
-                        style={{ maxWidth: '380px', width: '100%', textAlign: 'center', padding: '32px', boxShadow: '20px 20px 0 var(--black)' }}
-                        onClick={e => e.stopPropagation()}
+                        style={{
+                            position: 'fixed', inset: 0,
+                            backgroundColor: 'var(--navy-dark)',
+                            backgroundImage: 'radial-gradient(var(--blue-bright) 1px, transparent 1px)',
+                            backgroundSize: '24px 24px',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            zIndex: 1000, padding: '24px',
+                            animation: 'pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                        }}
+                        onClick={() => setShowQRModal(false)}
                     >
-                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '28px', letterSpacing: '2px', marginBottom: '4px' }}>
-                            USER PORTAL QR
+                        <div
+                            className="card"
+                            style={{ maxWidth: '380px', width: '100%', textAlign: 'center', padding: '32px', boxShadow: '20px 20px 0 var(--black)' }}
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div style={{ fontFamily: 'var(--font-display)', fontSize: '28px', letterSpacing: '2px', marginBottom: '4px' }}>
+                                USER PORTAL QR
+                            </div>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#666', letterSpacing: '1px', marginBottom: '20px' }}>
+                                SCAN UNTUK AKSES GAME
+                            </div>
+                            <div style={{ background: 'white', padding: '16px', borderRadius: '8px', border: 'var(--border)', display: 'inline-block', marginBottom: '16px' }}>
+                                <QRCode value={origin || 'https://digimasia.id'} size={180} />
+                            </div>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--blue-bright)', wordBreak: 'break-all', marginBottom: '20px' }}>
+                                {origin || 'https://digimasia.id'}
+                            </div>
+                            <button className="btn btn-danger btn-full" style={{ boxShadow: '5px 5px 0 var(--black)' }} onClick={() => setShowQRModal(false)}>
+                                TUTUP JENDELA
+                            </button>
                         </div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#666', letterSpacing: '1px', marginBottom: '20px' }}>
-                            SCAN UNTUK AKSES GAME
-                        </div>
-                        <div style={{ background: 'white', padding: '16px', borderRadius: '8px', border: 'var(--border)', display: 'inline-block', marginBottom: '16px' }}>
-                            <QRCode value={origin || 'https://digimasia.id'} size={180} />
-                        </div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--blue-bright)', wordBreak: 'break-all', marginBottom: '20px' }}>
-                            {origin || 'https://digimasia.id'}
-                        </div>
-                        <button className="btn btn-danger btn-full" style={{ boxShadow: '5px 5px 0 var(--black)' }} onClick={() => setShowQRModal(false)}>
-                            TUTUP JENDELA
-                        </button>
                     </div>
-                </div>
-            )}
+                )
+            }
 
             {/* ── RESET CONFIRM MODAL ── */}
-            {showResetConfirm && (
-                <div
-                    style={{
-                        position: 'fixed', inset: 0,
-                        backgroundColor: 'transparent',
-                        pointerEvents: 'auto',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        zIndex: 1000, padding: '24px',
-                        animation: 'pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
-                    }}
-                >
+            {
+                showResetConfirm && (
                     <div
-                        className="card"
-                        style={{ maxWidth: '400px', width: '100%', textAlign: 'center', padding: '40px', background: 'var(--white)', border: '5px solid var(--black)', boxShadow: '15px 15px 0 var(--black)' }}
-                    >
-                        <div style={{
-                            width: '80px', height: '80px',
-                            background: '#FFD600',
-                            border: '4px solid var(--black)',
-                            borderRadius: '50%',
+                        style={{
+                            position: 'fixed', inset: 0,
+                            backgroundColor: 'transparent',
+                            pointerEvents: 'auto',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontSize: '42px',
-                            margin: '0 auto 24px',
-                            boxShadow: '6px 6px 0 var(--black)',
-                            transform: 'rotate(-5deg)'
-                        }}>⚠️</div>
+                            zIndex: 1000, padding: '24px',
+                            animation: 'pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                        }}
+                    >
+                        <div
+                            className="card"
+                            style={{ maxWidth: '400px', width: '100%', textAlign: 'center', padding: '40px', background: 'var(--white)', border: '5px solid var(--black)', boxShadow: '15px 15px 0 var(--black)' }}
+                        >
+                            <div style={{
+                                width: '80px', height: '80px',
+                                background: '#FFD600',
+                                border: '4px solid var(--black)',
+                                borderRadius: '50%',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: '42px',
+                                margin: '0 auto 24px',
+                                boxShadow: '6px 6px 0 var(--black)',
+                                transform: 'rotate(-5deg)'
+                            }}>⚠️</div>
 
-                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '36px', letterSpacing: '2px', marginBottom: '12px', color: 'var(--black)', lineHeight: 1 }}>
-                            RESET SYSTEM?
-                        </div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: '#333', letterSpacing: '1px', marginBottom: '32px', lineHeight: 1.6 }}>
-                            Seluruh data voting, jawaban, dan poin akan di-reset ke nol.<br />
-                            <span style={{ background: 'var(--yellow)', padding: '2px 6px', fontWeight: 900 }}>DATA USER TETAP AMAN.</span>
-                        </div>
+                            <div style={{ fontFamily: 'var(--font-display)', fontSize: '36px', letterSpacing: '2px', marginBottom: '12px', color: 'var(--black)', lineHeight: 1 }}>
+                                RESET SYSTEM?
+                            </div>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: '#333', letterSpacing: '1px', marginBottom: '32px', lineHeight: 1.6 }}>
+                                Seluruh data voting, jawaban, dan poin akan di-reset ke nol.<br />
+                                <span style={{ background: 'var(--yellow)', padding: '2px 6px', fontWeight: 900 }}>DATA USER TETAP AMAN.</span>
+                            </div>
 
-                        <div style={{ display: 'flex', gap: '16px' }}>
-                            <button className="btn" style={{ flex: 1, background: 'var(--navy-dark)', color: 'var(--white)', padding: '16px', fontSize: '14px' }} onClick={() => setShowResetConfirm(false)}>
-                                TIDAK, BATAL
-                            </button>
-                            <button className="btn" style={{ flex: 1, background: '#FF0099', color: 'white', padding: '16px', fontSize: '14px', boxShadow: '6px 6px 0 var(--black)' }} onClick={executeReset}>
-                                YA, RESET!
-                            </button>
+                            <div style={{ display: 'flex', gap: '16px' }}>
+                                <button className="btn" style={{ flex: 1, background: 'var(--navy-dark)', color: 'var(--white)', padding: '16px', fontSize: '14px' }} onClick={() => setShowResetConfirm(false)}>
+                                    TIDAK, BATAL
+                                </button>
+                                <button className="btn" style={{ flex: 1, background: '#FF0099', color: 'white', padding: '16px', fontSize: '14px', boxShadow: '6px 6px 0 var(--black)' }} onClick={executeReset}>
+                                    YA, RESET!
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            )}
-        </div>
+                )
+            }
+        </div >
     );
 }

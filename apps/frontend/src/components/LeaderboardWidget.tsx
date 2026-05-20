@@ -10,10 +10,16 @@ interface LeaderboardEntry {
     score: number;
 }
 
-const getInitials = (name: string) =>
-    name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+const getDeterministicIndex = (name: string, arrLength: number) => {
+    if (!name) return 0;
+    let sum = 0;
+    for (let i = 0; i < name.length; i++) {
+        sum += name.charCodeAt(i);
+    }
+    return sum % arrLength;
+};
 
-const AVATAR_COLORS = ['var(--pink-hot)', 'var(--orange)', 'var(--lime)', 'var(--blue-bright)', 'var(--navy-dark)'];
+const AVATAR_COLORS = ['var(--pink-hot)', 'var(--orange)', 'var(--lime)', 'var(--blue-bright)', '#00E5FF', '#FFD600', '#B388FF'];
 
 export default function LeaderboardWidget({ isPaused = false }: { isPaused?: boolean }) {
     const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
@@ -43,23 +49,37 @@ export default function LeaderboardWidget({ isPaused = false }: { isPaused?: boo
 
     return (
         <div className="rank-list">
-            {leaderboard.map((entry, i) => (
-                <div key={i} className="rank-row" style={{
-                    background: i === 0 ? 'var(--lime)' : i === 1 ? '#E8E8E8' : i === 2 ? '#FFE4CC' : 'var(--white)',
-                }}>
-                    <div className="rank-num">#{i + 1}</div>
-                    <div className="rank-avatar" style={{ background: AVATAR_COLORS[i % AVATAR_COLORS.length] }}>
-                        {getInitials(entry.name)}
+            {leaderboard.map((entry, i) => {
+                const colorIdx = getDeterministicIndex(entry.name, AVATAR_COLORS.length);
+                const currentAvatarColor = AVATAR_COLORS[colorIdx];
+                const seedStr = encodeURIComponent(entry.name + entry.division);
+                const avatarUrl = `https://api.dicebear.com/7.x/pixel-art/svg?seed=${seedStr}`;
+
+                return (
+                    <div key={i} className="rank-row" style={{
+                        background: i === 0 ? 'var(--lime)' : i === 1 ? '#E8E8E8' : i === 2 ? '#FFE4CC' : 'var(--white)',
+                    }}>
+                        <div className="rank-num">#{i + 1}</div>
+                        <div className="rank-avatar" style={{
+                            background: currentAvatarColor,
+                            position: 'relative',
+                            overflow: 'hidden',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}>
+                            <img src={avatarUrl} alt="" style={{ width: '130%', height: '130%', imageRendering: 'pixelated', marginTop: '6px' }} />
+                        </div>
+                        <div className="rank-info">
+                            <div className="rank-name">{entry.name}</div>
+                            <div className="rank-team">{entry.division}</div>
+                        </div>
+                        <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center' }}>
+                            <div className="rank-water" style={{ fontSize: '20px' }}>{entry.amount}L</div>
+                        </div>
                     </div>
-                    <div className="rank-info">
-                        <div className="rank-name">{entry.name}</div>
-                        <div className="rank-team">{entry.division}</div>
-                    </div>
-                    <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center' }}>
-                        <div className="rank-water" style={{ fontSize: '20px' }}>{entry.amount}L</div>
-                    </div>
-                </div>
-            ))}
+                );
+            })}
         </div>
     );
 }

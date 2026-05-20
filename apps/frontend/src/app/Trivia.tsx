@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { useGameStore } from '@/store/useGameStore';
 import { getBackendUrl } from '@/lib/config';
 import { useTreeAudio } from '@/hooks/useTreeAudio';
@@ -48,7 +48,7 @@ export default function Trivia() {
 
     // Stop BGM and play fanfare when Trivia ends (phase → TRANSITION)
     const hasPlayedCompleteRef = useRef(false);
-    useEffect(() => {
+    useLayoutEffect(() => {
         if ((phase === 'TRANSITION' || (currentQuestion >= 10 && timer === 0)) && !hasPlayedCompleteRef.current) {
             hasPlayedCompleteRef.current = true;
             stopBGM();
@@ -126,6 +126,9 @@ export default function Trivia() {
             if (res.ok && data.correct !== undefined) {
                 setIsCorrect(data.correct);
                 if (data.points) setPointsEarned(data.points);
+                if (data.correct) {
+                    playStageUp(); // Play immediately without layout cycle wait
+                }
             }
 
             if (!res.ok && data.error) {
@@ -144,13 +147,6 @@ export default function Trivia() {
     const showFeedback = isSubmitted && isCorrect !== null;
     // Strict fairness: display 10 until the NEW question data is actually loaded in state
     const displayTimer = (isLoading || !question || question.index !== currentQuestion) ? 10 : timer;
-
-    // Play stage-up sound when correct feedback is shown
-    useEffect(() => {
-        if (showFeedback && isCorrect) {
-            playStageUp();
-        }
-    }, [showFeedback, isCorrect, playStageUp]);
 
     // GET READY: show if quiz hasn't started OR phase is back to TRIVIA but quiz already finished
     if (currentQuestion === 0) return (

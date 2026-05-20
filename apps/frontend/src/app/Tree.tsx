@@ -161,7 +161,12 @@ export default function Tree() {
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px', maxWidth: '400px', width: '100%', textAlign: 'center' }}>
                 {/* Tree preview */}
                 <div className="card" style={{ width: '100%', padding: '0', overflow: 'hidden', border: '4px solid var(--black)', boxShadow: '6px 6px 0 var(--black)' }}>
-                    <div style={{ height: '200px', background: "url('/assets/branding/BG1.png') center/cover no-repeat", position: 'relative' }}>
+                    <div style={{
+                        height: '200px',
+                        background: "url('/assets/branding/BG1.png') center/cover no-repeat, var(--blue-bright)",
+                        backgroundBlendMode: 'overlay',
+                        position: 'relative'
+                    }}>
                         <TreeVisual stage={treeStage} size="100%" isLevelingUp={!!stageToast} />
                         <div style={{ position: 'absolute', top: '10px', left: '10px', background: 'var(--black)', color: 'var(--yellow)', fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 700, padding: '3px 10px', borderRadius: '20px' }}>
                             STAGE {treeStage + 1} / 10
@@ -202,15 +207,17 @@ export default function Tree() {
 
     return (
         <div style={{
-            minHeight: 'calc(100dvh - 120px)',
-            padding: '16px 16px 32px',
+            height: '100dvh',
+            padding: '12px 16px 20px',
             maxWidth: '480px',
             margin: '0 auto',
             display: 'flex',
             flexDirection: 'column',
-            gap: '14px',
+            justifyContent: 'space-between',
+            gap: '8px',
             position: 'relative',
-            overflowY: 'auto',
+            overflow: 'hidden',
+            boxSizing: 'border-box'
         }}>
 
             {/* Stage-up Toast */}
@@ -220,21 +227,21 @@ export default function Tree() {
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    zIndex: 1000,
-                    background: 'var(--lime)',
-                    border: '3px solid var(--black)',
-                    boxShadow: '5px 5px 0 var(--black)',
-                    borderRadius: '12px',
-                    padding: '12px 20px',
+                    zIndex: 10000,
+                    background: 'var(--yellow)',
+                    border: '5px solid var(--black)',
+                    boxShadow: '10px 10px 0 var(--black)',
+                    borderRadius: '24px',
+                    padding: '24px 40px',
                     fontFamily: 'var(--font-display)',
-                    fontSize: '15px',
-                    letterSpacing: '1px',
+                    fontSize: '24px',
+                    letterSpacing: '2px',
                     color: 'var(--black)',
-                    animation: 'pop-in 0.4s ease-out',
+                    animation: 'pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both',
                     whiteSpace: 'nowrap',
-                    maxWidth: '90vw',
                     textAlign: 'center',
                 }}>
+                    <div style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', marginBottom: '4px', opacity: 0.8 }}>LEVEL UP!</div>
                     {stageToast}
                 </div>
             )}
@@ -305,14 +312,14 @@ export default function Tree() {
                     position: 'relative',
                     height: 'clamp(180px, 40vw, 240px)',
                     width: '100%',
-                    background: 'linear-gradient(to bottom, #1565C0, #0D47A1)', // Solid blue fallback
-                    backgroundImage: 'url(/assets/branding/BG1.png)',
-                    backgroundSize: '100% 100%', // Stretch to fill exactly
-                    backgroundRepeat: 'no-repeat',
+                    background: 'var(--blue-bright)',
+                    backgroundImage: "url('/assets/branding/BG1.png')",
+                    backgroundSize: 'cover',
                     backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
                 }}>
-                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', paddingBottom: '20px' }}>
-                        <TreeVisual stage={treeStage} size="85%" isLevelingUp={!!stageToast} />
+                    <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <TreeVisual stage={treeStage} size="75%" isLevelingUp={!!stageToast} />
                     </div>
 
                     {/* Stage badge top-left */}

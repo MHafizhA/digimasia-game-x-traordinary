@@ -15,15 +15,16 @@ export default function Final() {
 
     return (
         <div style={{
-            height: 'calc(100vh - 80px)',
-            padding: '12px',
+            height: '100dvh',
+            padding: '10px',
             maxWidth: '480px',
             margin: '0 auto',
             display: 'flex',
             flexDirection: 'column',
-            gap: '16px',
+            gap: '12px',
             alignItems: 'center',
             justifyContent: 'center',
+            overflow: 'hidden'
         }}>
             {/* Main Congratulations Card */}
             <div className="card" style={{

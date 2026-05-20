@@ -169,13 +169,13 @@ export function useTreeAudio(enabled = true) {
             const gain = ctx.createGain();
             osc.connect(gain);
             gain.connect(master);
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(600, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.08);
-            gain.gain.setValueAtTime(0.12, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+            osc.type = 'sine'; // Sine for cleaner "drip"
+            osc.frequency.setValueAtTime(400, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1000, ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.4, ctx.currentTime); // Louder (was 0.12)
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
             osc.start(ctx.currentTime);
-            osc.stop(ctx.currentTime + 0.08);
+            osc.stop(ctx.currentTime + 0.1);
         } catch (_) { }
     }, [getAudioCtx]);
 

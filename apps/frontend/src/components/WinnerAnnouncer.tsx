@@ -359,18 +359,16 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
         setFlashActive(true);
         setTimeout(() => setFlashActive(false), 700);
 
-        const duration = 4 * 1000;
-        const animationEnd = Date.now() + duration;
-        const defaults = { startVelocity: 30, spread: 360, ticks: 80, zIndex: 10000 };
-        const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+        const defaults = { startVelocity: 45, spread: 360, ticks: 100, zIndex: 10000, particleCount: 150 };
 
-        const interval: ReturnType<typeof setInterval> = setInterval(() => {
-            const timeLeft = animationEnd - Date.now();
-            if (timeLeft <= 0) return clearInterval(interval);
-            const particleCount = 60 * (timeLeft / duration);
-            confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
-            confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
-        }, 200);
+        // Two big bursts instead of a heavy loop to prevent lag
+        confetti({ ...defaults, origin: { x: 0.2, y: 0.5 } });
+        confetti({ ...defaults, origin: { x: 0.8, y: 0.5 } });
+
+        // One small follow-up burst
+        setTimeout(() => {
+            confetti({ ...defaults, particleCount: 80, origin: { x: 0.5, y: 0.4 } });
+        }, 400);
     };
 
     const handleWinnerReveal = (type: 'team' | 'digimer') => {
