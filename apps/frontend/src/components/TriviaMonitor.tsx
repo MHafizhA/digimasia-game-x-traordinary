@@ -9,6 +9,7 @@ interface TriviaStats {
     totalUsers: number;
     totalAnswers: number;
     questionText: string;
+    questionIndex: number; // Add this
     correctAnswer: number;
     options?: string[];
     stats: { option: number; count: number }[];
@@ -22,9 +23,6 @@ export default function TriviaMonitor() {
     const [stats, setStats] = useState<TriviaStats | null>(null);
 
     useEffect(() => {
-        // Clear stale stats immediately when question changes to prevent flicker
-        setStats(null);
-
         if (phase !== 'TRIVIA' && phase !== 'TRANSITION') return;
         if (currentQuestion === 0) return;
 
@@ -41,10 +39,10 @@ export default function TriviaMonitor() {
         };
 
         fetchStats();
-        const interval = setInterval(fetchStats, 3000);
+        const interval = setInterval(fetchStats, 1500); // Snappier polling
         return () => {
             clearInterval(interval);
-            controller.abort(); // Cancel in-flight request for old question
+            controller.abort();
         };
     }, [currentQuestion, phase]);
 
@@ -111,9 +109,10 @@ export default function TriviaMonitor() {
         );
     }
 
-    if (!stats) return null;
+    // Check if we have the CORRECT stats for the CURRENT question
+    const isStatsStale = !stats || stats.questionIndex !== currentQuestion;
 
-    const isFinished = timer === 0 && currentQuestion >= 10 || phase === 'TRANSITION';
+    const isFinished = (timer === 0 && currentQuestion >= 10) || phase === 'TRANSITION';
 
     if (isFinished) {
         return (
@@ -232,12 +231,29 @@ export default function TriviaMonitor() {
                         </div>
 
                         {/* Question Info */}
-                        <div style={{ paddingTop: '4px' }}>
+                        <div style={{ paddingTop: '4px', flex: 1 }}>
                             <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#888', letterSpacing: '2px', marginBottom: '8px' }}>
-                                PERTANYAAN #{currentQuestion} · {stats?.totalAnswers || 0} JAWABAN
+                                PERTANYAAN #{currentQuestion} · {isStatsStale ? '...' : (stats?.totalAnswers || 0)} JAWABAN
                             </div>
-                            <div style={{ fontFamily: 'var(--font-body)', fontSize: '20px', fontWeight: 800, color: '#000', lineHeight: 1.4 }}>
-                                {stats?.questionText || 'Memuat pertanyaan...'}
+                            <div style={{
+                                fontFamily: 'var(--font-body)',
+                                fontSize: '20px',
+                                fontWeight: 800,
+                                color: isStatsStale ? '#999' : '#000',
+                                lineHeight: 1.4,
+                                position: 'relative'
+                            }}>
+                                {isStatsStale ? 'Memuat data soal...' : (stats?.questionText || 'Memuat pertanyaan...')}
+                                {isStatsStale && (
+                                    <div style={{
+                                        position: 'absolute',
+                                        inset: 0,
+                                        background: 'rgba(255,255,255,0.6)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        animation: 'pulse 1.5s infinite'
+                                    }} />
+                                )}
                             </div>
                         </div>
                     </div>
@@ -297,7 +313,7 @@ export default function TriviaMonitor() {
                 </div>
 
                 {/* Correct Answer Reveal — shown when timer = 0 */}
-                {timer === 0 && stats.correctAnswer !== undefined && (
+                {timer === 0 && stats?.correctAnswer !== undefined && (
                     <div style={{
                         background: 'var(--lime)',
                         border: '4px solid var(--black)',

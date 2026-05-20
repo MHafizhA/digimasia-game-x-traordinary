@@ -18,12 +18,15 @@ const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 const common_1 = require("@nestjs/common");
 const session_service_1 = require("./session.service");
+const prisma_service_1 = require("./prisma.service");
 let EventsGateway = EventsGateway_1 = class EventsGateway {
     sessionService;
+    prisma;
     server;
     logger = new common_1.Logger(EventsGateway_1.name);
-    constructor(sessionService) {
+    constructor(sessionService, prisma) {
         this.sessionService = sessionService;
+        this.prisma = prisma;
     }
     afterInit(server) {
         this.logger.log('WebSocket Gateway Initialized');
@@ -38,8 +41,16 @@ let EventsGateway = EventsGateway_1 = class EventsGateway {
         this.logger.log(`Client connected: ${client.id}`);
         client.emit('session_state', this.sessionService.getState());
     }
-    handleJoin(data, client) {
+    async handleJoin(data, client) {
         this.logger.log(`User ${data.name} joined via socket`);
+        if (data.id) {
+            const userInDb = await this.prisma.user.findUnique({ where: { id: data.id } });
+            if (userInDb && !userInDb.isJoined && !userInDb.isAdmin) {
+                this.logger.log(`User ${data.name} reconnecting but was reset. Forcing logout.`);
+                client.emit('system_resetted');
+                return { event: 'rejected', reason: 'system_reset' };
+            }
+        }
         client.user = data;
         return { event: 'joined', data: 'success' };
     }
@@ -64,7 +75,7 @@ __decorate([
     __param(1, (0, websockets_1.ConnectedSocket)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, socket_io_1.Socket]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], EventsGateway.prototype, "handleJoin", null);
 __decorate([
     (0, websockets_1.SubscribeMessage)('vote'),
@@ -92,6 +103,7 @@ exports.EventsGateway = EventsGateway = EventsGateway_1 = __decorate([
             origin: '*',
         },
     }),
-    __metadata("design:paramtypes", [session_service_1.SessionService])
+    __metadata("design:paramtypes", [session_service_1.SessionService,
+        prisma_service_1.PrismaService])
 ], EventsGateway);
 //# sourceMappingURL=events.gateway.js.map

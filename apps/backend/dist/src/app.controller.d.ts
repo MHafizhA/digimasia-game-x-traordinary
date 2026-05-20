@@ -9,4 +9,11 @@ export declare class AppController {
         amount: number;
         score: number;
     }[]>;
+    getSessionState(): Promise<{
+        phase: import("./session.service").GamePhase;
+        currentQuestion: number;
+        timer: number;
+        treeStage: number;
+        totalWater: number;
+    }>;
 }

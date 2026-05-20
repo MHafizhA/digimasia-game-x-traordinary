@@ -56,6 +56,12 @@ export default function Trivia() {
 
     // Fetch question whenever currentQuestion changes
     useEffect(() => {
+        // Reset sub-states immediately to prevent stale feedback during transition
+        setSelectedOption(null);
+        setIsSubmitted(false);
+        setIsCorrect(null);
+        setPointsEarned(0);
+
         const fetchQuestion = async () => {
             setIsLoading(true);
             // Reset all answer state for the new question

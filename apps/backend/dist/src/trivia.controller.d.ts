@@ -4,13 +4,16 @@ export declare class TriviaController {
     private triviaService;
     private prisma;
     constructor(triviaService: TriviaService, prisma: PrismaService);
-    getQuestion(index: string): Promise<{
+    getQuestion(index: string, userId?: string): Promise<{
+        error: string;
+    } | {
+        userSelection: number | null;
+        isCorrect: boolean | null;
         id: string;
         index: number;
         text: string;
         options: string;
-    } | {
-        error: string;
+        error?: undefined;
     }>;
     submitAnswer(body: {
         userId: string;

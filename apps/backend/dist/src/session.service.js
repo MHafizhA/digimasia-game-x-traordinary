@@ -48,6 +48,9 @@ let SessionService = SessionService_1 = class SessionService {
     }
     async updatePhase(phase) {
         this.state.phase = phase;
+        if (phase === 'TRIVIA') {
+            this.state.currentQuestion = 0;
+        }
         this.onStateChange(this.state);
         await this.saveToDb();
     }

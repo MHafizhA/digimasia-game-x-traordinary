@@ -23,14 +23,25 @@ let TriviaController = class TriviaController {
         this.triviaService = triviaService;
         this.prisma = prisma;
     }
-    async getQuestion(index) {
+    async getQuestion(index, userId) {
         const q = await this.prisma.question.findUnique({
             where: { index: parseInt(index) },
         });
         if (!q)
             return { error: 'Not found' };
         const { answer, ...rest } = q;
-        return rest;
+        let userSelection = null;
+        let isCorrect = null;
+        if (userId) {
+            const ua = await this.prisma.userAnswer.findUnique({
+                where: { userId_questionId: { userId: userId, questionId: q.id } }
+            });
+            if (ua) {
+                userSelection = ua.selected;
+                isCorrect = ua.isCorrect;
+            }
+        }
+        return { ...rest, userSelection, isCorrect };
     }
     async submitAnswer(body) {
         return this.triviaService.submitAnswer(body.userId, body.questionIndex, body.optionIndex);
@@ -40,8 +51,9 @@ exports.TriviaController = TriviaController;
 __decorate([
     (0, common_1.Get)('trivia-question/:index'),
     __param(0, (0, common_1.Param)('index')),
+    __param(1, (0, common_1.Query)('userId')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], TriviaController.prototype, "getQuestion", null);
 __decorate([

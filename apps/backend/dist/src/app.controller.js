@@ -23,6 +23,9 @@ let AppController = class AppController {
     async getLeaderboard() {
         return this.appService.getLeaderboard();
     }
+    async getSessionState() {
+        return this.appService.getSessionState();
+    }
 };
 exports.AppController = AppController;
 __decorate([
@@ -37,6 +40,12 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
 ], AppController.prototype, "getLeaderboard", null);
+__decorate([
+    (0, common_1.Get)('session-state'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], AppController.prototype, "getSessionState", null);
 exports.AppController = AppController = __decorate([
     (0, common_1.Controller)(),
     __metadata("design:paramtypes", [app_service_1.AppService])
