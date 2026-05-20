@@ -32,20 +32,29 @@ export const useSocket = () => {
 
         socket.on('system_resetted', () => {
             console.log('System reset by admin - cleaning up...');
-            const store = useGameStore.getState();
+            try {
+                const store = useGameStore.getState();
 
-            if (store.user?.isAdmin) {
-                store.setToastMessage("SISTEM TELAH DI-RESET. DATA GAME TELAH DIKOSONGKAN.");
-            } else {
-                // Users get logged out and redirected via re-render + hard redirect
-                console.log('User logout triggered by system reset');
-
-                // Clear state and storage explicitly
-                store.reset();
+                if (store.user?.isAdmin) {
+                    store.setToastMessage("SISTEM TELAH DI-RESET. DATA GAME TELAH DIKOSONGKAN.");
+                } else {
+                    console.log('User logout triggered by system reset');
+                    // 1. Clear zustand store in-memory
+                    store.reset();
+                    // 2. Clear persisted storage AFTER store reset
+                    try {
+                        localStorage.removeItem('x-celerate-storage');
+                    } catch (_) { }
+                    // 3. Navigate back to root (clean URL, no params to avoid Next.js router errors)
+                    if (typeof window !== 'undefined') {
+                        window.location.href = '/';
+                    }
+                }
+            } catch (err) {
+                console.error('Error handling system_resetted:', err);
+                // Fail-safe: just navigate to root
                 if (typeof window !== 'undefined') {
-                    localStorage.removeItem('x-celerate-storage'); // Force clear persistence
-                    // Hard redirect with cache buster
-                    window.location.replace('/?t=' + Date.now());
+                    window.location.href = '/';
                 }
             }
         });
