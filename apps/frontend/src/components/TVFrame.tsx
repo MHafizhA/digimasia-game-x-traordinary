@@ -99,12 +99,11 @@ export default function TVFrame({ children, bgImage = '/assets/branding/BG1.png'
                         boxShadow: 'inset 0 0 60px rgba(0,0,0,0.8)',
                         boxSizing: 'border-box',
                     }}>
-                        {/* Vintage TV Scanlines Overlay */}
+                        {/* Vintage TV Scanlines Overlay - Optimized */}
                         <div style={{
                             position: 'absolute',
                             inset: 0,
-                            background: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.04), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.04))',
-                            backgroundSize: '100% 4px, 6px 100%',
+                            background: 'repeating-linear-gradient(rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px)',
                             zIndex: 10,
                             pointerEvents: 'none'
                         }} />

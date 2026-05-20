@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo, useMemo } from 'react';
 import confetti from 'canvas-confetti';
 import { getBackendUrl } from '@/lib/config';
 import { useTreeAudio } from '@/hooks/useTreeAudio';
@@ -36,7 +36,7 @@ const getImageForId = (id: string | undefined, name: string, imageUrl?: string) 
 };
 
 // ── Dramatic Nominee List (before winner) ─────────────
-function NomineeList({ data, accentColor, textColor, maxVotes, showVotes }: {
+const NomineeList = memo(function NomineeList({ data, accentColor, textColor, maxVotes, showVotes }: {
     data: WinnerStats[];
     accentColor: string;
     textColor: string;
@@ -54,6 +54,7 @@ function NomineeList({ data, accentColor, textColor, maxVotes, showVotes }: {
                     padding: '12px 16px',
                     boxShadow: '4px 4px 0 var(--black)',
                     animation: `slideInLeft 0.4s ${idx * 0.1}s both cubic-bezier(0.34, 1.56, 0.64, 1)`,
+                    willChange: 'transform, opacity',
                 }}>
                     <div style={{ position: 'relative', flexShrink: 0 }}>
                         {/* Avatar */}
@@ -94,7 +95,7 @@ function NomineeList({ data, accentColor, textColor, maxVotes, showVotes }: {
                     </div>
                     {/* Vote bar */}
                     {showVotes && (
-                        <div style={{ flexShrink: 0, textAlign: 'right', minWidth: '80px', animation: `popInRight 0.5s ${idx * 0.15}s both cubic-bezier(0.34, 1.56, 0.64, 1)` }}>
+                        <div style={{ flexShrink: 0, textAlign: 'right', minWidth: '80px', animation: `popInRight 0.5s ${idx * 0.15}s both cubic-bezier(0.34, 1.56, 0.64, 1)`, willChange: 'transform, opacity' }}>
                             <div style={{
                                 fontFamily: 'var(--font-mono)', fontSize: 'clamp(10px, 1vw, 13px)',
                                 fontWeight: 800, color: 'var(--black)', marginBottom: '4px',
@@ -107,6 +108,7 @@ function NomineeList({ data, accentColor, textColor, maxVotes, showVotes }: {
                                     borderRadius: '4px',
                                     transformOrigin: 'left',
                                     animation: `expandWidth 1s ${idx * 0.15}s both cubic-bezier(0.34, 1.56, 0.64, 1)`,
+                                    willChange: 'transform',
                                 }} />
                             </div>
                         </div>
@@ -115,10 +117,10 @@ function NomineeList({ data, accentColor, textColor, maxVotes, showVotes }: {
             ))}
         </div>
     );
-}
+});
 
 // ── Dramatic Winner Card ──────────────────────────────
-function WinnerCard({ winner, accentColor, textColor, votes, maxVotes }: {
+const WinnerCard = memo(function WinnerCard({ winner, accentColor, textColor, votes, maxVotes }: {
     winner: WinnerStats;
     accentColor: string;
     textColor: string;
@@ -131,9 +133,10 @@ function WinnerCard({ winner, accentColor, textColor, votes, maxVotes }: {
             flexDirection: 'column',
             alignItems: 'center',
             animation: 'winnerReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+            willChange: 'transform, opacity',
         }}>
             {/* Crown */}
-            <div style={{ fontSize: 'clamp(40px, 5vw, 64px)', animation: 'crownFloat 2.5s ease-in-out infinite', marginBottom: '-12px', zIndex: 1 }}>
+            <div style={{ fontSize: 'clamp(40px, 5vw, 64px)', animation: 'crownFloat 2.5s ease-in-out infinite', marginBottom: '-12px', zIndex: 1, willChange: 'transform' }}>
                 👑
             </div>
 
@@ -151,7 +154,8 @@ function WinnerCard({ winner, accentColor, textColor, votes, maxVotes }: {
                 color: textColor,
                 animation: 'sparkleGlow 2.5s ease-in-out infinite',
                 marginBottom: '16px',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                willChange: 'box-shadow',
             }}>
                 <img src={getImageForId(winner.id, winner.name, winner.imageUrl)} alt={winner.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
@@ -207,10 +211,10 @@ function WinnerCard({ winner, accentColor, textColor, votes, maxVotes }: {
             </div>
         </div>
     );
-}
+});
 
 // ── Award Panel ────────────────────────────────────────
-function AwardPanel({ title, accentColor, textColor = 'var(--black)', stats, winner, revealed, setRevealed, showVotes, setShowVotes, winnerRevealed, onRevealWinner }: {
+const AwardPanel = memo(function AwardPanel({ title, accentColor, textColor = 'var(--black)', stats, winner, revealed, setRevealed, showVotes, setShowVotes, winnerRevealed, onRevealWinner }: {
     title: string;
     accentColor: string;
     textColor?: string;
@@ -223,7 +227,7 @@ function AwardPanel({ title, accentColor, textColor = 'var(--black)', stats, win
     winnerRevealed: boolean;
     onRevealWinner: () => void;
 }) {
-    const maxVotes = Math.max(...stats.map(d => d.count), 1);
+    const maxVotes = useMemo(() => Math.max(...stats.map(d => d.count), 1), [stats]);
 
     return (
         <div style={{
@@ -280,7 +284,8 @@ function AwardPanel({ title, accentColor, textColor = 'var(--black)', stats, win
                             borderRadius: '24px', boxShadow: '8px 8px 0 var(--black)',
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             fontSize: '48px', marginBottom: '24px', zIndex: 1,
-                            animation: 'crownFloat 4s ease-in-out infinite'
+                            animation: 'crownFloat 4s ease-in-out infinite',
+                            willChange: 'transform'
                         }}>
                             🔒
                         </div>
@@ -336,7 +341,7 @@ function AwardPanel({ title, accentColor, textColor = 'var(--black)', stats, win
             </div>
         </div>
     );
-}
+});
 
 // ── Main Component ────────────────────────────────────
 export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
