@@ -163,13 +163,8 @@ export default function Trivia() {
         </div>
     );
 
-    if (isLoading || !question) return (
-        <div style={{ minHeight: 'calc(100dvh - 120px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <div className="card" style={{ padding: '24px 40px', textAlign: 'center' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', letterSpacing: '2px' }}>MEMUAT SOAL...</div>
-            </div>
-        </div>
-    );
+    // REMOVED: Full-page isLoading return to permit Header/Timer to render immediately
+
 
     // Show "no answer" message when time ran out and user didn't answer
     const showNoAnswer = isTimedOut && !isSubmitted;
@@ -235,16 +230,30 @@ export default function Trivia() {
             </div>
 
             {/* Question Card - Compact padding */}
-            <div className="card card-navy" style={{ padding: '16px' }}>
-                <p style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'clamp(15px, 4.5vw, 17px)',
-                    fontWeight: 700,
-                    lineHeight: 1.4,
-                    color: 'var(--white)',
-                }}>
-                    {question.text}
-                </p>
+            <div className="card card-navy" style={{ padding: '16px', minHeight: '100px', display: 'flex', alignItems: 'center' }}>
+                {isLoading || !question ? (
+                    <div style={{
+                        width: '100%',
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: '14px',
+                        color: 'rgba(255,255,255,0.6)',
+                        textAlign: 'center',
+                        fontStyle: 'italic',
+                        animation: 'pulse 1.5s infinite'
+                    }}>
+                        Menyiapkan pertanyaan...
+                    </div>
+                ) : (
+                    <p style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: 'clamp(15px, 4.5vw, 17px)',
+                        fontWeight: 700,
+                        lineHeight: 1.4,
+                        color: 'var(--white)',
+                    }}>
+                        {question.text}
+                    </p>
+                )}
             </div>
 
             {/* Bug Fix 3: Show waiting screen when time is up */}
@@ -252,7 +261,7 @@ export default function Trivia() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     {/* Options (locked, show selection if any) */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', opacity: 0.6 }}>
-                        {question.options.map((opt, idx) => {
+                        {(question?.options || [0, 1, 2, 3]).map((opt, idx) => {
                             const isThisSelected = selectedOption === idx;
                             let optClass = 'trivia-opt';
                             if (isThisSelected) {
@@ -268,7 +277,9 @@ export default function Trivia() {
                                     style={{ cursor: 'not-allowed' }}
                                 >
                                     <span className="opt-letter">{OPTION_LETTERS[idx]}</span>
-                                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px' }}>{opt}</span>
+                                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px' }}>
+                                        {typeof opt === 'string' ? opt : `Pilihan ${OPTION_LETTERS[idx]}`}
+                                    </span>
                                 </button>
                             );
                         })}
@@ -356,7 +367,7 @@ export default function Trivia() {
             ) : (
                 /* Active question — options are selectable while timer > 0 */
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {question.options.map((opt, idx) => {
+                    {(isLoading || !question ? [0, 1, 2, 3] : question.options).map((opt, idx) => {
                         const isThisSelected = selectedOption === idx;
                         let optClass = 'trivia-opt';
                         if (isThisSelected) {
@@ -368,11 +379,14 @@ export default function Trivia() {
                                 key={idx}
                                 className={optClass}
                                 // Allow user to change answer as long as timer hasn't run out
-                                onClick={() => handleSelect(idx)}
-                                disabled={false}
+                                onClick={() => !isLoading && handleSelect(idx)}
+                                disabled={isLoading}
+                                style={{ opacity: isLoading ? 0.6 : 1 }}
                             >
                                 <span className="opt-letter">{OPTION_LETTERS[idx]}</span>
-                                <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px' }}>{opt}</span>
+                                <span style={{ fontFamily: 'var(--font-body)', fontSize: '14px' }}>
+                                    {isLoading ? '...' : opt}
+                                </span>
                             </button>
                         );
                     })}

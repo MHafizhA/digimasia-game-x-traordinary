@@ -273,12 +273,28 @@ export function useTreeAudio(enabled = true) {
     const setMuted = useCallback((muted: boolean) => {
         isMutedRef.current = muted;
         const ctx = getAudioCtx();
-        if (masterGainRef.current) {
-            masterGainRef.current.gain.setTargetAtTime(muted ? 0 : 1, ctx.currentTime, 0.05);
-        }
 
-        if (!muted) {
-            // Resume Context
+        if (muted) {
+            // STOP EVERYTHING
+            if (bgmSchedulerRef.current) {
+                clearTimeout(bgmSchedulerRef.current);
+                bgmSchedulerRef.current = null;
+            }
+            stopAllOscillators();
+
+            if (bgmRef.current) {
+                bgmRef.current.pause();
+            }
+
+            if (masterGainRef.current) {
+                masterGainRef.current.gain.setTargetAtTime(0, ctx.currentTime, 0.02);
+            }
+        } else {
+            // RESUME EVERYTHING
+            if (masterGainRef.current) {
+                masterGainRef.current.gain.setTargetAtTime(1, ctx.currentTime, 0.05);
+            }
+
             if (ctx.state === 'suspended') ctx.resume();
 
             // Resume BGM chiptune if it was supposed to play
@@ -288,11 +304,11 @@ export function useTreeAudio(enabled = true) {
             }
 
             // Resume Trivia BGM if it exists
-            if (bgmRef.current && bgmRef.current.paused) {
+            if (bgmRef.current && bgmRef.current.src !== "" && bgmRef.current.paused) {
                 bgmRef.current.play().catch(() => { });
             }
         }
-    }, [getAudioCtx, scheduleBGMLoop]);
+    }, [getAudioCtx, scheduleBGMLoop, stopAllOscillators]);
 
     return { playBGM, playTriviaBGM, stopBGM, playWaterDrop, playMenuSelect, playStageUp, playComplete, setMuted };
 }
