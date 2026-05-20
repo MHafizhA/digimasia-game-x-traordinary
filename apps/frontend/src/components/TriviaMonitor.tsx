@@ -78,14 +78,34 @@ export default function TriviaMonitor() {
     );
 
     if (currentQuestion === 0) {
+        const handleStartTriviaFromMonitor = async () => {
+            try {
+                await fetch(`${getBackendUrl()}/admin/start-trivia`, { method: 'POST' });
+            } catch { alert('Gagal start trivia'); }
+        };
         return (
-            <div className="card card-lime" style={{ textAlign: 'center', padding: '60px', border: '5px solid var(--black)', boxShadow: '10px 10px 0 var(--black)', borderRadius: '20px', margin: '40px auto', maxWidth: '800px' }}>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: '56px', color: 'var(--black)', textShadow: '3px 3px 0 var(--white)' }}>
+            <div className="card card-lime" style={{ textAlign: 'center', padding: '60px', border: '5px solid var(--black)', boxShadow: '10px 10px 0 var(--black)', borderRadius: '20px', margin: '40px auto', maxWidth: '800px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '56px', color: 'var(--black)', textShadow: '3px 3px 0 rgba(0,0,0,0.15)' }}>
                     GET READY!
                 </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '16px', color: '#333', marginTop: '16px', letterSpacing: '4px', fontWeight: 800 }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '16px', color: '#333', letterSpacing: '4px', fontWeight: 800 }}>
                     KUIS TRIVIA SEGERA DIMULAI
                 </div>
+                <button
+                    onClick={handleStartTriviaFromMonitor}
+                    style={{
+                        background: 'var(--black)', color: 'var(--lime)',
+                        border: '4px solid var(--black)', boxShadow: '6px 6px 0 rgba(0,0,0,0.4)',
+                        borderRadius: '12px', padding: '16px 40px',
+                        fontFamily: 'var(--font-display)', fontSize: '28px', letterSpacing: '2px',
+                        cursor: 'pointer', transition: 'transform 0.1s',
+                        display: 'flex', alignItems: 'center', gap: '12px',
+                    }}
+                    onMouseDown={e => (e.currentTarget.style.transform = 'translate(3px,3px)')}
+                    onMouseUp={e => (e.currentTarget.style.transform = 'translate(0,0)')}
+                >
+                    ▶ MULAI TRIVIA SEKARANG
+                </button>
             </div>
         );
     }

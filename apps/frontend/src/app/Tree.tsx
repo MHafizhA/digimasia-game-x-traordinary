@@ -28,6 +28,7 @@ export default function Tree() {
 
     const { emitWaterTap } = useSocket();
     const [isSyncing, setIsSyncing] = useState(true);
+    const [gameStarted, setGameStarted] = useState(false);
     const [isPumping, setIsPumping] = useState(false);
     const [droplets, setDroplets] = useState<Droplet[]>([]);
     const [stageToast, setStageToast] = useState<string | null>(null);
@@ -59,7 +60,7 @@ export default function Tree() {
         fetchStats();
     }, [user?.id, setUserState]);
 
-    // Start BGM when page loads — user interaction required so we hook into tap
+    // Start BGM — wrapped in a one-shot callback triggered by user gesture
     const bgmStarted = useRef(false);
     const startBGMOnce = useCallback(() => {
         if (!bgmStarted.current) {
@@ -67,6 +68,12 @@ export default function Tree() {
             audio.playBGM();
         }
     }, [audio]);
+
+    // Handler: tap Get Ready to enter the game + start BGM
+    const handleGameReady = useCallback(() => {
+        setGameStarted(true);
+        startBGMOnce();
+    }, [startBGMOnce]);
 
     // Stage-up toast + SFX
     useEffect(() => {
@@ -126,16 +133,65 @@ export default function Tree() {
         </div>
     );
 
+    // ── PRE-GAME LOBBY SCREEN ───────────────────────────────────────────
+    if (!gameStarted) return (
+        <div style={{
+            minHeight: 'calc(100dvh - 120px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px',
+        }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px', maxWidth: '400px', width: '100%', textAlign: 'center' }}>
+                {/* Tree preview */}
+                <div className="card" style={{ width: '100%', padding: '0', overflow: 'hidden', border: '4px solid var(--black)', boxShadow: '6px 6px 0 var(--black)' }}>
+                    <div style={{ height: '200px', background: 'linear-gradient(to bottom, #f0fdf4, #dcfce7)', position: 'relative' }}>
+                        <TreeVisual stage={treeStage} size="100%" />
+                        <div style={{ position: 'absolute', top: '10px', left: '10px', background: 'var(--black)', color: 'var(--yellow)', fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 700, padding: '3px 10px', borderRadius: '20px' }}>
+                            STAGE {treeStage + 1} / 10
+                        </div>
+                    </div>
+                    <div style={{ padding: '12px 16px', background: 'var(--white)', borderTop: '3px solid var(--black)' }}>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: 'var(--black)' }}>{TREE_STAGE_LABELS[Math.min(treeStage, 9)]}</div>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#888', marginTop: '4px' }}>{Math.round(Math.min(100, (totalWater / TOTAL_WATER_GOAL) * 100))}% TOTAL PROGRESS BERSAMA</div>
+                    </div>
+                </div>
+
+                {/* Start button */}
+                <button
+                    onClick={handleGameReady}
+                    style={{
+                        background: 'linear-gradient(135deg, #22c55e, #16a34a)',
+                        border: '4px solid var(--black)', boxShadow: '8px 8px 0 var(--black)',
+                        borderRadius: '18px', padding: '20px 40px', width: '100%',
+                        cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
+                        touchAction: 'manipulation', userSelect: 'none', WebkitUserSelect: 'none',
+                    }}
+                >
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 7vw, 32px)', letterSpacing: '2px', color: 'var(--white)', textShadow: '2px 2px 0 rgba(0,0,0,0.3)' }}>
+                        💧 MULAI MEMOMPA!
+                    </div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(255,255,255,0.8)', letterSpacing: '2px' }}>
+                        TAP UNTUK MASUK & AKTIFKAN SUARA
+                    </div>
+                </button>
+
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(255,255,255,0.6)', letterSpacing: '1px' }}>
+                    {collectedWater}L AIR TERSEDIA · {contributedWater}L SUDAH KONTRIBUSI
+                </div>
+            </div>
+        </div>
+    );
+    // ── END PRE-GAME ────────────────────────────────────────────────────
+
     return (
         <div style={{
             minHeight: 'calc(100dvh - 120px)',
-            padding: '16px',
+            padding: '16px 16px 32px',
             maxWidth: '480px',
             margin: '0 auto',
             display: 'flex',
             flexDirection: 'column',
             gap: '14px',
             position: 'relative',
+            overflowY: 'auto',
         }}>
 
             {/* Stage-up Toast */}
