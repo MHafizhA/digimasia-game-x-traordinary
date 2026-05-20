@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '@/store/useGameStore';
 import { getBackendUrl } from '@/lib/config';
+import { useTreeAudio } from '@/hooks/useTreeAudio';
 
 interface Question {
     index: number;
@@ -21,6 +22,23 @@ export default function Trivia() {
     const [isLoading, setIsLoading] = useState(true);
 
     const { user, currentQuestion, timer } = useGameStore();
+
+    // ── Audio Setup ──
+    const [bgmEnabled, setBgmEnabled] = useState(false);
+    const { playBGM, stopBGM, playWaterDrop, playStageUp, setMuted } = useTreeAudio(bgmEnabled);
+    const hasStartedBGM = useRef(false);
+
+    const toggleGlobalMute = () => {
+        setBgmEnabled(!bgmEnabled);
+        setMuted(bgmEnabled); // if it was enabled, we are muting it, so true.
+    };
+
+    const startBGMOnce = () => {
+        if (!hasStartedBGM.current && bgmEnabled) {
+            playBGM();
+            hasStartedBGM.current = true;
+        }
+    };
 
     // Fetch question whenever currentQuestion changes
     useEffect(() => {
@@ -51,6 +69,9 @@ export default function Trivia() {
     const handleSelect = async (optIdx: number) => {
         // Block if timer has run out
         if (!user || !question || timer === 0) return;
+
+        startBGMOnce(); // Attempt to start BGM on first interaction
+        playWaterDrop(); // Play retro blip on select
 
         // Prevent redundant clicks if already selected this exact option
         if (selectedOption === optIdx) return;
@@ -102,6 +123,14 @@ export default function Trivia() {
     const isTimedOut = timer === 0;
     // Show result feedback when: user submitted AND (timer is up OR there's a result from server)
     const showFeedback = isSubmitted && isCorrect !== null;
+
+    // Play stage-up sound when correct feedback is shown
+    useEffect(() => {
+        if (showFeedback && isCorrect) {
+            playStageUp();
+        }
+    }, [showFeedback, isCorrect, playStageUp]);
+
     // Show "no answer" message when time ran out and user didn't answer
     const showNoAnswer = isTimedOut && !isSubmitted;
 
@@ -114,9 +143,26 @@ export default function Trivia() {
             display: 'flex',
             flexDirection: 'column',
             gap: '16px',
+            position: 'relative'
         }}>
+            {/* Audio Toggle */}
+            <button
+                onClick={toggleGlobalMute}
+                style={{
+                    position: 'absolute', top: '-10px', right: '16px',
+                    width: '40px', height: '40px', borderRadius: '50%',
+                    background: bgmEnabled ? 'var(--blue-bright)' : 'var(--gray-light)',
+                    border: '3px solid var(--black)',
+                    boxShadow: '4px 4px 0 var(--black)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '18px', cursor: 'pointer', zIndex: 10
+                }}
+            >
+                {bgmEnabled ? '🔊' : '🔇'}
+            </button>
+
             {/* Header: Timer + Question counter */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginTop: '16px' }}>
                 <div
                     className={`timer-circle${timer <= 3 ? ' urgent' : ''}`}
                     style={{ width: 'clamp(44px, 12vw, 56px)', height: 'clamp(44px, 12vw, 56px)' }}
