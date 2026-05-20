@@ -25,7 +25,7 @@ export default function Trivia() {
 
     // ── Audio Setup ──
     const [bgmEnabled, setBgmEnabled] = useState(false);
-    const { playBGM, stopBGM, playWaterDrop, playStageUp, setMuted } = useTreeAudio(bgmEnabled);
+    const { playBGM, stopBGM, playMenuSelect, playStageUp, setMuted } = useTreeAudio(bgmEnabled);
     const hasStartedBGM = useRef(false);
 
     const toggleGlobalMute = () => {
@@ -50,12 +50,19 @@ export default function Trivia() {
             setIsCorrect(null);
             setPointsEarned(0);
             try {
-                const resQ = await fetch(`${getBackendUrl()}/trivia-question/${currentQuestion}`);
+                const resQ = await fetch(`${getBackendUrl()}/trivia-question/${currentQuestion}?userId=${user?.id}`);
                 const data = await resQ.json();
                 setQuestion({
                     ...data,
                     options: JSON.parse(data.options)
                 });
+
+                // Restore state if user already answered (useful for page refresh)
+                if (data.userSelection !== undefined && data.userSelection !== null) {
+                    setSelectedOption(data.userSelection);
+                    setIsSubmitted(true);
+                    setIsCorrect(data.isCorrect);
+                }
             } catch (err) {
                 console.error('Failed to fetch question');
             } finally {
@@ -71,7 +78,7 @@ export default function Trivia() {
         if (!user || !question || timer === 0) return;
 
         startBGMOnce(); // Attempt to start BGM on first interaction
-        playWaterDrop(); // Play retro blip on select
+        playMenuSelect(); // Play retro select blip
 
         // Prevent redundant clicks if already selected this exact option
         if (selectedOption === optIdx) return;

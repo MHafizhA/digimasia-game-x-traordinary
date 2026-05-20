@@ -84,6 +84,27 @@ export function useTreeAudio(enabled = true) {
         } catch (_) { }
     }, [getAudioCtx]);
 
+    // ── SFX: Menu Select (Trivia answer click) ────────────
+    const playMenuSelect = useCallback(() => {
+        if (isMutedRef.current || typeof window === 'undefined') return;
+        try {
+            const ctx = getAudioCtx();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(880, ctx.currentTime); // High pitch flat beep
+
+            gain.gain.setValueAtTime(0.1, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.05);
+        } catch (_) { }
+    }, [getAudioCtx]);
+
     // ── SFX: Stage up ─────────────────────────────────────
     const playStageUp = useCallback(() => {
         if (isMutedRef.current) return;
@@ -117,5 +138,5 @@ export function useTreeAudio(enabled = true) {
         }
     }, [playBGM]);
 
-    return { playBGM, stopBGM, playWaterDrop, playStageUp, playComplete, setMuted };
+    return { playBGM, stopBGM, playWaterDrop, playMenuSelect, playStageUp, playComplete, setMuted };
 }

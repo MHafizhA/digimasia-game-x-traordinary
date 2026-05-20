@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { TriviaService } from './trivia.service';
 import { PrismaService } from './prisma.service';
 
@@ -10,7 +10,7 @@ export class TriviaController {
     ) { }
 
     @Get('trivia-question/:index')
-    async getQuestion(@Param('index') index: string) {
+    async getQuestion(@Param('index') index: string, @Query('userId') userId?: string) {
         const q = await this.prisma.question.findUnique({
             where: { index: parseInt(index) },
         });
@@ -19,7 +19,21 @@ export class TriviaController {
 
         // Jangan kirim jawaban asli ke client
         const { answer, ...rest } = q;
-        return rest;
+
+        let userSelection: number | null = null;
+        let isCorrect: boolean | null = null;
+
+        if (userId) {
+            const ua = await this.prisma.userAnswer.findUnique({
+                where: { userId_questionId: { userId: userId, questionId: q.id } }
+            });
+            if (ua) {
+                userSelection = ua.selected;
+                isCorrect = ua.isCorrect;
+            }
+        }
+
+        return { ...rest, userSelection, isCorrect };
     }
 
     @Post('trivia-answer')
