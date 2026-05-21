@@ -98,7 +98,7 @@ export default function Tree() {
     useEffect(() => {
         if (treeStage > prevStageRef.current) {
             const label = TREE_STAGE_LABELS[Math.min(treeStage, 9)];
-            setStageToast(`🌱 POHON NAIK KE STAGE ${treeStage + 1}: ${label}!`);
+            setStageToast(`STAGE ${treeStage + 1}|${label}`);
             setTimeout(() => setStageToast(null), 3000);
             audio.playStageUp();
             if (treeStage >= 9) audio.playComplete();
@@ -117,7 +117,7 @@ export default function Tree() {
 
         // Pump animation
         setIsPumping(true);
-        setTimeout(() => setIsPumping(false), 350);
+        setTimeout(() => setIsPumping(false), 100);
 
         // Spawn a water droplet
         const id = dropletIdRef.current++;
@@ -214,36 +214,39 @@ export default function Tree() {
             boxSizing: 'border-box'
         }}>
 
-            {/* Stage-up Toast — Wrapped in relative container so translate isn't overridden by pop-in */}
-            {stageToast && (
-                <div style={{
-                    position: 'fixed',
-                    top: '10%',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    zIndex: 10000,
-                    pointerEvents: 'none',
-                }}>
+            {/* Stage-up Toast */}
+            {stageToast && (() => {
+                const [stageLabel, treeName] = stageToast.split('|');
+                return (
                     <div style={{
-                        background: 'var(--yellow)',
-                        border: '5px solid var(--black)',
-                        boxShadow: '6px 6px 0 var(--black)',
-                        borderRadius: '20px',
-                        padding: '12px 24px',
-                        fontFamily: 'var(--font-display)',
-                        fontSize: '20px',
-                        letterSpacing: '2px',
-                        color: 'var(--black)',
-                        animation: 'pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both',
-                        whiteSpace: 'nowrap',
-                        maxWidth: '85vw',
-                        textAlign: 'center',
+                        position: 'fixed',
+                        bottom: '24%',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        zIndex: 10000,
+                        pointerEvents: 'none',
+                        width: 'min(80vw, 320px)',
                     }}>
-                        <div style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', marginBottom: '4px', opacity: 0.7 }}>⬆️ LEVEL UP!</div>
-                        {stageToast}
+                        <div style={{
+                            background: 'var(--yellow)',
+                            border: '4px solid var(--black)',
+                            boxShadow: '5px 5px 0 var(--black)',
+                            borderRadius: '16px',
+                            padding: '10px 16px',
+                            textAlign: 'center',
+                            animation: 'pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+                        }}>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '2px', color: '#555', marginBottom: '4px' }}>⬆️ LEVEL UP!</div>
+                            <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(14px, 4vw, 18px)', letterSpacing: '1px', color: 'var(--black)', lineHeight: 1.1 }}>
+                                {stageLabel}
+                            </div>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#333', marginTop: '3px', fontWeight: 700 }}>
+                                {treeName}
+                            </div>
+                        </div>
                     </div>
-                </div>
-            )}
+                );
+            })()}
 
             {/* ── TITLE ─────────────────────── */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -585,12 +588,13 @@ export default function Tree() {
                 <button
                     onClick={handleTap}
                     disabled={isOutOfWater}
-                    className={`pump-btn ${isPumping ? 'is-pumping' : ''}`}
                     style={{
                         background: isPumping
                             ? 'linear-gradient(135deg, #0ea5e9, #2563eb)'
                             : 'linear-gradient(135deg, #22c55e, #16a34a)',
                         border: '4px solid var(--black)',
+                        boxShadow: isPumping ? '2px 2px 0 var(--black)' : '6px 6px 0 var(--black)',
+                        transform: isPumping ? 'translate(4px, 4px)' : 'translate(0, 0)',
                         borderRadius: '18px',
                         padding: '20px',
                         width: '100%',
@@ -599,7 +603,7 @@ export default function Tree() {
                         flexDirection: 'column',
                         alignItems: 'center',
                         gap: '4px',
-                        transition: 'all 0.05s ease',
+                        transition: 'box-shadow 0.08s ease, transform 0.08s ease, background 0.1s ease',
                         userSelect: 'none',
                         WebkitUserSelect: 'none',
                         touchAction: 'manipulation',
@@ -627,14 +631,6 @@ export default function Tree() {
 
             {/* Global CSS for animations */}
             <style>{`
-                .pump-btn {
-                    box-shadow: 6px 6px 0 var(--black);
-                    transform: translate(0, 0);
-                }
-                .pump-btn:active, .pump-btn.is-pumping {
-                    box-shadow: 2px 2px 0 var(--black) !important;
-                    transform: translate(4px, 4px) !important;
-                }
                 @keyframes dropletFly {
                     0% { transform: translateY(0) scale(1); opacity: 1; }
                     60% { transform: translateY(-90px) translateX(30px) scale(1.2); opacity: 0.9; }
