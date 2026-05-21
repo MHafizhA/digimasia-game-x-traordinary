@@ -357,6 +357,8 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
     const [finalWinnerTeam, setFinalWinnerTeam] = useState(false);
     const [finalWinnerDigimer, setFinalWinnerDigimer] = useState(false);
     const [flashActive, setFlashActive] = useState(false);
+    // revealStage: 0 = only digimer shown, 1 = digimer revealed + team panel unlocked, 2 = both revealed
+    const [revealStage, setRevealStage] = useState(0);
 
     const audio = useTreeAudio(true);
 
@@ -377,8 +379,14 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
     const handleWinnerReveal = (type: 'team' | 'digimer') => {
         triggerCelebration();
         audio.playComplete();
-        if (type === 'team') setFinalWinnerTeam(true);
-        else setFinalWinnerDigimer(true);
+        if (type === 'digimer') {
+            setFinalWinnerDigimer(true);
+            // Unlock the team panel after a short delay for dramatic effect
+            setTimeout(() => setRevealStage(1), 1500);
+        } else {
+            setFinalWinnerTeam(true);
+            setRevealStage(2);
+        }
     };
 
     const fetchData = async () => {
@@ -416,6 +424,10 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
                 @keyframes slideInLeft {
                     from { opacity: 0; transform: translateX(-30px); }
                     to   { opacity: 1; transform: translateX(0); }
+                }
+                @keyframes slideInRight {
+                    from { opacity: 0; transform: translateX(60px) scale(0.95); }
+                    to   { opacity: 1; transform: translateX(0) scale(1); }
                 }
                 @keyframes winnerReveal {
                     from { opacity: 0; transform: scale(0.5) rotate(-5deg); }
@@ -490,51 +502,79 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
                 )}
             </div>
 
-            {/* Two Award Sections */}
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '16px',
-                flex: 1,
-                minHeight: 0,
-                overflow: 'hidden',
-            }}>
-                <AwardPanel
-                    title="🌟 DIGIMER OF THE YEAR"
-                    accentColor="var(--blue-bright)"
-                    textColor="white"
-                    stats={digimerStats}
-                    winner={digimerWinner}
-                    revealed={revealedNomineesDigimer}
-                    setRevealed={setRevealedNomineesDigimer}
-                    showVotes={showDigimerVotes}
-                    setShowVotes={setShowDigimerVotes}
-                    winnerRevealed={finalWinnerDigimer}
-                    onRevealWinner={() => handleWinnerReveal('digimer')}
-                />
-                <AwardPanel
-                    title="🏅 BEST TEAM OF THE YEAR"
-                    accentColor="var(--yellow)"
-                    textColor="var(--black)"
-                    stats={teamStats}
-                    winner={teamWinner}
-                    revealed={revealedNomineesTeam}
-                    setRevealed={setRevealedNomineesTeam}
-                    showVotes={showTeamVotes}
-                    setShowVotes={setShowTeamVotes}
-                    winnerRevealed={finalWinnerTeam}
-                    onRevealWinner={() => handleWinnerReveal('team')}
-                />
-            </div>
+            {/* Sequential Award Sections */}
+            {revealStage === 0 ? (
+                // Stage 0: Only show Digimer panel full-width (dramatic focus)
+                <div style={{ flex: 1, minHeight: 0, overflow: 'hidden', animation: 'fadeIn 0.5s ease' }}>
+                    <AwardPanel
+                        title="🌟 DIGIMER OF THE YEAR"
+                        accentColor="var(--blue-bright)"
+                        textColor="white"
+                        stats={digimerStats}
+                        winner={digimerWinner}
+                        revealed={revealedNomineesDigimer}
+                        setRevealed={setRevealedNomineesDigimer}
+                        showVotes={showDigimerVotes}
+                        setShowVotes={setShowDigimerVotes}
+                        winnerRevealed={finalWinnerDigimer}
+                        onRevealWinner={() => handleWinnerReveal('digimer')}
+                    />
+                    {!finalWinnerDigimer && (
+                        <div style={{ textAlign: 'center', marginTop: '12px', fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(255,255,255,0.4)', letterSpacing: '2px' }}>
+                            BEST TEAM OF THE YEAR AKAN TERUNGKAP SETELAH INI
+                        </div>
+                    )}
+                </div>
+            ) : (
+                // Stage 1+: Show both panels side by side
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    gap: '16px',
+                    flex: 1,
+                    minHeight: 0,
+                    overflow: 'hidden',
+                }}>
+                    <AwardPanel
+                        title="🌟 DIGIMER OF THE YEAR"
+                        accentColor="var(--blue-bright)"
+                        textColor="white"
+                        stats={digimerStats}
+                        winner={digimerWinner}
+                        revealed={revealedNomineesDigimer}
+                        setRevealed={setRevealedNomineesDigimer}
+                        showVotes={showDigimerVotes}
+                        setShowVotes={setShowDigimerVotes}
+                        winnerRevealed={finalWinnerDigimer}
+                        onRevealWinner={() => handleWinnerReveal('digimer')}
+                    />
+                    <div style={{ animation: 'slideInRight 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both' }}>
+                        <AwardPanel
+                            title="🏅 BEST TEAM OF THE YEAR"
+                            accentColor="var(--yellow)"
+                            textColor="var(--black)"
+                            stats={teamStats}
+                            winner={teamWinner}
+                            revealed={revealedNomineesTeam}
+                            setRevealed={setRevealedNomineesTeam}
+                            showVotes={showTeamVotes}
+                            setShowVotes={setShowTeamVotes}
+                            winnerRevealed={finalWinnerTeam}
+                            onRevealWinner={() => handleWinnerReveal('team')}
+                        />
+                    </div>
+                </div>
+            )}
 
             {/* Reset button */}
-            {anyRevealed && (
+            {revealStage >= 1 && (
                 <div style={{ textAlign: 'center', flexShrink: 0 }}>
                     <button
                         onClick={() => {
                             setFinalWinnerTeam(false); setFinalWinnerDigimer(false);
                             setShowTeamVotes(false); setShowDigimerVotes(false);
                             setRevealedNomineesTeam(false); setRevealedNomineesDigimer(false);
+                            setRevealStage(0);
                         }}
                         style={{
                             background: 'transparent', border: '2px solid rgba(255,255,255,0.3)',
