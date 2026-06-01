@@ -141,11 +141,11 @@ const CardNomineeList = memo(function CardNomineeList({ data, accentColor, textC
     return (
         <div style={{
             display: 'flex', flexDirection: 'column', alignItems: 'center',
-            width: '100%', gap: '8px',
+            width: '100%', gap: '4px',
             animation: 'winnerReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both',
         }}>
             {/* Branding Image Header */}
-            <div style={{ padding: '0 20px', width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <div style={{ padding: '0 20px', width: '100%', display: 'flex', justifyContent: 'center', marginTop: '-40px' }}>
                 <img
                     src={logoSrc}
                     alt="Awards Logo"
@@ -166,7 +166,7 @@ const CardNomineeList = memo(function CardNomineeList({ data, accentColor, textC
 
                     {/* Big Photo */}
                     <div style={{
-                        width: 'clamp(200px, 38vh, 320px)', height: 'clamp(200px, 38vh, 320px)',
+                        width: 'clamp(240px, 42vh, 380px)', height: 'clamp(240px, 42vh, 380px)',
                         borderRadius: '24px', border: `6px solid var(--black)`,
                         overflow: 'hidden', boxShadow: `6px 6px 0 ${accentColor}`,
                         background: accentColor,
