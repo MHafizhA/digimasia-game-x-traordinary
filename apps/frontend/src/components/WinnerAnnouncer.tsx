@@ -312,7 +312,7 @@ const WinnerCard = memo(function WinnerCard({ winner, accentColor, textColor, vo
 });
 
 // ── Award Panel ────────────────────────────────────────
-const AwardPanel = memo(function AwardPanel({ title, accentColor, textColor = 'var(--black)', stats, winner, revealed, setRevealed, showVotes, setShowVotes, winnerRevealed, onRevealWinner, countdownValue, type }: {
+const AwardPanel = memo(function AwardPanel({ title, accentColor, textColor = 'var(--black)', stats, winner, revealed, setRevealed, showVotes, setShowVotes, winnerRevealed, onRevealWinner, countdownValue, type, isFocused }: {
     title: string;
     accentColor: string;
     textColor?: string;
@@ -326,50 +326,57 @@ const AwardPanel = memo(function AwardPanel({ title, accentColor, textColor = 'v
     countdownValue?: number | null;
     onRevealWinner: () => void;
     type: 'team' | 'digimer';
+    isFocused?: boolean;
 }) {
     const maxVotes = useMemo(() => Math.max(...stats.map(d => d.count), 1), [stats]);
 
+    const wrapperStyle = isFocused ? {
+        display: 'flex', flexDirection: 'column' as const, flex: 1, overflow: 'hidden'
+    } : {
+        background: 'white',
+        border: '5px solid var(--black)',
+        borderRadius: '20px',
+        boxShadow: '8px 8px 0 var(--black)',
+        display: 'flex',
+        flexDirection: 'column' as const,
+        overflow: 'hidden',
+    };
+
     return (
-        <div style={{
-            background: 'white',
-            border: '5px solid var(--black)',
-            borderRadius: '20px',
-            boxShadow: '8px 8px 0 var(--black)',
-            display: 'flex',
-            flexDirection: 'column',
-            overflow: 'hidden',
-        }}>
+        <div style={wrapperStyle}>
             {/* Header strip */}
-            <div style={{
-                background: accentColor,
-                borderBottom: '5px solid var(--black)',
-                padding: '12px 20px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-            }}>
+            {!isFocused && (
                 <div style={{
-                    fontFamily: 'var(--font-display)',
-                    fontSize: 'clamp(14px, 1.8vw, 22px)',
-                    letterSpacing: '2px',
-                    color: textColor,
-                }}>{title}</div>
-                <div style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 'clamp(9px, 0.9vw, 11px)',
-                    color: textColor === 'white' ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.5)',
-                    letterSpacing: '1px',
-                }}>{stats.length} FINALISTS</div>
-            </div>
+                    background: accentColor,
+                    borderBottom: '5px solid var(--black)',
+                    padding: '12px 20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                }}>
+                    <div style={{
+                        fontFamily: 'var(--font-display)',
+                        fontSize: 'clamp(14px, 1.8vw, 22px)',
+                        letterSpacing: '2px',
+                        color: textColor,
+                    }}>{title}</div>
+                    <div style={{
+                        fontFamily: 'var(--font-mono)',
+                        fontSize: 'clamp(9px, 0.9vw, 11px)',
+                        color: textColor === 'white' ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.5)',
+                        letterSpacing: '1px',
+                    }}>{stats.length} FINALISTS</div>
+                </div>
+            )}
 
             {/* Body */}
-            <div style={{ padding: '16px 20px', flex: 1, overflowY: 'auto' }}>
+            <div style={{ padding: isFocused ? '0' : '16px 20px', flex: 1, overflowY: 'auto' }}>
                 {!winnerRevealed ? (
                     countdownValue !== undefined && countdownValue !== null && countdownValue > 0 ? (
                         <div style={{
                             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                             flex: 1, padding: '40px 20px', position: 'relative', overflow: 'hidden',
-                            background: 'var(--white)', // Added background to cover potential leaks
+                            background: isFocused ? 'transparent' : 'var(--white)', // Keep background if in 'all' view, transparent in focused
                         }}>
                             {/* Decorative rotating retro rings */}
                             <div style={{
@@ -726,6 +733,7 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
                             countdownValue={countdownState?.type === 'digimer' ? countdownState.count : null}
                             onRevealWinner={() => handleWinnerReveal('digimer')}
                             type="digimer"
+                            isFocused={true}
                         />
                     </div>
                 </div>
@@ -750,6 +758,7 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
                             countdownValue={countdownState?.type === 'team' ? countdownState.count : null}
                             onRevealWinner={() => handleWinnerReveal('team')}
                             type="team"
+                            isFocused={true}
                         />
                     </div>
                 </div>
