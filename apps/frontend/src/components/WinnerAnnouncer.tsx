@@ -269,12 +269,39 @@ const AwardPanel = memo(function AwardPanel({ title, accentColor, textColor = 'v
                     countdownValue !== undefined && countdownValue !== null && countdownValue > 0 ? (
                         <div style={{
                             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                            flex: 1, padding: '40px 20px', position: 'relative', overflow: 'hidden'
+                            flex: 1, padding: '40px 20px', position: 'relative', overflow: 'hidden',
+                            background: 'var(--white)', // Added background to cover potential leaks
                         }}>
+                            {/* Decorative rotating retro rings */}
                             <div style={{
-                                fontFamily: 'var(--font-display)', fontSize: '150px',
+                                position: 'absolute', width: '280px', height: '280px',
+                                border: `12px dashed ${accentColor}`, borderRadius: '50%',
+                                animation: 'spinSlow 10s linear infinite', opacity: 0.3, zIndex: 1
+                            }} />
+                            <div style={{
+                                position: 'absolute', width: '220px', height: '220px',
+                                border: '6px dotted var(--black)', borderRadius: '50%',
+                                animation: 'spinReverse 6s linear infinite', opacity: 0.5, zIndex: 1
+                            }} />
+                            <div style={{
+                                position: 'absolute', width: '160px', height: '160px',
+                                border: `4px solid ${accentColor}`, borderRadius: '50%',
+                                animation: 'spinSlow 4s linear infinite', opacity: 0.8, zIndex: 1
+                            }} />
+                            <div style={{
+                                fontFamily: 'var(--font-mono)', fontSize: '18px',
+                                letterSpacing: '8px', marginBottom: '10px', zIndex: 2,
+                                background: accentColor, padding: '4px 16px', color: textColor,
+                                border: '3px solid var(--black)', borderRadius: '8px',
+                                boxShadow: '4px 4px 0 var(--black)',
+                                animation: 'sparkleGlow 0.3s ease-in-out infinite alternate'
+                            }}>
+                                [ DECRYPTING ]
+                            </div>
+                            <div style={{
+                                fontFamily: 'var(--font-display)', fontSize: '160px',
                                 color: accentColor, textShadow: '8px 8px 0 var(--black)',
-                                zIndex: 2, position: 'relative',
+                                zIndex: 2, position: 'relative', lineHeight: 1,
                                 animation: 'sparkleGlow 0.5s ease-in-out infinite alternate'
                             }}>
                                 {countdownValue}
@@ -495,6 +522,14 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
                 @keyframes expandWidth {
                     0% { transform: scaleX(0); }
                     100% { transform: scaleX(1); }
+                }
+                @keyframes spinSlow {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+                @keyframes spinReverse {
+                    0% { transform: rotate(360deg); }
+                    100% { transform: rotate(0deg); }
                 }
             `}</style>
 
