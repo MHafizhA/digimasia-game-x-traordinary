@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, memo, useMemo } from 'react';
+import { useState, useEffect, memo, useMemo, useCallback } from 'react';
 import confetti from 'canvas-confetti';
 import { getBackendUrl } from '@/lib/config';
 import { useTreeAudio } from '@/hooks/useTreeAudio';
@@ -214,7 +214,7 @@ const WinnerCard = memo(function WinnerCard({ winner, accentColor, textColor, vo
 });
 
 // ── Award Panel ────────────────────────────────────────
-const AwardPanel = memo(function AwardPanel({ title, accentColor, textColor = 'var(--black)', stats, winner, revealed, setRevealed, showVotes, setShowVotes, winnerRevealed, onRevealWinner }: {
+const AwardPanel = memo(function AwardPanel({ title, accentColor, textColor = 'var(--black)', stats, winner, revealed, setRevealed, showVotes, setShowVotes, winnerRevealed, onRevealWinner, countdownValue }: {
     title: string;
     accentColor: string;
     textColor?: string;
@@ -225,6 +225,7 @@ const AwardPanel = memo(function AwardPanel({ title, accentColor, textColor = 'v
     showVotes: boolean;
     setShowVotes: (v: boolean) => void;
     winnerRevealed: boolean;
+    countdownValue?: number | null;
     onRevealWinner: () => void;
 }) {
     const maxVotes = useMemo(() => Math.max(...stats.map(d => d.count), 1), [stats]);
@@ -265,64 +266,81 @@ const AwardPanel = memo(function AwardPanel({ title, accentColor, textColor = 'v
             {/* Body */}
             <div style={{ padding: '16px 20px', flex: 1, overflowY: 'auto' }}>
                 {!winnerRevealed ? (
-                    // Hidden state with Neo-brutalist lock design
-                    <div style={{
-                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                        flex: 1, padding: '40px 20px', position: 'relative', overflow: 'hidden'
-                    }}>
-                        {/* Subtle background pattern to indicate 'classified' area */}
+                    countdownValue !== undefined && countdownValue !== null && countdownValue > 0 ? (
                         <div style={{
-                            position: 'absolute', inset: 0, opacity: 0.05, pointerEvents: 'none',
-                            backgroundImage: 'radial-gradient(var(--navy-dark) 2px, transparent 2px)',
-                            backgroundSize: '20px 20px'
-                        }} />
-
-                        {/* Dramatic Boxed Icon */}
-                        <div style={{
-                            position: 'relative', width: '100px', height: '100px',
-                            background: 'white', border: '5px solid var(--black)',
-                            borderRadius: '24px', boxShadow: '8px 8px 0 var(--black)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontSize: '48px', marginBottom: '24px', zIndex: 1,
-                            animation: 'crownFloat 4s ease-in-out infinite',
-                            willChange: 'transform'
+                            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                            flex: 1, padding: '40px 20px', position: 'relative', overflow: 'hidden'
                         }}>
-                            🔒
+                            <div style={{
+                                fontFamily: 'var(--font-display)', fontSize: '150px',
+                                color: accentColor, textShadow: '8px 8px 0 var(--black)',
+                                zIndex: 2, position: 'relative',
+                                animation: 'sparkleGlow 0.5s ease-in-out infinite alternate'
+                            }}>
+                                {countdownValue}
+                            </div>
                         </div>
-
-                        {/* Lock Status Text */}
+                    ) : (
+                        // Hidden state with Neo-brutalist lock design
                         <div style={{
-                            fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3vw, 32px)',
-                            color: 'var(--black)', letterSpacing: '2px',
-                            marginBottom: '6px', zIndex: 1
+                            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                            flex: 1, padding: '40px 20px', position: 'relative', overflow: 'hidden'
                         }}>
-                            CLASSIFIED
-                        </div>
-                        <div style={{
-                            fontFamily: 'var(--font-mono)', fontSize: 'clamp(9px, 1vw, 11px)',
-                            color: '#888', letterSpacing: '2px', fontWeight: 600,
-                            marginBottom: '40px', zIndex: 1, textAlign: 'center'
-                        }}>
-                            RESULTS ARE LOCKED UNTIL REVEAL
-                        </div>
+                            {/* Subtle background pattern to indicate 'classified' area */}
+                            <div style={{
+                                position: 'absolute', inset: 0, opacity: 0.05, pointerEvents: 'none',
+                                backgroundImage: 'radial-gradient(var(--navy-dark) 2px, transparent 2px)',
+                                backgroundSize: '20px 20px'
+                            }} />
 
-                        {/* Action Button */}
-                        <button
-                            style={{
-                                background: accentColor, border: '5px solid var(--black)',
-                                boxShadow: `0 0 20px ${accentColor}, 8px 8px 0 var(--black)`, // glowing shadow
-                                padding: '16px 32px', borderRadius: '16px', fontFamily: 'var(--font-display)',
-                                fontSize: 'clamp(14px, 1.5vw, 18px)', letterSpacing: '2px',
-                                cursor: 'pointer', transition: 'all 0.1s',
-                                color: textColor, position: 'relative', zIndex: 1,
-                            }}
-                            onMouseDown={e => { (e.target as HTMLElement).style.transform = 'translate(4px,4px)'; (e.target as HTMLElement).style.boxShadow = '4px 4px 0 var(--black)'; }}
-                            onMouseUp={e => { (e.target as HTMLElement).style.transform = ''; (e.target as HTMLElement).style.boxShadow = `0 0 20px ${accentColor}, 8px 8px 0 var(--black)`; }}
-                            onClick={onRevealWinner}
-                        >
-                            🏆 REVEAL WINNER!
-                        </button>
-                    </div>
+                            {/* Dramatic Boxed Icon */}
+                            <div style={{
+                                position: 'relative', width: '100px', height: '100px',
+                                background: 'white', border: '5px solid var(--black)',
+                                borderRadius: '24px', boxShadow: '8px 8px 0 var(--black)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                fontSize: '48px', marginBottom: '24px', zIndex: 1,
+                                animation: 'crownFloat 4s ease-in-out infinite',
+                                willChange: 'transform'
+                            }}>
+                                🔒
+                            </div>
+
+                            {/* Lock Status Text */}
+                            <div style={{
+                                fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 3vw, 32px)',
+                                color: 'var(--black)', letterSpacing: '2px',
+                                marginBottom: '6px', zIndex: 1
+                            }}>
+                                CLASSIFIED
+                            </div>
+                            <div style={{
+                                fontFamily: 'var(--font-mono)', fontSize: 'clamp(9px, 1vw, 11px)',
+                                color: '#888', letterSpacing: '2px', fontWeight: 600,
+                                marginBottom: '40px', zIndex: 1, textAlign: 'center'
+                            }}>
+                                RESULTS ARE LOCKED UNTIL REVEAL
+                            </div>
+
+                            {/* Action Button */}
+                            <button
+                                style={{
+                                    background: accentColor, border: '5px solid var(--black)',
+                                    boxShadow: `0 0 20px ${accentColor}, 8px 8px 0 var(--black)`, // glowing shadow
+                                    padding: '16px 32px', borderRadius: '16px', fontFamily: 'var(--font-display)',
+                                    fontSize: 'clamp(14px, 1.5vw, 18px)', letterSpacing: '2px',
+                                    cursor: 'pointer', transition: 'all 0.1s',
+                                    color: textColor, position: 'relative', zIndex: 1,
+                                }}
+                                onMouseDown={e => { (e.target as HTMLElement).style.transform = 'translate(4px,4px)'; (e.target as HTMLElement).style.boxShadow = '4px 4px 0 var(--black)'; }}
+                                onMouseUp={e => { (e.target as HTMLElement).style.transform = ''; (e.target as HTMLElement).style.boxShadow = `0 0 20px ${accentColor}, 8px 8px 0 var(--black)`; }}
+                                onClick={onRevealWinner}
+                                disabled={countdownValue !== undefined && countdownValue !== null}
+                            >
+                                🏆 REVEAL WINNER!
+                            </button>
+                        </div>
+                    )
                 ) : (
                     // Winner & Nominees revealed state
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -358,10 +376,11 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
     const [finalWinnerDigimer, setFinalWinnerDigimer] = useState(false);
     const [flashActive, setFlashActive] = useState(false);
     const [activeFocus, setActiveFocus] = useState<'all' | 'digimer' | 'team'>('all');
+    const [countdownState, setCountdownState] = useState<{ type: 'digimer' | 'team', count: number } | null>(null);
 
     const audio = useTreeAudio(true);
 
-    const triggerCelebration = () => {
+    const triggerCelebration = useCallback(() => {
         setFlashActive(true);
         setTimeout(() => setFlashActive(false), 700);
 
@@ -373,19 +392,39 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
         setTimeout(() => {
             confetti({ startVelocity: 30, spread: 180, ticks: 60, zIndex: 10000, particleCount: 30, origin: { x: 0.5, y: 0.45 } });
         }, 500);
-    };
+    }, []);
 
     const handleWinnerReveal = (type: 'team' | 'digimer') => {
-        triggerCelebration();
-        audio.playComplete();
-        if (type === 'digimer') {
-            setFinalWinnerDigimer(true);
-            setActiveFocus('digimer');
-        } else {
-            setFinalWinnerTeam(true);
-            setActiveFocus('team');
-        }
+        if (countdownState) return; // Prevent multiple clicks
+        audio.playTick();
+        setActiveFocus(type);
+        setCountdownState({ type, count: 3 });
     };
+
+    useEffect(() => {
+        if (countdownState) {
+            if (countdownState.count > 0) {
+                const tm = setTimeout(() => {
+                    const newCount = countdownState.count - 1;
+                    setCountdownState({ type: countdownState.type, count: newCount });
+                    if (newCount > 0) {
+                        audio.playTick();
+                    }
+                }, 1000);
+                return () => clearTimeout(tm);
+            } else {
+                // Countdown reached 0
+                triggerCelebration();
+                audio.playComplete();
+                if (countdownState.type === 'digimer') {
+                    setFinalWinnerDigimer(true);
+                } else {
+                    setFinalWinnerTeam(true);
+                }
+                setCountdownState(null);
+            }
+        }
+    }, [countdownState, audio, triggerCelebration]);
 
     const fetchData = async () => {
         try {
@@ -523,6 +562,7 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
                         showVotes={showDigimerVotes}
                         setShowVotes={setShowDigimerVotes}
                         winnerRevealed={finalWinnerDigimer}
+                        countdownValue={countdownState?.type === 'digimer' ? countdownState.count : null}
                         onRevealWinner={() => handleWinnerReveal('digimer')}
                     />
                     <AwardPanel
@@ -536,6 +576,7 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
                         showVotes={showTeamVotes}
                         setShowVotes={setShowTeamVotes}
                         winnerRevealed={finalWinnerTeam}
+                        countdownValue={countdownState?.type === 'team' ? countdownState.count : null}
                         onRevealWinner={() => handleWinnerReveal('team')}
                     />
                 </div>

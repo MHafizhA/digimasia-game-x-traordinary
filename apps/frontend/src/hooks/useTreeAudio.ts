@@ -198,6 +198,27 @@ export function useTreeAudio(enabled = true) {
         } catch (_) { }
     }, [getAudioCtx]);
 
+    const playTick = useCallback(() => {
+        if (isMutedRef.current || typeof window === 'undefined') return;
+        try {
+            const ctx = getAudioCtx();
+            const master = masterGainRef.current;
+            if (!master) return;
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(master);
+            osc.type = 'square';
+            // Classic tension tick
+            osc.frequency.setValueAtTime(880, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.2, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.1);
+        } catch (_) { }
+    }, [getAudioCtx]);
+
     const playStageUp = useCallback(() => {
         if (isMutedRef.current) return;
         try {
@@ -256,5 +277,5 @@ export function useTreeAudio(enabled = true) {
         }
     }, [getAudioCtx, scheduleBGMLoop, stopAllOscillators]);
 
-    return { playBGM, playTriviaBGM, stopBGM, playWaterDrop, playMenuSelect, playStageUp, playComplete, setMuted };
+    return { playBGM, playTriviaBGM, stopBGM, playWaterDrop, playMenuSelect, playTick, playStageUp, playComplete, setMuted };
 }
