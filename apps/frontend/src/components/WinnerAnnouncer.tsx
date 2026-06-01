@@ -358,14 +358,16 @@ const AwardPanel = memo(function AwardPanel({ title, accentColor, textColor = 'v
     const wrapperStyle = isFocused ? {
         display: 'flex', flexDirection: 'column' as const, flex: 1, overflow: 'hidden'
     } : {
-        background: 'white',
+        backgroundColor: '#f8f9fa',
+        backgroundImage: 'radial-gradient(rgba(0,0,0,0.1) 2px, transparent 0)',
+        backgroundSize: '24px 24px',
         border: '6px solid var(--black)',
         borderRadius: '32px',
         boxShadow: `12px 12px 0 ${accentColor}`,
         display: 'flex',
         flexDirection: 'column' as const,
         alignItems: 'center',
-        padding: '30px 20px',
+        padding: '40px 20px',
         gap: '24px',
         flex: 1,
         position: 'relative' as const,
@@ -377,14 +379,14 @@ const AwardPanel = memo(function AwardPanel({ title, accentColor, textColor = 'v
             {!isFocused ? (
                 winnerRevealed && winner ? (
                     // Persistent Winner Display in 'All' View
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', height: '100%', justifyContent: 'center', gap: '8px' }}>
-                        <img src={logoSrc} alt={title} style={{ maxWidth: '280px', width: '100%' }} />
-                        <div style={{ position: 'relative', marginTop: '4px' }}>
-                            <div style={{ fontSize: 'clamp(32px, 4vh, 52px)', position: 'absolute', top: '-18px', left: '50%', transform: 'translateX(-50%)', animation: 'crownFloat 2.5s infinite', zIndex: 1 }}>👑</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', height: '100%', justifyContent: 'center', gap: '20px' }}>
+                        <img src={logoSrc} alt={title} style={{ maxWidth: 'clamp(300px, 45vw, 480px)', width: '100%' }} />
+                        <div style={{ position: 'relative', marginTop: '10px' }}>
+                            <div style={{ fontSize: 'clamp(40px, 5vh, 64px)', position: 'absolute', top: '-24px', left: '50%', transform: 'translateX(-50%)', animation: 'crownFloat 2.5s infinite', zIndex: 1 }}>👑</div>
                             <div style={{
-                                width: 'clamp(180px, 28vh, 280px)', height: 'clamp(180px, 28vh, 280px)',
+                                width: 'clamp(200px, 32vh, 320px)', height: 'clamp(200px, 32vh, 320px)',
                                 borderRadius: '24px', border: `6px solid var(--black)`,
-                                overflow: 'hidden', boxShadow: `6px 6px 0 ${accentColor}`
+                                overflow: 'hidden', boxShadow: `8px 8px 0 ${accentColor}`
                             }}>
                                 <img src={getImageForId(winner.id, winner.name, winner.imageUrl)} alt={winner.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             </div>
@@ -435,7 +437,7 @@ const AwardPanel = memo(function AwardPanel({ title, accentColor, textColor = 'v
                     </div>
                 )
             ) : (  // Focused state — Full Screen Reveal/Countdown Mode
-                <div style={{ padding: '0', flex: 1, overflowY: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                <div className="no-scrollbar" style={{ padding: '0', flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
                     {!winnerRevealed ? (
                         countdownValue !== undefined && countdownValue !== null && countdownValue > 0 ? (
                             <div style={{
@@ -630,6 +632,13 @@ export default function WinnerAnnouncer({ onClose }: WinnerAnnouncerProps) {
                 @keyframes spinReverse {
                     0% { transform: rotate(360deg); }
                     100% { transform: rotate(0deg); }
+                }
+                .no-scrollbar::-webkit-scrollbar {
+                    display: none;
+                }
+                .no-scrollbar {
+                    -ms-overflow-style: none;  /* IE and Edge */
+                    scrollbar-width: none;  /* Firefox */
                 }
             `}</style>
 
