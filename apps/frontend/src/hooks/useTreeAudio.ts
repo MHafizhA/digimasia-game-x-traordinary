@@ -219,36 +219,24 @@ export function useTreeAudio(enabled = true) {
         } catch (_) { }
     }, [getAudioCtx]);
 
-    const tensionDroneRef = useRef<OscillatorNode | null>(null);
+    const tensionDroneRef = useRef<HTMLAudioElement | null>(null);
 
     const playTensionDrone = useCallback(() => {
         if (isMutedRef.current || typeof window === 'undefined') return;
         try {
-            const ctx = getAudioCtx();
-            const master = masterGainRef.current;
-            if (!master) return;
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.connect(gain);
-            gain.connect(master);
-            // Deep dramatic drone
-            osc.type = 'sawtooth';
-            // Start at a very low bass frequency and slowly pitch up slightly
-            osc.frequency.setValueAtTime(45, ctx.currentTime);
-            osc.frequency.linearRampToValueAtTime(65, ctx.currentTime + 10);
-
-            // Build volume and tension over 10 seconds
-            gain.gain.setValueAtTime(0, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.5, ctx.currentTime + 10);
-
-            osc.start(ctx.currentTime);
-            tensionDroneRef.current = osc;
+            const audio = new Audio('/assets/audio/paulyudin-dramatic-482366.mp3');
+            audio.volume = 0.8;
+            tensionDroneRef.current = audio;
+            audio.play().catch(() => { });
         } catch (_) { }
-    }, [getAudioCtx]);
+    }, []);
 
     const stopTensionDrone = useCallback(() => {
         if (tensionDroneRef.current) {
-            try { tensionDroneRef.current.stop(); tensionDroneRef.current.disconnect(); } catch (_) { }
+            try {
+                tensionDroneRef.current.pause();
+                tensionDroneRef.current.src = "";
+            } catch (_) { }
             tensionDroneRef.current = null;
         }
     }, []);
@@ -288,7 +276,10 @@ export function useTreeAudio(enabled = true) {
             }
 
             if (tensionDroneRef.current) {
-                try { tensionDroneRef.current.stop(); } catch (_) { }
+                try {
+                    tensionDroneRef.current.pause();
+                    tensionDroneRef.current.src = "";
+                } catch (_) { }
                 tensionDroneRef.current = null;
             }
             if (masterGainRef.current) {
