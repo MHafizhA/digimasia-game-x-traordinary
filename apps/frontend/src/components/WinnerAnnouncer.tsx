@@ -136,24 +136,24 @@ const WinnerCard = memo(function WinnerCard({ winner, accentColor, textColor, vo
             willChange: 'transform, opacity',
         }}>
             {/* Crown */}
-            <div style={{ fontSize: 'clamp(60px, 12vw, 120px)', animation: 'crownFloat 2.5s ease-in-out infinite', marginBottom: '-20px', zIndex: 1, willChange: 'transform' }}>
+            <div style={{ fontSize: 'clamp(40px, 8vh, 80px)', animation: 'crownFloat 2.5s ease-in-out infinite', marginBottom: '-24px', zIndex: 1, willChange: 'transform' }}>
                 👑
             </div>
 
             {/* Big Avatar */}
             <div style={{
-                width: 'clamp(140px, 25vw, 280px)',
-                height: 'clamp(140px, 25vw, 280px)',
+                width: 'clamp(120px, 35vh, 240px)',
+                height: 'clamp(120px, 35vh, 240px)',
                 borderRadius: '24px',
                 background: accentColor,
-                border: '8px solid var(--black)',
-                boxShadow: `0 0 50px ${accentColor}, 10px 10px 0 var(--black)`,
+                border: '6px solid var(--black)',
+                boxShadow: `0 0 40px ${accentColor}, 8px 8px 0 var(--black)`,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(40px, 8vw, 80px)',
+                fontSize: 'clamp(32px, 6vh, 64px)',
                 color: textColor,
                 animation: 'sparkleGlow 2.5s ease-in-out infinite',
-                marginBottom: '20px',
+                marginBottom: '16px',
                 overflow: 'hidden',
                 willChange: 'box-shadow',
             }}>
@@ -163,16 +163,16 @@ const WinnerCard = memo(function WinnerCard({ winner, accentColor, textColor, vo
             {/* Name */}
             <div style={{
                 background: accentColor,
-                border: '6px solid var(--black)',
-                boxShadow: '8px 8px 0 var(--black)',
-                padding: '12px 36px',
+                border: '4px solid var(--black)',
+                boxShadow: '6px 6px 0 var(--black)',
+                padding: '8px 28px',
                 borderRadius: '50px',
                 fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(24px, 5vw, 56px)',
+                fontSize: 'clamp(20px, 4vh, 40px)',
                 letterSpacing: '2px',
                 color: textColor,
                 textAlign: 'center',
-                marginBottom: '12px',
+                marginBottom: '8px',
             }}>{winner.name}</div>
 
             {/* Division */}
