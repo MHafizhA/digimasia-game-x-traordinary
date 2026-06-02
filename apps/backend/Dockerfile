@@ -1,36 +1,34 @@
-# Stage 1: Build
-FROM node:20-alpine AS builder
-# Install openssl for Prisma
-RUN apk add --no-cache openssl
+﻿FROM node:20-alpine AS builder
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-RUN npm ci
+COPY apps/backend/package*.json ./apps/backend/
+COPY apps/frontend/package*.json ./apps/frontend/
 
-# Copy source code
-COPY . .
+# Install root + backend deps
+RUN npm ci --workspace=apps/backend 2>/dev/null || true
+RUN cd apps/backend && npm ci
 
-# Build step now includes prisma generate via package.json
+# Copy source
+COPY apps/backend ./apps/backend
+
+# Generate Prisma client + build NestJS
+WORKDIR /app/apps/backend
+RUN npx prisma generate
 RUN npm run build
 
-# Stage 2: Production
-FROM node:20-alpine AS production
-RUN apk add --no-cache openssl
+# ─── Production image ───────────────────────────
+FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Copy package files and install prod deps only
-COPY package*.json ./
-RUN npm ci --omit=dev
-
-# Copy generated prisma files (standard location)
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-COPY prisma ./prisma
-COPY dist ./dist
+COPY --from=builder /app/apps/backend/dist ./dist
+COPY --from=builder /app/apps/backend/node_modules ./node_modules
+COPY --from=builder /app/apps/backend/package.json ./package.json
+COPY --from=builder /app/apps/backend/prisma ./prisma
 
 EXPOSE 3001
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start:prod"]
