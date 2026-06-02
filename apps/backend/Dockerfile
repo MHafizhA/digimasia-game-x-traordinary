@@ -6,7 +6,7 @@ COPY package*.json ./
 COPY prisma ./prisma
 
 # Install all deps
-RUN npm ci
+RUN npm install
 
 # Copy remaining source
 COPY . .
