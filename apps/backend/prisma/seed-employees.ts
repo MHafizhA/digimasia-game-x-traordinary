@@ -46,6 +46,17 @@ async function main() {
     await prisma.vote.deleteMany({});
     await prisma.user.deleteMany({});
 
+    console.log('Seeding Admin...');
+    await prisma.user.create({
+        data: {
+            name: 'Admin',
+            pin: '9999',
+            division: 'ADMIN',
+            isAdmin: true,
+            isJoined: true,
+        },
+    });
+
     console.log('Seeding employees...');
     for (let i = 0; i < employees.length; i++) {
         const emp = employees[i];
