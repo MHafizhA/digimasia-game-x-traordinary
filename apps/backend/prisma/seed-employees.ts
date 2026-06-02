@@ -41,10 +41,12 @@ const employees = [
 ];
 
 async function main() {
-    console.log('Cleaning up existing users...');
+    console.log('Cleaning up existing data...');
     await prisma.userAnswer.deleteMany({});
     await prisma.vote.deleteMany({});
     await prisma.user.deleteMany({});
+    await prisma.candidate.deleteMany({});
+    await prisma.question.deleteMany({});
 
     console.log('Seeding Admin...');
     await prisma.user.create({
@@ -73,9 +75,36 @@ async function main() {
                 score: 0,
             },
         });
-        console.log(`Created: ${emp.name} (PIN: ${pin})`);
     }
-    console.log('Seeding finished.');
+
+    console.log('Seeding candidates (Teams & Digimers)...');
+    await prisma.candidate.createMany({
+        data: [
+            // Teams
+            { id: 't1', name: 'Tech Wizards', division: 'Technology & Operation', type: 'team', imageUrl: '' },
+            { id: 't2', name: 'Design Masters', division: 'Content Design', type: 'team', imageUrl: '' },
+            { id: 't3', name: 'Support Heroes', division: 'Customer Support', type: 'team', imageUrl: '' },
+            // Individual Digimers (Sampling from real employees)
+            { id: 'd1', name: 'Muhammad Rizky Husain', division: 'Software Engineering & QA', type: 'digimer', imageUrl: '' },
+            { id: 'd2', name: 'Hanafiah Yunan Putri', division: 'Content Design', type: 'digimer', imageUrl: '' },
+            { id: 'd3', name: 'Muhammad Hafizh Abdillah', division: 'Software Engineering & QA', type: 'digimer', imageUrl: '' },
+        ]
+    });
+
+    console.log('Seeding trivia questions...');
+    const questions = [
+        { index: 1, text: 'Apa warna logo Digimasia?', options: JSON.stringify(['Merah', 'Biru', 'Hijau', 'Kuning']), answer: 1 },
+        { index: 2, text: 'Tahun berapa Digimasia didirikan?', options: JSON.stringify(['2010', '2015', '2018', '2020']), answer: 2 },
+        { index: 3, text: 'Apa core value utama kita?', options: JSON.stringify(['Speed', 'Quality', 'Integrity', 'All of above']), answer: 3 },
+        { index: 4, text: 'Apa tagline event X-Celerate?', options: JSON.stringify(['Move Fast', 'Grow the Tree', 'Shoot for Star', 'Break the Limit']), answer: 1 },
+        { index: 5, text: 'Berapa jumlah divisi di kantor kita?', options: JSON.stringify(['4', '6', '8', '10']), answer: 2 },
+    ];
+
+    for (const q of questions) {
+        await prisma.question.create({ data: q });
+    }
+
+    console.log('Seeding finished successfully.');
 }
 
 main()
