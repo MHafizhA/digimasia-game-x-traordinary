@@ -147,10 +147,23 @@ export function useTreeAudio(enabled = true) {
             bgmSchedulerRef.current = null;
         }
         stopAllOscillators();
+
         if (bgmRef.current) {
-            bgmRef.current.pause();
-            bgmRef.current.src = "";
-            bgmRef.current = null;
+            const audio = bgmRef.current;
+            // Smooth fade out
+            const startVolume = audio.volume;
+            let currentVolume = startVolume;
+            const fadeInterval = setInterval(() => {
+                if (currentVolume > 0.05) {
+                    currentVolume -= 0.05;
+                    audio.volume = Math.max(0, currentVolume);
+                } else {
+                    clearInterval(fadeInterval);
+                    audio.pause();
+                    audio.src = "";
+                    bgmRef.current = null;
+                }
+            }, 30); // ~300ms total fade duration
         }
     }, [stopAllOscillators]);
 

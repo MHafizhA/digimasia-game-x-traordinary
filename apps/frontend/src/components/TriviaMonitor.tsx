@@ -30,15 +30,8 @@ export default function TriviaMonitor() {
     }, [currentQuestion]);
 
     const { playComplete } = useTreeAudio(true); // default enabled for admin SFX
-    const hasPlayedCompleteRef = useRef(false);
+    // Audio trigger handled at Monitoring Page level for smoother transition
 
-    // Effect 1: Handle SFX when trivia is finished
-    useEffect(() => {
-        if ((phase === 'TRANSITION' || (currentQuestion >= 10 && timer === 0)) && !hasPlayedCompleteRef.current) {
-            hasPlayedCompleteRef.current = true;
-            playComplete();
-        }
-    }, [phase, timer, currentQuestion, playComplete]);
 
     // Effect 2: Polling Trivia Stats
     useEffect(() => {

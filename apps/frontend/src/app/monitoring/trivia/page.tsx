@@ -32,10 +32,18 @@ export default function TriviaMonitoringPage() {
         if (phase === 'TRIVIA' && timer === 0) {
             playStageUp();
         } else if (phase === 'TRANSITION') {
-            // Play victory sound once when moving to final leaderboard
-            playComplete();
+            // ── Transition Polish ──
+            // 1. Kill the BGM loop immediately
+            stopBGM();
+
+            // 2. Play victory sound with a tiny delay for a "cleaner" impact
+            const timerId = setTimeout(() => {
+                playComplete();
+            }, 500);
+
+            return () => clearTimeout(timerId);
         }
-    }, [timer, phase, bgmEnabled, playStageUp, playComplete]);
+    }, [timer, phase, bgmEnabled, playStageUp, playComplete, stopBGM]);
 
     return (
         <TVFrame bgImage="/assets/branding/BG2.png">
