@@ -28,6 +28,7 @@ export default function Trivia() {
     const [bgmEnabled, setBgmEnabled] = useState(true);
     const { playTriviaBGM, stopBGM, playMenuSelect, playStageUp, playComplete, setMuted } = useTreeAudio(true);
     const hasStartedBGM = useRef(false);
+    const isTimedOut = timer === 0;
 
     const toggleGlobalMute = () => {
         const nextEnabled = !bgmEnabled;
@@ -56,14 +57,19 @@ export default function Trivia() {
         }
     }, [phase, timer, currentQuestion, stopBGM, playComplete]);
 
-    // Play correct-answer SFX shortly after UI state changes for perfect visual sync
-    const prevIsCorrect = useRef<boolean | null>(null);
+    // Play correct-answer SFX ONLY when timer reaches 0 for perfect visual sync
+    const hasPlayedCorrectSFX = useRef(false);
+    useEffect(() => {
+        // Reset sound flag for each new question
+        hasPlayedCorrectSFX.current = false;
+    }, [currentQuestion]);
+
     useLayoutEffect(() => {
-        if (isCorrect === true && prevIsCorrect.current !== true) {
+        if (isCorrect === true && isTimedOut && !hasPlayedCorrectSFX.current) {
+            hasPlayedCorrectSFX.current = true;
             setTimeout(() => playStageUp(), 30);
         }
-        prevIsCorrect.current = isCorrect;
-    }, [isCorrect, playStageUp]);
+    }, [isCorrect, isTimedOut, playStageUp]);
 
     // Fetch question whenever currentQuestion changes
     useEffect(() => {
@@ -150,7 +156,6 @@ export default function Trivia() {
         }
     };
 
-    const isTimedOut = timer === 0;
     const showFeedback = isTimedOut && isSubmitted && isCorrect !== null;
     // Strict fairness: display 10 until the NEW question data is actually loaded in state
     const displayTimer = (isLoading || !question || question.index !== currentQuestion) ? 10 : timer;
