@@ -149,7 +149,7 @@ export default function TreeMonitorExternal() {
             }}>
                 {!isMaxStage && (
                     <div style={{
-                        background: 'var(--white)',
+                        background: 'var(--blue-light)',
                         border: '3px solid var(--black)',
                         boxShadow: '6px 6px 0 var(--black)',
                         padding: '12px 20px',
@@ -179,7 +179,7 @@ export default function TreeMonitorExternal() {
 
                 {!isMaxStage && (
                     <div style={{
-                        background: 'var(--white)',
+                        background: 'var(--blue-light)',
                         border: '3px solid var(--black)',
                         boxShadow: '6px 6px 0 var(--black)',
                         padding: '12px 20px',
