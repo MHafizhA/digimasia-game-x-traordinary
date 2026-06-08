@@ -163,7 +163,13 @@ export default function Tree() {
             backgroundPosition: 'center',
         }}>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', maxWidth: '400px', width: '100%', textAlign: 'center' }}>
-                <div className="card" style={{ width: '100%', padding: '32px 20px', border: '5px solid var(--black)', boxShadow: '8px 8px 0 var(--black)' }}>
+                <div className="card" style={{
+                    width: '100%',
+                    padding: '32px 20px',
+                    border: '5px solid var(--black)',
+                    boxShadow: '8px 8px 0 var(--black)',
+                    background: 'var(--yellow)'
+                }}>
                     <div style={{ display: 'flex', justifyContent: 'center', height: '140px', marginBottom: '16px' }}>
                         <TreeVisual stage={9} size="100%" />
                     </div>

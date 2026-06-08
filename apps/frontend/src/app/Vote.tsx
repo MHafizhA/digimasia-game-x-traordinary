@@ -146,7 +146,7 @@ export default function Vote({ type }: { type: 'team' | 'digimer' }) {
                                 position: 'relative',
                                 padding: 'clamp(16px, 4vw, 24px) clamp(10px, 2vw, 16px) clamp(12px, 3vw, 20px)',
                                 border: isVoted ? '4px solid var(--navy-dark)' : isSelected ? '4px solid var(--blue-bright)' : '3px solid var(--black)',
-                                background: isVoted ? 'var(--lime)' : isSelected ? '#EEF6FF' : 'var(--white)',
+                                background: isVoted ? 'var(--lime)' : isSelected ? 'var(--blue-light)' : 'var(--blue-light)',
                                 opacity: (votedId && c.id !== votedId) ? 0.55 : 1,
                                 filter: (votedId && c.id !== votedId) ? 'grayscale(0.7)' : 'none',
                                 width: 'clamp(140px, 42vw, 180px)',
