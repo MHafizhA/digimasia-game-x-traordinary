@@ -21,7 +21,7 @@ const employees = [
     { name: "Hanafiah Yunan Putri", division: "Content Design" },
     { name: "Andre Alfadjrid", division: "Content Design" },
     { name: "Hari Mujana", division: "Content Design" },
-    { name: "Candra Prasetyo", division: "Content Design" },
+    { name: "Candra Prasetyo", division: "Software Engineering & QA" },
     { name: "Stepanus", division: "Interaction Design" },
     { name: "Heri Irwanto", division: "Interaction Design" },
     { name: "Tedy Iman Priyo Lestanto", division: "Interaction Design" },

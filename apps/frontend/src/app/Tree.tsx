@@ -168,8 +168,8 @@ export default function Tree() {
                     padding: '32px 20px',
                     border: '5px solid var(--black)',
                     boxShadow: '8px 8px 0 var(--black)',
-                    background: 'var(--lime-light)',
-                    borderRadius: '12px'
+                    background: '#E0F7FA', // Soft Cyan
+                    borderRadius: '16px'
                 }}>
                     <div style={{ display: 'flex', justifyContent: 'center', height: '140px', marginBottom: '16px' }}>
                         <TreeVisual stage={9} size="100%" />

@@ -57,7 +57,7 @@ function WaitingCard({ user }: { user: any }) {
           color: 'var(--yellow)',
           lineHeight: 1,
         }}>
-          Welcome, {user?.name?.split(' ')[0]}!
+          Welcome, {user?.name}!
         </div>
         <div style={{
           fontFamily: 'var(--font-mono)',
@@ -125,7 +125,7 @@ function WaitingCard({ user }: { user: any }) {
               textTransform: 'uppercase'
             }}
           >
-            Bukan {user?.name?.split(' ')[0]}? Klik untuk Keluar
+            Bukan {user?.name}? Klik untuk Keluar
           </button>
         </div>
       </div>

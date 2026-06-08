@@ -266,7 +266,7 @@ export function useTreeAudio(enabled = true) {
     const playComplete = useCallback(() => {
         if (isMutedRef.current) return;
         try {
-            const sfx = new Audio('/assets/audio/sfx-reveal-4.mp3');
+            const sfx = new Audio('/assets/audio/sfx-complete.mp3');
             sfx.volume = 0.8;
             sfx.play().catch(() => { });
         } catch (_) { }

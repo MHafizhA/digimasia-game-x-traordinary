@@ -123,6 +123,7 @@ export default function Trivia() {
         // Prevent redundant clicks if already selected this exact option
         if (selectedOption === optIdx) return;
 
+        playMenuSelect(); // Play selection SFX
         setSelectedOption(optIdx);
         setIsSubmitted(true);
         // Clear previous results to ensure new state is fresh

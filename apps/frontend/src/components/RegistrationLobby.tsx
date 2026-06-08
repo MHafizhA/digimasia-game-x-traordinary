@@ -137,10 +137,6 @@ export default function RegistrationLobby() {
                                 fontWeight: 800,
                                 color: '#000',
                                 boxShadow: '2px 2px 0 #000',
-                                maxWidth: '100px',
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
                                 textAlign: 'center',
                                 marginTop: '4px'
                             }}>

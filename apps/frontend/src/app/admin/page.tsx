@@ -281,22 +281,7 @@ export default function AdminPage() {
                                 )}
                                 {(phase === 'TRIVIA' || phase === 'TRANSITION') && (
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                                        {phase === 'TRIVIA' && useGameStore.getState().currentQuestion === 0 && (
-                                            <div style={{ textAlign: 'center', padding: '24px' }}>
-                                                <button className="btn" style={{
-                                                    background: 'var(--lime)',
-                                                    color: 'var(--black)',
-                                                    padding: '16px 32px',
-                                                    fontSize: '24px',
-                                                    fontFamily: 'var(--font-display)',
-                                                    letterSpacing: '2px',
-                                                    boxShadow: '8px 8px 0 var(--black)',
-                                                    border: '4px solid var(--black)'
-                                                }} onClick={handleStartTrivia}>
-                                                    ▶ MULAI TRIVIA QUIZ SEKARANG
-                                                </button>
-                                            </div>
-                                        )}
+
                                         <TriviaMonitor />
                                     </div>
                                 )}

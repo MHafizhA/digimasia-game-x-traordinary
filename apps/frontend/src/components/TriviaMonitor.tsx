@@ -106,7 +106,7 @@ export default function TriviaMonitor() {
                 <button
                     onClick={handleStartTriviaFromMonitor}
                     style={{
-                        background: 'var(--black)', color: 'var(--lime)',
+                        background: 'var(--lime)', color: 'var(--black)',
                         border: '4px solid var(--black)', boxShadow: '6px 6px 0 rgba(0,0,0,0.4)',
                         borderRadius: '12px', padding: '16px 40px',
                         fontFamily: 'var(--font-display)', fontSize: '28px', letterSpacing: '2px',
