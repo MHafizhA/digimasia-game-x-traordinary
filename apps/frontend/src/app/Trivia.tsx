@@ -64,12 +64,13 @@ export default function Trivia() {
         hasPlayedCorrectSFX.current = false;
     }, [currentQuestion]);
 
-    useLayoutEffect(() => {
-        if (isCorrect === true && isTimedOut && !hasPlayedCorrectSFX.current) {
+    // Safer hook: explicitly watch timer changes and evaluate it directly.
+    useEffect(() => {
+        if (timer === 0 && isCorrect === true && !hasPlayedCorrectSFX.current) {
             hasPlayedCorrectSFX.current = true;
             setTimeout(() => playStageUp(), 30);
         }
-    }, [isCorrect, isTimedOut, playStageUp]);
+    }, [timer, isCorrect, playStageUp]);
 
     // Fetch question whenever currentQuestion changes
     useEffect(() => {
