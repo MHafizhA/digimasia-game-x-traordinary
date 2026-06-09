@@ -338,9 +338,8 @@ const AwardPanel = memo(function AwardPanel({ title, accentColor, textColor = 'v
         display: 'flex', flexDirection: 'column' as const, flex: 1, overflow: 'hidden'
     } : {
         backgroundColor: '#f8f9fa',
-        backgroundImage: `url('${bgImage}')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundImage: 'radial-gradient(rgba(0,0,0,0.1) 2px, transparent 0)',
+        backgroundSize: '24px 24px',
         border: '6px solid var(--black)',
         borderRadius: '32px',
         boxShadow: `12px 12px 0 ${accentColor}`,
