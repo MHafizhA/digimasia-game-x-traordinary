@@ -143,35 +143,37 @@ const CardNomineeList = memo(function CardNomineeList({ data, accentColor, textC
             display: 'flex', flexDirection: 'column', alignItems: 'center',
             width: '100%', flex: 1, gap: '0',
             animation: 'winnerReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both',
-            justifyContent: 'center'
+            justifyContent: 'flex-start',
+            margin: 'auto 0'
         }}>
             {/* Branding Image Header */}
-            <div style={{ padding: '0 10px', width: '100%', display: 'flex', justifyContent: 'center', marginBottom: '1vh' }}>
+            <div style={{ padding: '0 10px', width: '100%', display: 'flex', justifyContent: 'center', marginBottom: '-10px', zIndex: 2 }}>
                 <img
                     src={logoSrc}
                     alt="Awards Logo"
-                    style={{ height: 'auto', maxHeight: '24vh', width: '100%', maxWidth: 'clamp(260px, 50vw, 550px)', display: 'block', objectFit: 'contain' }}
+                    style={{ height: 'auto', maxHeight: '20vh', width: '100%', maxWidth: 'clamp(280px, 55vw, 600px)', display: 'block', objectFit: 'contain' }}
                 />
             </div>
 
             {/* WINNER — Big Spotlight Card (No White Box, just floating elements) */}
             {winner && (
                 <div style={{
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1vh',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px',
                     position: 'relative',
                     animation: 'popInRight 0.6s both',
                     maxWidth: '100%',
                 }}>
                     {/* Crown */}
-                    <div style={{ fontSize: 'clamp(28px, 5vh, 48px)', animation: 'crownFloat 2.5s ease-in-out infinite', marginBottom: '-18px', zIndex: 1 }}>👑</div>
+                    <div style={{ fontSize: 'clamp(28px, 5vh, 48px)', animation: 'crownFloat 2.5s ease-in-out infinite', marginBottom: '-22px', zIndex: 1 }}>👑</div>
 
                     {/* Big Photo */}
                     <div style={{
-                        width: 'clamp(200px, 40vh, 360px)', height: 'clamp(200px, 40vh, 360px)',
+                        width: 'clamp(180px, 32vh, 320px)', height: 'clamp(180px, 32vh, 320px)',
                         borderRadius: '24px', border: `5px solid var(--black)`,
                         overflow: 'hidden', boxShadow: `5px 5px 0 ${accentColor}`,
                         background: accentColor,
                         animation: 'sparkleGlow 2.5s ease-in-out infinite',
+                        zIndex: 0,
                     }}>
                         <img src={getImageForId(winner.id, winner.name, winner.imageUrl)} alt={winner.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
@@ -182,7 +184,8 @@ const CardNomineeList = memo(function CardNomineeList({ data, accentColor, textC
                         border: '3px solid var(--black)', boxShadow: '4px 4px 0 var(--black)',
                         padding: '4px 20px', borderRadius: '50px',
                         fontFamily: 'var(--font-display)', fontSize: 'clamp(16px, 3vh, 28px)',
-                        letterSpacing: '1px', color: textColor, marginTop: '2px', textAlign: 'center',
+                        letterSpacing: '1px', color: textColor, marginTop: '-4px', textAlign: 'center',
+                        zIndex: 2,
                     }}>{winner.name}</div>
 
                     {/* Division */}
@@ -191,7 +194,7 @@ const CardNomineeList = memo(function CardNomineeList({ data, accentColor, textC
                             background: 'var(--black)', color: accentColor,
                             padding: '3px 12px', borderRadius: '8px',
                             fontFamily: 'var(--font-mono)', fontSize: 'clamp(9px, 1vw, 12px)',
-                            letterSpacing: '2px', fontWeight: 800,
+                            letterSpacing: '1px', fontWeight: 800,
                         }}>{winner.division.toUpperCase()}</div>
                     )}
 
