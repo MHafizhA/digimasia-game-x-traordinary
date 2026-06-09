@@ -82,16 +82,17 @@ const ValueMascot = ({ size = 110, showLabel = true, interval = 900 }: { size?: 
     );
 };
 
-<div style={{ position: 'relative', width: 'fit-content', margin: '0 auto clamp(20px, 6vw, 45px) auto' }}>
-    <div style={{ width: 'clamp(200px, 50vw, 420px)', height: 'auto', position: 'relative' }}>
-        <img
-            src="/assets/branding/Logo_DAA_Transparant copy.png"
-            alt="Digima Asia Logo"
-            style={{ width: '100%', height: 'auto', objectFit: 'contain', filter: 'drop-shadow(4px 4px 0 rgba(0,0,0,0.4))' }}
-        />
+const DigimasiaBrandLogo = () => (
+    <div style={{ position: 'relative', width: 'fit-content', margin: '0 auto clamp(20px, 6vw, 45px) auto' }}>
+        <div style={{ width: 'clamp(200px, 50vw, 420px)', height: 'auto', position: 'relative' }}>
+            <img
+                src="/assets/branding/Logo_DAA_Transparant copy.png"
+                alt="Digima Asia Logo"
+                style={{ width: '100%', height: 'auto', objectFit: 'contain', filter: 'drop-shadow(4px 4px 0 rgba(0,0,0,0.4))' }}
+            />
+        </div>
     </div>
-</div>
-
+);
 
 const ArcadeBootSequence = () => (
     <div style={{ position: 'relative' }}>
