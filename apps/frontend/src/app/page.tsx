@@ -14,6 +14,8 @@ const getInitials = (name: string) =>
   name?.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2) ?? '?';
 
 function WaitingCard({ user }: { user: any }) {
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
   return (
     <div style={{
       minHeight: 'calc(100dvh - 120px)',
@@ -107,12 +109,7 @@ function WaitingCard({ user }: { user: any }) {
         {/* Manual Reset Fallback */}
         <div style={{ marginTop: '32px', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '16px' }}>
           <button
-            onClick={() => {
-              if (confirm('Apakah Anda ingin keluar dan masuk dengan PIN lain?')) {
-                useGameStore.getState().reset();
-                window.location.reload();
-              }
-            }}
+            onClick={() => setShowLogoutModal(true)}
             style={{
               background: 'none',
               border: 'none',
@@ -128,6 +125,38 @@ function WaitingCard({ user }: { user: any }) {
             Bukan {user?.name}? Klik untuk Keluar
           </button>
         </div>
+
+        {/* Custom Logout Modal */}
+        {showLogoutModal && (
+          <div style={{ position: 'fixed', inset: 0, zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)' }}>
+            <div className="animate-pop-in card" style={{ background: 'var(--white)', padding: '24px', maxWidth: '320px', width: '90%', textAlign: 'center', border: '4px solid var(--black)', boxShadow: '8px 8px 0 var(--black)' }}>
+              <div style={{ fontSize: '32px', marginBottom: '12px' }}>👋</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: '24px', letterSpacing: '1px', color: 'var(--black)', marginBottom: '8px' }}>
+                KONFIRMASI KELUAR
+              </div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#555', marginBottom: '24px', lineHeight: 1.5 }}>
+                Apakah Anda yakin ingin keluar dan masuk dengan PIN lain?
+              </div>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <button
+                  onClick={() => setShowLogoutModal(false)}
+                  style={{ flex: 1, padding: '12px', background: '#ccc', border: '3px solid var(--black)', borderRadius: '8px', fontFamily: 'var(--font-display)', fontSize: '14px', cursor: 'pointer', color: 'var(--black)', boxShadow: '3px 3px 0 var(--black)' }}
+                >
+                  BATAL
+                </button>
+                <button
+                  onClick={() => {
+                    useGameStore.getState().reset();
+                    window.location.reload();
+                  }}
+                  style={{ flex: 1, padding: '12px', background: 'var(--pink-hot)', border: '3px solid var(--black)', borderRadius: '8px', fontFamily: 'var(--font-display)', fontSize: '14px', cursor: 'pointer', color: 'var(--white)', boxShadow: '3px 3px 0 var(--black)' }}
+                >
+                  KELUAR
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

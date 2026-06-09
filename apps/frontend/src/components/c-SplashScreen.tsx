@@ -83,33 +83,13 @@ const ValueMascot = ({ size = 110, showLabel = true, interval = 900 }: { size?: 
 };
 
 const DigimasiaBrandLogo = () => (
-    <div style={{ position: 'relative', width: 'fit-content', margin: '0 auto clamp(16px, 4vw, 32px) auto' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(10px, 2.5vw, 20px)' }}>
-            <div style={{ width: 'clamp(70px, 16vw, 110px)', height: 'clamp(70px, 16vw, 110px)', position: 'relative', flexShrink: 0 }}>
-                <img
-                    src="/assets/branding/Logo_DAA_Transparant copy.png"
-                    alt="Digima Asia Logo"
-                    style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(2px 2px 0 rgba(0,0,0,0.3))' }}
-                />
-            </div>
-            <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(24px, 5.5vw, 44px)', fontWeight: 'bold', color: 'white', letterSpacing: 'clamp(1px, 0.4vw, 2px)', lineHeight: 1, textShadow: '4px 4px 0 #000', whiteSpace: 'nowrap' }}>
-                    DIGIMA ASIA
-                </div>
-                <div style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: 'clamp(7px, 2vw, 11px)',
-                    color: 'rgba(255,255,255,0.9)',
-                    letterSpacing: '0px',
-                    marginTop: 'clamp(4px, 1vw, 6px)',
-                    whiteSpace: 'nowrap',
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'space-between'
-                }}>
-                    <span>DIGITAL</span> <span>INNOVATION</span> <span>&</span> <span>STRATEGIC</span> <span>EXECUTION</span>
-                </div>
-            </div>
+    <div style={{ position: 'relative', width: 'fit-content', margin: '0 auto clamp(24px, 5vw, 40px) auto' }}>
+        <div style={{ width: 'clamp(140px, 35vw, 300px)', height: 'auto', position: 'relative' }}>
+            <img
+                src="/assets/branding/Logo_DAA_Transparant copy.png"
+                alt="Digima Asia Logo"
+                style={{ width: '100%', height: 'auto', objectFit: 'contain', filter: 'drop-shadow(4px 4px 0 rgba(0,0,0,0.5))' }}
+            />
         </div>
     </div>
 );
