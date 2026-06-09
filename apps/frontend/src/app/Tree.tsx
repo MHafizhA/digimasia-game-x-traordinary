@@ -158,7 +158,7 @@ export default function Tree() {
             height: 'calc(100dvh - 140px)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px',
             backgroundColor: 'var(--blue-bright)',
-            backgroundImage: "url('/assets/branding/BG1.png')",
+            backgroundImage: "url('/assets/branding/BG2.png')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
         }}>
@@ -168,7 +168,9 @@ export default function Tree() {
                     padding: '32px 20px',
                     border: '5px solid var(--black)',
                     boxShadow: '8px 8px 0 var(--black)',
-                    background: '#E0F7FA', // Soft Cyan
+                    backgroundImage: "url('/assets/branding/BG1.png')",
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
                     borderRadius: '16px'
                 }}>
                     <div style={{ display: 'flex', justifyContent: 'center', height: '140px', marginBottom: '16px' }}>
@@ -305,7 +307,7 @@ export default function Tree() {
             </div>
 
             {/* ── TREE HERO CARD ─────────────── */}
-            <div className="card" style={{ padding: '0', position: 'relative', overflow: 'hidden' }}>
+            <div className="card" style={{ padding: '0', position: 'relative', overflow: 'visible' }}>
                 {/* Background shimmer on max stage */}
                 {isMaxStage && (
                     <div style={{
@@ -330,7 +332,7 @@ export default function Tree() {
                     <div style={{
                         position: 'absolute', inset: 0,
                         display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
-                        overflow: 'hidden', paddingBottom: '10px'
+                        overflow: 'visible', paddingBottom: '10px'
                     }}>
                         <TreeVisual stage={treeStage} size="70%" isLevelingUp={!!stageToast} />
                     </div>

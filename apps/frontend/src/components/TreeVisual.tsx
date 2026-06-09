@@ -51,7 +51,7 @@ export default function TreeVisual({ stage, size = '100%', isAnimated = true, is
             alignItems: 'flex-end',
             justifyContent: 'center',
             position: 'relative',
-            overflow: 'hidden',
+            overflow: 'visible',
         }}>
             <img
                 key={`tree-${currentStage}-${isLevelingUp}`} // Force re-render on level up for animation trigger
