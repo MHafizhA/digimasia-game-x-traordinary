@@ -2,11 +2,20 @@
 
 import { useGameStore } from '@/store/useGameStore';
 import TreeVisual, { TREE_STAGE_LABELS } from './TreeVisual';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTreeAudio } from '@/hooks/useTreeAudio';
 
 const TOTAL_WATER_GOAL = 5000;
 const WATER_PER_STAGE = 500;
+
+interface WaterDrop {
+    id: number;
+    x: number; // % from left
+    delay: number; // stagger delay s
+    size: number; // relative size
+}
+
+let dropIdCounter = 0;
 
 export default function TreeMonitor() {
     const { totalWater, treeStage } = useGameStore();
@@ -15,8 +24,42 @@ export default function TreeMonitor() {
     const isMaxStage = treeStage >= 9;
 
     const [isLevelingUp, setIsLevelingUp] = useState(false);
+    const [waterDrops, setWaterDrops] = useState<WaterDrop[]>([]);
+    const [isWatering, setIsWatering] = useState(false);
+    const prevWaterRef = useRef(totalWater);
     const prevStageRef = useRef(treeStage);
+    const wateringTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const { playStageUp } = useTreeAudio(true);
+
+    // Spawn water drops from above when totalWater increases
+    const spawnDrops = useCallback(() => {
+        const count = 5 + Math.floor(Math.random() * 5); // 5-9 drops per event
+        const drops: WaterDrop[] = Array.from({ length: count }, (_, i) => ({
+            id: dropIdCounter++,
+            x: 15 + Math.random() * 70, // spread across 15–85% width
+            delay: i * 0.05,
+            size: 0.8 + Math.random() * 0.7,
+        }));
+        setWaterDrops(prev => [...prev, ...drops]);
+        // Remove them after animation ends (1.2s + max delay)
+        setTimeout(() => {
+            const ids = drops.map(d => d.id);
+            setWaterDrops(prev => prev.filter(d => !ids.includes(d.id)));
+        }, 1600);
+    }, []);
+
+    useEffect(() => {
+        if (totalWater > prevWaterRef.current) {
+            // Water increased → user tapped
+            spawnDrops();
+
+            // Mark as watering for glow effect
+            setIsWatering(true);
+            if (wateringTimerRef.current) clearTimeout(wateringTimerRef.current);
+            wateringTimerRef.current = setTimeout(() => setIsWatering(false), 2000);
+        }
+        prevWaterRef.current = totalWater;
+    }, [totalWater, spawnDrops]);
 
     useEffect(() => {
         if (treeStage > prevStageRef.current) {
@@ -31,6 +74,20 @@ export default function TreeMonitor() {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {/* Keyframes */}
+            <style>{`
+                @keyframes tm-dropFall {
+                    0%   { transform: translateY(-20px) scale(0.6); opacity: 0; }
+                    20%  { opacity: 1; }
+                    80%  { opacity: 0.8; }
+                    100% { transform: translateY(260px) scale(0.9); opacity: 0; }
+                }
+                @keyframes tm-waterPulse {
+                    0%, 100% { box-shadow: 4px 4px 0 var(--black); }
+                    50%      { box-shadow: 0 0 0 6px rgba(59,130,246,0.4), 4px 4px 0 var(--black); }
+                }
+            `}</style>
+
             {/* Header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
@@ -38,12 +95,25 @@ export default function TreeMonitor() {
                         LIVE TREE GROWTH
                     </div>
                     <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#888', letterSpacing: '1px' }}>
-                        REAL-TIME UPDATING
+                        {isWatering ? '💧 USERS SEDANG MENYIRAM...' : 'REAL-TIME UPDATING'}
                     </div>
                 </div>
-                <span className="badge badge-green">
-                    <span className="live-dot" /> LIVE
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    {isWatering && (
+                        <div style={{
+                            fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '1px',
+                            color: 'var(--blue-bright)', fontWeight: 700,
+                            animation: 'tm-waterPulse 0.8s ease-in-out infinite',
+                            padding: '3px 10px', borderRadius: '20px',
+                            border: '2px solid var(--blue-bright)',
+                        }}>
+                            💧 LIVE TAPPING
+                        </div>
+                    )}
+                    <span className="badge badge-green">
+                        <span className="live-dot" /> LIVE
+                    </span>
+                </div>
             </div>
 
             {/* Main layout: tall tree hero panel on top */}
@@ -52,15 +122,42 @@ export default function TreeMonitor() {
                 {/* Tree image — full-width hero */}
                 <div style={{
                     width: '100%',
-                    height: '300px', // Reduced from 400px to avoid massive scaling on dashboard
+                    height: '300px',
                     background: "url('/assets/branding/BG1.png') center/cover no-repeat",
                     border: '3px solid var(--black)',
-                    boxShadow: '4px 4px 0 var(--black)',
+                    boxShadow: isWatering
+                        ? '4px 4px 0 var(--black), 0 0 0 4px rgba(59,130,246,0.4)'
+                        : '4px 4px 0 var(--black)',
                     borderRadius: '16px',
-                    overflow: 'hidden',
+                    overflow: 'visible',
                     position: 'relative',
+                    transition: 'box-shadow 0.3s ease',
                 }}>
                     <TreeVisual stage={treeStage} size="100%" isLevelingUp={isLevelingUp} />
+
+                    {/* 💧 Water Droplets Animation Overlay */}
+                    {waterDrops.map(drop => (
+                        <div
+                            key={drop.id}
+                            style={{
+                                position: 'absolute',
+                                top: 0,
+                                left: `${drop.x}%`,
+                                fontSize: `${16 * drop.size}px`,
+                                animationName: 'tm-dropFall',
+                                animationDuration: '1.2s',
+                                animationDelay: `${drop.delay}s`,
+                                animationFillMode: 'both',
+                                animationTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
+                                pointerEvents: 'none',
+                                zIndex: 20,
+                                transformOrigin: 'center top',
+                            }}
+                        >
+                            💧
+                        </div>
+                    ))}
+
                     {/* Stage badge overlay */}
                     <div style={{
                         position: 'absolute', top: '12px', left: '12px',
@@ -79,6 +176,29 @@ export default function TreeMonitor() {
                     }}>
                         {totalWater}L
                     </div>
+
+                    {/* Watering particles splash at base */}
+                    {isWatering && (
+                        <div style={{
+                            position: 'absolute',
+                            bottom: '6px',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            display: 'flex',
+                            gap: '4px',
+                            zIndex: 10,
+                            pointerEvents: 'none',
+                        }}>
+                            {['🌊', '💦', '🌊'].map((e, i) => (
+                                <span key={i} style={{
+                                    fontSize: '14px',
+                                    opacity: 0.85,
+                                    animation: `tm-waterPulse ${0.8 + i * 0.15}s ease-in-out infinite`,
+                                    animationDelay: `${i * 0.2}s`,
+                                }}>{e}</span>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Stats row below the tree */}
