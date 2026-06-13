@@ -50,17 +50,19 @@ export default function Trivia() {
         }
     }, [bgmEnabled, playTriviaBGM]);
 
-    // Auto-trigger BGM when mounting (relies on browser user-activation rules from prior pages)
+    // Auto-trigger BGM when mounting only if the game has started (currentQuestion > 0)
     useEffect(() => {
-        startBGMOnce();
-        const trigger = () => startBGMOnce();
-        window.addEventListener('click', trigger, { once: true });
-        window.addEventListener('touchstart', trigger, { once: true });
-        return () => {
-            window.removeEventListener('click', trigger);
-            window.removeEventListener('touchstart', trigger);
-        };
-    }, [startBGMOnce]);
+        if (currentQuestion > 0) {
+            startBGMOnce();
+            const trigger = () => startBGMOnce();
+            window.addEventListener('click', trigger, { once: true });
+            window.addEventListener('touchstart', trigger, { once: true });
+            return () => {
+                window.removeEventListener('click', trigger);
+                window.removeEventListener('touchstart', trigger);
+            };
+        }
+    }, [currentQuestion, startBGMOnce]);
 
     // Stop BGM IMMEDIATELY when Trivia ends
     useLayoutEffect(() => {

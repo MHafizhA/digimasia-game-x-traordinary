@@ -18,8 +18,7 @@ const PHASES = [
     { targetPhase: 'VOTING_TEAM', icon: '👥', label: 'Team Voting', sub: 'Team of the Year' },
     { targetPhase: 'VOTING_DIGIMER', icon: '🌟', label: 'Digimer Voting', sub: 'Digimer of the Year' },
     { targetPhase: 'TRIVIA', icon: '🧠', label: 'Trivia Quiz', sub: 'Earn water points!' },
-    { targetPhase: 'PRE_WATERING', icon: '🌳', label: 'Tree - Get Ready', sub: 'Show Get Ready screen' },
-    { targetPhase: 'WATERING', icon: '💧', label: 'Tree - Start Game', sub: 'Users can start tapping' },
+    { targetPhase: 'PRE_WATERING', icon: '🌳', label: 'Grow The Tree', sub: 'Water planting game' },
 ];
 
 export default function AdminPage() {

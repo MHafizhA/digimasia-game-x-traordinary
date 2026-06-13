@@ -243,15 +243,15 @@ export default function TriviaMonitor() {
                         </div>
 
                         {/* Question Info */}
-                        <div style={{ paddingTop: '4px', flex: 1 }}>
-                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#888', letterSpacing: '2px', marginBottom: '8px' }}>
+                        <div className="card card-navy" style={{ flex: 1, padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(255,255,255,0.7)', letterSpacing: '2px', marginBottom: '8px' }}>
                                 PERTANYAAN #{currentQuestion} · {isStatsStale ? '...' : (stats?.totalAnswers || 0)} JAWABAN
                             </div>
                             <div style={{
                                 fontFamily: 'var(--font-body)',
                                 fontSize: '20px',
                                 fontWeight: 800,
-                                color: isStatsStale ? '#999' : '#000',
+                                color: 'var(--white)',
                                 lineHeight: 1.4,
                                 position: 'relative'
                             }}>
@@ -294,13 +294,12 @@ export default function TriviaMonitor() {
                                     transition: 'all 0.4s ease',
                                     opacity: isStatsStale ? 0.7 : 1,
                                 }}>
-                                    {/* Background Progress Fill */}
+                                    {/* Background Progress Fill - subtle gray instead of neon colors to match user UI */}
                                     <div style={{
                                         position: 'absolute',
                                         top: 0, left: 0, bottom: 0,
                                         width: `${percent}%`,
-                                        background: isCorrect ? 'rgba(0,0,0,0.08)' : OPT_COLORS[optIdx],
-                                        opacity: isCorrect ? 1 : 0.2,
+                                        background: isCorrect ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)',
                                         transition: 'width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
                                         zIndex: 0,
                                     }} />
@@ -308,14 +307,14 @@ export default function TriviaMonitor() {
                                     {/* Content */}
                                     <div style={{ zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                            <div style={{ fontFamily: 'var(--font-display)', fontSize: '28px', color: isCorrect ? 'var(--black)' : OPT_COLORS[optIdx], WebkitTextStroke: '1px #000' }}>
+                                            <div style={{ fontFamily: 'var(--font-display)', fontSize: '28px', color: 'var(--black)' }}>
                                                 {OPT_LETTERS[optIdx]}
                                             </div>
                                             <div style={{
                                                 fontFamily: 'var(--font-body)',
                                                 fontSize: '15px',
                                                 fontWeight: 600,
-                                                color: isStatsStale ? '#999' : '#000',
+                                                color: isStatsStale ? '#555' : '#000',
                                                 fontStyle: isStatsStale ? 'italic' : 'normal'
                                             }}>
                                                 {optionText}

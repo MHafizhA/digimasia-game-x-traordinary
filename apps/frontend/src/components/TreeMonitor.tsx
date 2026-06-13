@@ -19,7 +19,7 @@ interface WaterDrop {
 let dropIdCounter = 0;
 
 export default function TreeMonitor() {
-    const { totalWater, treeStage } = useGameStore();
+    const { totalWater, treeStage, phase } = useGameStore();
     const progress = Math.min(100, (totalWater / TOTAL_WATER_GOAL) * 100);
     const stageProgress = ((totalWater % WATER_PER_STAGE) / WATER_PER_STAGE) * 100;
     const isMaxStage = treeStage >= 9;
@@ -64,6 +64,36 @@ export default function TreeMonitor() {
         };
         fetchTop();
     }, [totalWater]);
+
+    const handleStartWatering = async () => {
+        try {
+            await fetch(`${getBackendUrl()}/admin/phase`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phase: 'WATERING' }),
+            });
+        } catch { alert('Gagal start game pohon'); }
+    };
+
+    if (phase === 'PRE_WATERING') {
+        return (
+            <div className="card card-navy" style={{ textAlign: 'center', padding: '60px', borderRadius: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px', border: '5px solid var(--black)', boxShadow: '8px 8px 0 var(--black)' }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '56px', color: 'var(--yellow)', textShadow: '2px 2px 0 var(--black)' }}>
+                    TREE: GET READY
+                </div>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--white)', letterSpacing: '4px', marginTop: '12px' }}>
+                    MONITOR STANDBY · PENGGUNA BISA MELIHAT LAYAR INI
+                </div>
+                <button
+                    onClick={handleStartWatering}
+                    className="btn btn-primary"
+                    style={{ fontSize: '24px', padding: '16px 40px', marginTop: '32px' }}
+                >
+                    ▶ MULAI GAME SEKARANG
+                </button>
+            </div>
+        );
+    }
 
     useEffect(() => {
         if (totalWater > prevWaterRef.current) {
