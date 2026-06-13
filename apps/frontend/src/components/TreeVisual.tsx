@@ -83,7 +83,7 @@ export default function TreeVisual({ stage, size = '100%', isAnimated = true, is
                 
                 @keyframes gentleGrowth {
                     0% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 10px rgba(255,215,0,0.5)); }
-                    50% { transform: scale(1.08) translateY(-10px); filter: drop-shadow(0 0 35px rgba(255,215,0,1)); }
+                    50% { transform: scale(1.15) translateY(-15px); filter: drop-shadow(0 0 45px rgba(255,215,0,1)) brightness(1.2); }
                     100% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 10px rgba(255,215,0,0.5)); }
                 }
 

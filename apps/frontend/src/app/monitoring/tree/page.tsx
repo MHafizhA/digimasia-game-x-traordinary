@@ -43,9 +43,11 @@ export default function TreeMonitorExternal() {
     const startBGMOnce = useCallback(() => {
         if (!bgmStarted.current) {
             bgmStarted.current = true;
-            audio.playBGM();
+            if (treeStage < 9) {
+                audio.playBGM();
+            }
         }
-    }, [audio]);
+    }, [audio, treeStage]);
 
     useEffect(() => {
         window.addEventListener('click', startBGMOnce, { once: true });
