@@ -225,7 +225,7 @@ export default function TreeMonitor() {
                     justifyContent: 'center',
                     paddingBottom: '10px',
                 }}>
-                    <TreeVisual stage={treeStage} size="100%" isLevelingUp={isLevelingUp} />
+                    <TreeVisual stage={treeStage} size="90%" isLevelingUp={isLevelingUp} />
 
                     {/* 💧 Water Droplets Animation Overlay */}
                     {waterDrops.map(drop => (

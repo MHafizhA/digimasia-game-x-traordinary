@@ -64,8 +64,7 @@ export default function TriviaMonitor({ muteSFX = false }: { muteSFX?: boolean }
     useEffect(() => {
         if (phase === 'TRANSITION' && !hasPlayedComplete.current && !muteSFX) {
             hasPlayedComplete.current = true;
-            // Small delay to ensure DOM has rendered result screen first
-            setTimeout(() => playComplete(), 200);
+            playComplete();
         }
         if (phase !== 'TRANSITION') {
             hasPlayedComplete.current = false;
@@ -242,7 +241,7 @@ export default function TriviaMonitor({ muteSFX = false }: { muteSFX?: boolean }
                             width: '72px',
                             height: '72px',
                             borderRadius: '50%',
-                            background: displayTimer <= 5 ? '#e53935' : 'var(--orange)',
+                            background: displayTimer <= 3 ? '#e53935' : 'var(--orange)',
                             border: '4px solid #000',
                             display: 'flex',
                             flexDirection: 'column',

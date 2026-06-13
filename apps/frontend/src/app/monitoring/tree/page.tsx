@@ -308,7 +308,7 @@ export default function TreeMonitorExternal() {
                         padding: '16px'
                     }}>
                         <div style={{ width: '100%', height: '100%', position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'flex-end', paddingBottom: '10px' }}>
-                            <TreeVisual stage={treeStage} size={isMaxStage ? '120%' : '100%'} isLevelingUp={isLevelingUp} />
+                            <TreeVisual stage={treeStage} size={isMaxStage ? '110%' : '90%'} isLevelingUp={isLevelingUp} />
 
                             {/* DROPS */}
                             {waterDrops.map(drop => (
@@ -426,7 +426,7 @@ export default function TreeMonitorExternal() {
             {/* Monitor Progress Bar */}
             <div style={{ flexShrink: 0, background: 'var(--blue-light)', padding: '12px 16px', borderRadius: '16px', border: '3px solid var(--black)', boxShadow: '4px 4px 0 var(--black)', position: 'relative', zIndex: 11 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--font-mono)', fontSize: '16px', fontWeight: 800, marginBottom: '8px' }}>
-                    <span>PROGRESS MENUJU GRAND TREE</span>
+                    <span>{isMaxStage ? '🏆 POHON TELAH TUMBUH SEMPURNA!' : 'PROGRESS MENUJU GRAND TREE'}</span>
                     <span>{Math.round(progress)}% · {totalWater} / {TOTAL_WATER_GOAL} L</span>
                 </div>
                 <div style={{ height: '24px', background: '#e5e7eb', borderRadius: '12px', overflow: 'hidden', border: '2px solid #333' }}>

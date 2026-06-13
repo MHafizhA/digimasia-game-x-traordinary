@@ -152,13 +152,13 @@ export default function Tree() {
     if (phase === 'PRE_WATERING') return (
         <div style={{
             height: 'calc(100dvh - 140px)',
-            display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '60px 24px 24px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px',
             backgroundColor: 'var(--blue-bright)',
             backgroundImage: "url('/assets/branding/BG2.png')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
         }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', maxWidth: '400px', width: '100%', textAlign: 'center', marginTop: '30px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', maxWidth: '400px', width: '100%', textAlign: 'center' }}>
                 <div className="card" style={{
                     width: '100%',
                     padding: '24px 20px',
@@ -179,7 +179,7 @@ export default function Tree() {
                         WAITING SYSTEM ⏳
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'center', height: '140px', marginBottom: '10px', marginTop: '-20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', height: '180px', marginBottom: '10px', marginTop: '-20px' }}>
                         <TreeVisual stage={9} size="100%" noEffects={true} />
                     </div>
 
@@ -187,10 +187,9 @@ export default function Tree() {
                         fontFamily: 'var(--font-display)',
                         fontSize: '52px',
                         color: 'var(--yellow)',
-                        WebkitTextStroke: '2px var(--black)',
                         letterSpacing: '2px',
                         lineHeight: 1.1,
-                        textShadow: '4px 4px 0 var(--black)'
+                        textShadow: '2px 2px 0 var(--black)'
                     }}>
                         GET READY!
                     </div>
