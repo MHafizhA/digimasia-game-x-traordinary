@@ -82,6 +82,19 @@ export const useGameStore = create<GameStore>()(
         }),
         {
             name: 'x-celerate-storage',
+            // CRITICAL: Only persist user-specific fields.
+            // Session state (phase, timer, currentQuestion, treeStage, totalWater)
+            // is transient and comes from the backend via socket.
+            // Persisting it caused a race condition where socket session_state
+            // events wrote to localStorage before hydration finished restoring
+            // user's collectedWater, causing the 0L reset bug on refresh.
+            partialize: (state) => ({
+                user: state.user,
+                collectedWater: state.collectedWater,
+                contributedWater: state.contributedWater,
+                voteTeam: state.voteTeam,
+                voteDigi: state.voteDigi,
+            }),
             onRehydrateStorage: () => (state) => {
                 state?.setHasHydrated(true);
             }
