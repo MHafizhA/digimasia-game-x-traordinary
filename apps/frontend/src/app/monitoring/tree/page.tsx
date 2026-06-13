@@ -20,7 +20,7 @@ interface WaterDrop {
 let dropIdCounter = 0;
 
 export default function TreeMonitorExternal() {
-    const { totalWater, treeStage, _hasHydrated } = useGameStore();
+    const { totalWater, treeStage, phase, _hasHydrated } = useGameStore();
     const [mounted, setMounted] = useState(false);
     const [isMuted, setIsMutedState] = useState(false);
     const [isLevelingUp, setIsLevelingUp] = useState(false);
@@ -93,9 +93,6 @@ export default function TreeMonitorExternal() {
             setWaterDrops(prev => prev.filter(d => !ids.includes(d.id)));
         }, 1600);
     }, []);
-
-    const [hasStarted, setHasStarted] = useState(false);
-
     useEffect(() => {
         if (totalWater > prevWaterRef.current && totalWater > 0) {
             spawnDrops();
@@ -112,7 +109,7 @@ export default function TreeMonitorExternal() {
     const stageProgress = ((totalWater % WATER_PER_STAGE) / WATER_PER_STAGE) * 100;
     const isMaxStage = treeStage >= 9;
 
-    if (!hasStarted) {
+    if (phase === 'PRE_WATERING') {
         return (
             <TVFrame>
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
@@ -123,24 +120,6 @@ export default function TreeMonitorExternal() {
                         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '16px', color: '#333', letterSpacing: '4px', fontWeight: 800 }}>
                             GROW THE TREE SEGERA DIMULAI
                         </div>
-                        <button
-                            onClick={() => {
-                                setHasStarted(true);
-                                startBGMOnce();
-                            }}
-                            style={{
-                                background: 'var(--lime)', color: 'var(--black)',
-                                border: '4px solid var(--black)', boxShadow: '6px 6px 0 rgba(0,0,0,0.4)',
-                                borderRadius: '12px', padding: '16px 40px',
-                                fontFamily: 'var(--font-display)', fontSize: '28px', letterSpacing: '2px',
-                                cursor: 'pointer', transition: 'transform 0.1s',
-                                display: 'flex', alignItems: 'center', gap: '12px',
-                            }}
-                            onMouseDown={e => (e.currentTarget.style.transform = 'translate(3px,3px)')}
-                            onMouseUp={e => (e.currentTarget.style.transform = 'translate(0,0)')}
-                        >
-                            ▶ MULAI SEKARANG
-                        </button>
                     </div>
                 </div>
             </TVFrame>

@@ -1,7 +1,7 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
 
-export type GamePhase = 'LOGIN' | 'WAITING' | 'VOTING_TEAM' | 'VOTING_DIGIMER' | 'TRIVIA' | 'TRANSITION' | 'WATERING' | 'FINAL';
+export type GamePhase = 'LOGIN' | 'WAITING' | 'VOTING_TEAM' | 'VOTING_DIGIMER' | 'TRIVIA' | 'TRANSITION' | 'PRE_WATERING' | 'WATERING' | 'FINAL';
 
 @Injectable()
 export class SessionService implements OnModuleInit {
@@ -55,9 +55,11 @@ export class SessionService implements OnModuleInit {
         // Reset trivia question counter when entering TRIVIA so GET READY shows
         if (phase === 'TRIVIA') {
             this.state.currentQuestion = 0;
-        } else if (phase === 'WATERING') {
-            this.state.totalWater = 0;
-            this.state.treeStage = 0;
+        } else if (phase === 'PRE_WATERING' || phase === 'WATERING') {
+            if (this.state.phase !== 'WATERING') {
+                this.state.totalWater = 0;
+                this.state.treeStage = 0;
+            }
         }
         this.onStateChange(this.state);
         await this.saveToDb();

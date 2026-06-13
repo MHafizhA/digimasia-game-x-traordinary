@@ -19,6 +19,7 @@ const WATER_PER_STAGE = 10; // 10 stages × 10L
 export default function Tree() {
     const {
         user,
+        phase,
         treeStage,
         totalWater,
         collectedWater,
@@ -29,7 +30,6 @@ export default function Tree() {
 
     const { emitWaterTap } = useSocket();
     const [isSyncing, setIsSyncing] = useState(true);
-    const [gameStarted, setGameStarted] = useState(false);
     const [isPumping, setIsPumping] = useState(false);
     const [droplets, setDroplets] = useState<Droplet[]>([]);
     const [stageToast, setStageToast] = useState<string | null>(null);
@@ -88,11 +88,7 @@ export default function Tree() {
         }
     }, [audio]);
 
-    // Handler: tap Get Ready to enter the game + start BGM
-    const handleGameReady = useCallback(() => {
-        setGameStarted(true);
-        startBGMOnce();
-    }, [startBGMOnce]);
+
 
     // Stage-up toast + SFX
     useEffect(() => {
@@ -153,7 +149,7 @@ export default function Tree() {
     );
 
     // ── PRE-GAME LOBBY SCREEN ───────────────────────────────────────────
-    if (!gameStarted) return (
+    if (phase === 'PRE_WATERING') return (
         <div style={{
             height: 'calc(100dvh - 140px)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px',
@@ -179,15 +175,15 @@ export default function Tree() {
                     <div style={{
                         fontFamily: 'var(--font-display)',
                         fontSize: 'clamp(36px, 10vw, 48px)',
-                        color: 'var(--black)',
-                        textShadow: '2px 2px 0 rgba(0,0,0,0.1)',
+                        color: 'var(--white)',
+                        textShadow: '2px 2px 0 var(--black)',
                         letterSpacing: '2px',
                         lineHeight: 1.1
                     }}>
                         GET READY!
                     </div>
                     <div style={{
-                        fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#333',
+                        fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--yellow)',
                         letterSpacing: '2px', marginTop: '6px', fontWeight: 800
                     }}>
                         BERSIAP MENYIRAM
@@ -205,24 +201,7 @@ export default function Tree() {
                     </div>
                 </div>
 
-                {/* Start button */}
-                <button
-                    onClick={handleGameReady}
-                    style={{
-                        background: 'linear-gradient(135deg, #22c55e, #16a34a)',
-                        border: '4px solid var(--black)', boxShadow: '6px 6px 0 var(--black)',
-                        borderRadius: '16px', padding: '20px', width: '100%',
-                        cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
-                        touchAction: 'manipulation', userSelect: 'none', WebkitUserSelect: 'none',
-                    }}
-                >
-                    <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(24px, 7vw, 32px)', letterSpacing: '2px', color: 'var(--white)', textShadow: '2px 2px 0 rgba(0,0,0,0.3)' }}>
-                        💧 MULAI TAPPING!
-                    </div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(255,255,255,0.9)', letterSpacing: '2px' }}>
-                        TAP UNTUK MASUK & AKTIFKAN SUARA
-                    </div>
-                </button>
+
             </div>
         </div>
     );

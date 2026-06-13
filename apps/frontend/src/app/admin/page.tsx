@@ -18,7 +18,8 @@ const PHASES = [
     { targetPhase: 'VOTING_TEAM', icon: '👥', label: 'Team Voting', sub: 'Team of the Year' },
     { targetPhase: 'VOTING_DIGIMER', icon: '🌟', label: 'Digimer Voting', sub: 'Digimer of the Year' },
     { targetPhase: 'TRIVIA', icon: '🧠', label: 'Trivia Quiz', sub: 'Earn water points!' },
-    { targetPhase: 'WATERING', icon: '🌳', label: 'Grow The Tree', sub: 'Water the tree' },
+    { targetPhase: 'PRE_WATERING', icon: '🌳', label: 'Tree - Get Ready', sub: 'Show Get Ready screen' },
+    { targetPhase: 'WATERING', icon: '💧', label: 'Tree - Start Game', sub: 'Users can start tapping' },
 ];
 
 export default function AdminPage() {
@@ -76,6 +77,7 @@ export default function AdminPage() {
         VOTING_TEAM: 'VOTING TEAM',
         VOTING_DIGIMER: 'VOTING DIGIMER',
         TRIVIA: 'TRIVIA QUIZ',
+        PRE_WATERING: 'TREE - GET READY',
         WATERING: 'GROW THE TREE',
         TRANSITION: 'TRANSISI',
         FINAL: 'SELESAI',
@@ -201,7 +203,7 @@ export default function AdminPage() {
                                 let currentIdx = phaseOrder.indexOf(phase);
                                 // Robust handling for phases not in PHASES list
                                 if (phase === 'TRANSITION') currentIdx = phaseOrder.indexOf('TRIVIA') + 0.5;
-                                if (phase === 'FINAL' || phase === 'WATERING') currentIdx = 99; // All steps done
+                                if (phase === 'FINAL') currentIdx = 99; // All steps done
                                 if (currentIdx < 0) currentIdx = 0; // Fallback for unknown phases
 
                                 const thisIdx = phaseOrder.indexOf(p.targetPhase);
@@ -285,7 +287,7 @@ export default function AdminPage() {
                                         <TriviaMonitor />
                                     </div>
                                 )}
-                                {phase === 'WATERING' && (
+                                {(phase === 'PRE_WATERING' || phase === 'WATERING') && (
                                     <TreeMonitor />
                                 )}
                                 {phase === 'LOGIN' && (

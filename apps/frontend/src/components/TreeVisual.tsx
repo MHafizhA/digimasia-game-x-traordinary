@@ -46,17 +46,8 @@ export default function TreeVisual({ stage, size = '100%', isAnimated = true, is
         anim = 'floating 3.5s ease-in-out infinite';
     }
 
-    // If not using inline animation for grand tree, use a class
-    let inlineAnim = anim;
-    let className = '';
-    if (Object.is(anim, 'tvGentleGrowth 3s ease-in-out infinite')) {
-        inlineAnim = 'none'; // handled by class
-        className = 'animate-grand-tree';
-    }
-
     return (
         <div
-            className={className}  // Apply to the parent wrapper!
             style={{
                 width: size,
                 height: size,
@@ -65,7 +56,7 @@ export default function TreeVisual({ stage, size = '100%', isAnimated = true, is
                 justifyContent: 'center',
                 position: 'relative',
                 overflow: 'visible',
-                animation: inlineAnim === 'none' ? undefined : inlineAnim,
+                animation: anim === 'none' ? undefined : anim,
             }}>
             <img
                 key={`tree-${currentStage}-${isLevelingUp}`} // Force re-render on level up for animation trigger
@@ -92,14 +83,10 @@ export default function TreeVisual({ stage, size = '100%', isAnimated = true, is
                     100% { transform: translateY(0); }
                 }
 
-                .animate-grand-tree {
-                    animation: tvGentleGrowth 3s ease-in-out infinite;
-                }
-                
                 @keyframes tvGentleGrowth {
-                    0% { transform: scale3d(1, 1, 1) translateY(0); filter: drop-shadow(0 0 10px rgba(255,215,0,0.5)); }
-                    50% { transform: scale3d(1.15, 1.15, 1) translateY(-15px); filter: drop-shadow(0 0 45px rgba(255,215,0,1)) brightness(1.2); }
-                    100% { transform: scale3d(1, 1, 1) translateY(0); filter: drop-shadow(0 0 10px rgba(255,215,0,0.5)); }
+                    0% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 10px rgba(255,215,0,0.4)); }
+                    50% { transform: scale(1.03) translateY(-4px); filter: drop-shadow(0 0 25px rgba(255,215,0,0.9)); }
+                    100% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 10px rgba(255,215,0,0.4)); }
                 }
 
                 @keyframes marioGrowth {

@@ -96,11 +96,11 @@ export default function TriviaMonitor() {
             } catch { alert('Gagal start trivia'); }
         };
         return (
-            <div className="card card-lime" style={{ textAlign: 'center', padding: '60px', border: '5px solid var(--black)', boxShadow: '10px 10px 0 var(--black)', borderRadius: '20px', margin: '40px auto', maxWidth: '800px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: '56px', color: 'var(--black)', textShadow: '3px 3px 0 rgba(0,0,0,0.15)' }}>
+            <div className="card card-navy" style={{ textAlign: 'center', padding: '60px', border: '5px solid var(--black)', boxShadow: '10px 10px 0 var(--black)', borderRadius: '20px', margin: '40px auto', maxWidth: '800px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: '56px', color: 'var(--yellow)', textShadow: '3px 3px 0 var(--black)' }}>
                     GET READY!
                 </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '16px', color: '#333', letterSpacing: '4px', fontWeight: 800 }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '16px', color: 'var(--white)', letterSpacing: '4px', fontWeight: 800 }}>
                     KUIS TRIVIA SEGERA DIMULAI
                 </div>
                 <button
