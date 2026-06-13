@@ -47,10 +47,13 @@ export default function Tree() {
                 const res = await fetch(`${getBackendUrl()}/users/${user.id}/stats`);
                 const data = await res.json();
                 if (data) {
-                    setUserState({
-                        collectedWater: data.collectedWater ?? 0,
-                        contributedWater: data.contributedWater ?? 0,
-                    } as any);
+                    // Only update if we actually got a value (persistence might already have it)
+                    if (data.collectedWater !== undefined) {
+                        setUserState({
+                            collectedWater: data.collectedWater,
+                            contributedWater: data.contributedWater ?? 0,
+                        } as any);
+                    }
                 }
             } catch (err) {
                 console.error('Tree: Failed to sync water balance', err);
@@ -211,8 +214,8 @@ export default function Tree() {
                         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 900, color: 'var(--black)' }}>
                             TOTAL AIR TERKUMPUL
                         </div>
-                        <strong style={{ fontFamily: 'var(--font-display)', fontSize: '32px', color: 'var(--navy-dark)', lineHeight: 1 }}>
-                            {collectedWater}L 💧
+                        <strong style={{ fontFamily: 'var(--font-display)', fontSize: '32px', color: 'var(--black)', lineHeight: 1 }}>
+                            {(collectedWater || 0)}L 💧
                         </strong>
                     </div>
                 </div>

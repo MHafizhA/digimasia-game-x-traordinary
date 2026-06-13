@@ -152,29 +152,32 @@ export default function TriviaMonitor({ muteSFX = false }: { muteSFX?: boolean }
                 width: '100%'
             }}>
                 {/* Hero Banner */}
-                <div className="card card-lime" style={{
+                <div className="card" style={{
                     padding: '40px 24px',
                     textAlign: 'center',
-                    background: 'var(--lime)',
+                    background: 'var(--navy-dark)',
                     border: '5px solid var(--black)',
                     boxShadow: '10px 10px 0 var(--black)',
-                    borderRadius: '20px',
+                    borderRadius: '24px',
+                    position: 'relative',
+                    overflow: 'hidden'
                 }}>
+                    <div style={{ fontSize: '48px', marginBottom: '16px' }}>🏆</div>
                     <div style={{
                         fontFamily: 'var(--font-display)',
                         fontSize: '64px',
+                        color: 'var(--yellow)',
+                        textShadow: '3px 3px 0 var(--black)',
                         letterSpacing: '4px',
-                        color: 'var(--black)',
-                        lineHeight: 1,
-                        marginBottom: '12px',
-                        textShadow: '2px 2px 0 rgba(0,0,0,0.1)'
+                        lineHeight: 1
                     }}>
-                        🎉 TRIVIA SELESAI!
+                        TRIVIA SELESAI!
                     </div>
                     <div style={{
                         fontFamily: 'var(--font-mono)',
                         fontSize: '14px',
-                        color: 'rgba(0,0,0,0.6)',
+                        color: 'var(--yellow)',
+                        marginTop: '16px',
                         letterSpacing: '4px',
                         fontWeight: 700
                     }}>

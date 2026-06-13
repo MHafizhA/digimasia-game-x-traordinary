@@ -144,11 +144,8 @@ export default function TreeMonitorExternal() {
                         <div style={{ position: 'relative', zIndex: 1 }}>
                             <TreeVisual stage={9} size="150px" noEffects={true} />
                         </div>
-                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '56px', color: 'var(--yellow)', textShadow: '2px 2px 0 var(--black)', marginTop: '20px', position: 'relative', zIndex: 1 }}>
-                            TREE: GET READY
-                        </div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--white)', letterSpacing: '4px', marginTop: '12px', position: 'relative', zIndex: 1 }}>
-                            MONITOR STANDBY · PENGGUNA BISA MELIHAT LAYAR INI
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '56px', color: 'var(--yellow)', textShadow: '2px 2px 0 var(--black)', marginTop: '20px', position: 'relative', zIndex: 1, textAlign: 'center' }}>
+                            READY FOR THE GROWTH?
                         </div>
                         <button
                             onClick={handleStartWatering}

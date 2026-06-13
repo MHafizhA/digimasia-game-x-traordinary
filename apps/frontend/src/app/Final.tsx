@@ -170,20 +170,7 @@ export default function Final() {
             </div>
 
             {/* Support Message or Secondary info */}
-            <div style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '12px',
-                color: 'var(--white)',
-                fontWeight: 800,
-                textAlign: 'center',
-                letterSpacing: '2px',
-                background: 'var(--black)',
-                padding: '6px 16px',
-                borderRadius: '16px',
-                animation: 'fadeIn 2s forwards',
-            }}>
-                SESSION COMPLETED · DIGIMA ASIA 2026
-            </div>
+            <div style={{ height: '40px' }} />
         </div>
     );
 }
