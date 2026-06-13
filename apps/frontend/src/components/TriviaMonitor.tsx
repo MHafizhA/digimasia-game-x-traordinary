@@ -242,7 +242,7 @@ export default function TriviaMonitor() {
                             width: '72px',
                             height: '72px',
                             borderRadius: '50%',
-                            background: displayTimer <= 5 && displayTimer > 0 ? '#e53935' : 'var(--orange)',
+                            background: displayTimer <= 5 ? '#e53935' : 'var(--orange)',
                             border: '4px solid #000',
                             display: 'flex',
                             flexDirection: 'column',

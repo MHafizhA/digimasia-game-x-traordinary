@@ -154,7 +154,7 @@ export default function Tree() {
             height: 'calc(100dvh - 140px)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px',
             backgroundColor: 'var(--blue-bright)',
-            backgroundImage: "url('/assets/branding/BG1.png')",
+            backgroundImage: "url('/assets/branding/BG2.png')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
         }}>
@@ -170,7 +170,7 @@ export default function Tree() {
                     alignItems: 'center',
                     position: 'relative',
                     zIndex: 1,
-                    background: '#60a5fa', // Bright Blue card
+                    background: '#7ec8e3', // BG1-inspired soft sky-blue
                 }}>
                     <div style={{ position: 'absolute', top: '-18px', background: 'var(--lime)', padding: '6px 16px', border: '3px solid var(--black)', borderRadius: '100px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '2px', color: 'var(--black)', boxShadow: '4px 4px 0 var(--black)', fontWeight: 900, transform: 'rotate(-3deg)' }}>
                         WAITING SYSTEM ⏳

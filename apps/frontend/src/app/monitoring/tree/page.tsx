@@ -131,18 +131,32 @@ export default function TreeMonitorExternal() {
         return (
             <TVFrame>
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
-                    <div className="card card-navy" style={{ textAlign: 'center', padding: '60px', borderRadius: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '300px', border: '5px solid var(--black)', boxShadow: '8px 8px 0 var(--black)' }}>
-                        <TreeVisual stage={9} size="150px" noEffects={true} />
-                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '56px', color: 'var(--yellow)', textShadow: '2px 2px 0 var(--black)', marginTop: '20px' }}>
+                    <div style={{
+                        textAlign: 'center', padding: '60px', borderRadius: '20px',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                        minHeight: '300px', border: '5px solid var(--black)', boxShadow: '8px 8px 0 var(--black)',
+                        backgroundImage: "url('/assets/branding/BG2.png')",
+                        backgroundSize: 'cover', backgroundPosition: 'center',
+                        position: 'relative', overflow: 'hidden'
+                    }}>
+                        {/* Inner card overlay with BG1 color */}
+                        <div style={{
+                            position: 'absolute', inset: 0, background: 'rgba(126, 200, 227, 0.85)',
+                            borderRadius: '20px'
+                        }} />
+                        <div style={{ position: 'relative', zIndex: 1 }}>
+                            <TreeVisual stage={9} size="150px" noEffects={true} />
+                        </div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '56px', color: 'var(--yellow)', textShadow: '2px 2px 0 var(--black)', marginTop: '20px', position: 'relative', zIndex: 1 }}>
                             TREE: GET READY
                         </div>
-                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--white)', letterSpacing: '4px', marginTop: '12px' }}>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--white)', letterSpacing: '4px', marginTop: '12px', position: 'relative', zIndex: 1 }}>
                             MONITOR STANDBY · PENGGUNA BISA MELIHAT LAYAR INI
                         </div>
                         <button
                             onClick={handleStartWatering}
                             className="btn btn-primary"
-                            style={{ fontSize: '24px', padding: '16px 40px', marginTop: '32px' }}
+                            style={{ fontSize: '24px', padding: '16px 40px', marginTop: '32px', position: 'relative', zIndex: 1 }}
                         >
                             ▶ MULAI GAME SEKARANG
                         </button>

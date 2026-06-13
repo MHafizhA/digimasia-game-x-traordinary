@@ -35,29 +35,19 @@ export default function TreeVisual({ stage, size = '100%', isAnimated = true, is
     const currentStage = Math.min(Math.max(stage, 0), 9);
     const src = TREE_IMAGES[currentStage];
 
-    // Determine animation based on isLevelingUp override vs normal loop
-    let anim = 'none';
+    // Determine class-based animation
+    let animClass = '';
     if (isLevelingUp) {
-        anim = 'marioGrowth 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) both';
+        animClass = 'animate-mario-growth';
     } else if (currentStage === 9 && !noEffects) {
-        anim = 'tvGentleGrowth 3s ease-in-out infinite';
+        animClass = 'animate-grand-tree';
     } else if (isAnimated) {
-        // floating gently
-        anim = 'floating 3.5s ease-in-out infinite';
-    }
-
-    // If not using inline animation for grand tree, use a class
-    let inlineAnim = anim;
-    let className = '';
-    if (Object.is(anim, 'tvGentleGrowth 3s ease-in-out infinite')) {
-        inlineAnim = 'none'; // handled by class
-        className = 'animate-grand-tree';
+        animClass = 'animate-floating';
     }
 
     return (
         <div
-            key={`wrapper-${currentStage}-${isLevelingUp}`}
-            className={className}  // Apply to the parent wrapper!
+            className={animClass}
             style={{
                 width: size,
                 height: size,
@@ -66,10 +56,8 @@ export default function TreeVisual({ stage, size = '100%', isAnimated = true, is
                 justifyContent: 'center',
                 position: 'relative',
                 overflow: 'visible',
-                animation: inlineAnim === 'none' ? undefined : inlineAnim,
             }}>
             <img
-                key={`tree-${currentStage}-${isLevelingUp}`} // Force re-render on level up for animation trigger
                 src={src}
                 alt={`Tree Stage ${currentStage + 1}`}
                 style={{
@@ -79,7 +67,7 @@ export default function TreeVisual({ stage, size = '100%', isAnimated = true, is
                     objectPosition: 'bottom',
                     filter: currentStage === 9 && !noEffects ? undefined : 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))',
                     transition: 'filter 0.8s ease',
-                    transformOrigin: 'bottom center', // crucial for growth animation from the ground
+                    transformOrigin: 'bottom center',
                     position: 'relative',
                     zIndex: 1,
                     willChange: 'transform, filter',
@@ -87,14 +75,20 @@ export default function TreeVisual({ stage, size = '100%', isAnimated = true, is
             />
 
             <style>{`
+                .animate-floating {
+                    animation: floating 3.5s ease-in-out infinite;
+                }
+                .animate-mario-growth {
+                    animation: marioGrowth 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+                }
+                .animate-grand-tree {
+                    animation: tvGentleGrowth 3s ease-in-out infinite;
+                }
+
                 @keyframes floating {
                     0% { transform: translateY(0); }
                     50% { transform: translateY(-8px); }
                     100% { transform: translateY(0); }
-                }
-
-                .animate-grand-tree {
-                    animation: tvGentleGrowth 3s ease-in-out infinite;
                 }
                 
                 @keyframes tvGentleGrowth {
