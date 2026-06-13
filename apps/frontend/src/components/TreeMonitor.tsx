@@ -278,7 +278,7 @@ export default function TreeMonitor() {
                             CURRENT STAGE
                         </div>
                         <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(18px, 2.5vw, 24px)', letterSpacing: '1px', lineHeight: 1 }}>
-                            {treeStage + 1} / 10 · {TREE_STAGE_LABELS[Math.min(treeStage, 9)]}
+                            {treeStage + 1} / 10 · <span style={{ color: treeStage === 8 ? 'var(--pink-hot)' : 'inherit' }}>{TREE_STAGE_LABELS[Math.min(treeStage, 9)]}</span>
                         </div>
                     </div>
 

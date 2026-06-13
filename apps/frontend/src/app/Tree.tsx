@@ -44,7 +44,10 @@ export default function Tree() {
         const fetchStats = async () => {
             if (!user?.id) { setIsSyncing(false); return; }
             try {
-                const res = await fetch(`${getBackendUrl()}/users/${user.id}/stats`);
+                const res = await fetch(`${getBackendUrl()}/users/${user.id}/stats?t=${Date.now()}`, {
+                    cache: 'no-store',
+                    headers: { 'Cache-Control': 'no-cache, no-store', 'Pragma': 'no-cache' }
+                });
                 const data = await res.json();
                 if (data) {
                     // Only update if we actually got a value (persistence might already have it)
@@ -409,8 +412,8 @@ export default function Tree() {
                             {isMaxStage ? '🌳 GRAND TREE TERCAPAI!' : TREE_STAGE_LABELS[Math.min(treeStage, 9)]}
                         </div>
                         <div style={{
-                            fontFamily: 'var(--font-mono)', fontSize: '9px',
-                            color: '#888', letterSpacing: '1px', textAlign: 'right',
+                            fontFamily: 'var(--font-mono)', fontSize: '10px',
+                            color: 'var(--black)', letterSpacing: '1px', textAlign: 'right', fontWeight: 900
                         }}>
                             {Math.round(progress)}% SELESAI
                         </div>
@@ -432,8 +435,8 @@ export default function Tree() {
                         <div style={{ marginTop: '6px' }}>
                             <div style={{
                                 display: 'flex', justifyContent: 'space-between',
-                                fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#aaa',
-                                letterSpacing: '1px', marginBottom: '3px'
+                                fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--black)',
+                                letterSpacing: '1px', marginBottom: '4px', fontWeight: 900
                             }}>
                                 <span>KE STAGE BERIKUTNYA</span>
                                 <span>{totalWater % WATER_PER_STAGE} / {WATER_PER_STAGE} L</span>
@@ -465,7 +468,7 @@ export default function Tree() {
                             width: '80px',
                             position: 'relative',
                         }}>
-                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#888', letterSpacing: '1px', textAlign: 'center' }}>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--black)', letterSpacing: '1px', textAlign: 'center', fontWeight: 900 }}>
                                 POMPA AIR
                             </div>
                             {/* Droplet spray area */}
@@ -522,7 +525,7 @@ export default function Tree() {
                         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
                             <div style={{
                                 display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                                fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#888', letterSpacing: '1px'
+                                fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--black)', letterSpacing: '1px', fontWeight: 900
                             }}>
                                 <span>TANGKI AIR KAMU</span>
                                 <span style={{ fontFamily: 'var(--font-display)', fontSize: '22px', color: 'var(--blue-bright)', lineHeight: 1 }}>
@@ -577,10 +580,10 @@ export default function Tree() {
 
                             {/* Contribution */}
                             <div style={{
-                                fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#888',
-                                letterSpacing: '1px', textAlign: 'right'
+                                fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'var(--black)',
+                                letterSpacing: '1px', textAlign: 'right', fontWeight: 800
                             }}>
-                                TOTAL KONTRIBUSIMU: <strong style={{ color: 'var(--black)' }}>{contributedWater}L</strong>
+                                TOTAL KONTRIBUSIMU: <strong style={{ color: 'var(--blue-bright)', fontWeight: 900 }}>{contributedWater}L</strong>
                             </div>
                         </div>
                     </div>
