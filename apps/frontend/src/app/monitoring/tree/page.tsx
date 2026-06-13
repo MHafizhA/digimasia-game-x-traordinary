@@ -7,7 +7,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useTreeAudio } from '@/hooks/useTreeAudio';
 import { useSocket } from '@/hooks/useSocket';
 
-const TOTAL_WATER_GOAL = 5000;
+const TOTAL_WATER_GOAL = 3500;
 
 interface WaterDrop {
     id: number;
@@ -275,7 +275,7 @@ export default function TreeMonitorExternal() {
                             {totalWater} L
                         </div>
                         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(10px, 1vw, 14px)', color: 'var(--navy-dark)', fontWeight: 800, marginTop: '8px' }}>
-                            TARGET: 5000 L
+                            TARGET: 3500 L
                         </div>
                     </div>
                 )}

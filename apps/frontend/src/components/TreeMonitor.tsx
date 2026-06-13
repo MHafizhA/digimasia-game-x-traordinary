@@ -4,9 +4,10 @@ import { useGameStore } from '@/store/useGameStore';
 import TreeVisual, { TREE_STAGE_LABELS } from './TreeVisual';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTreeAudio } from '@/hooks/useTreeAudio';
+import { getBackendUrl } from '@/lib/config';
 
-const TOTAL_WATER_GOAL = 5000;
-const WATER_PER_STAGE = 500;
+const TOTAL_WATER_GOAL = 3500;
+const WATER_PER_STAGE = 350;
 
 interface WaterDrop {
     id: number;
@@ -26,6 +27,7 @@ export default function TreeMonitor() {
     const [isLevelingUp, setIsLevelingUp] = useState(false);
     const [waterDrops, setWaterDrops] = useState<WaterDrop[]>([]);
     const [isWatering, setIsWatering] = useState(false);
+    const [topContributors, setTopContributors] = useState<{ id: string, name: string, division: string, contributedWater: number }[]>([]);
     const prevWaterRef = useRef(totalWater);
     const prevStageRef = useRef(treeStage);
     const wateringTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -47,6 +49,20 @@ export default function TreeMonitor() {
             setWaterDrops(prev => prev.filter(d => !ids.includes(d.id)));
         }, 1600);
     }, []);
+
+    // Fetch top contributors
+    useEffect(() => {
+        const fetchTop = async () => {
+            try {
+                const res = await fetch(`${getBackendUrl()}/users/tree/top-contributors`);
+                const data = await res.json();
+                if (Array.isArray(data)) setTopContributors(data);
+            } catch (err) {
+                console.error('Failed to fetch top contributors', err);
+            }
+        };
+        fetchTop();
+    }, [totalWater]);
 
     useEffect(() => {
         if (totalWater > prevWaterRef.current) {
@@ -287,6 +303,58 @@ export default function TreeMonitor() {
                     </div>
                 </div>
             )}
+
+            {/* Top Contributors Leaderboard */}
+            <div style={{
+                background: 'var(--blue-light)',
+                border: '3px solid var(--black)',
+                boxShadow: '4px 4px 0 var(--black)',
+                borderRadius: '16px',
+                padding: '16px',
+                marginTop: '8px'
+            }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', letterSpacing: '1px' }}>🏆 TOP CONTRIBUTORS</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', background: 'var(--lime)', border: '2px solid var(--black)', padding: '2px 8px', borderRadius: '12px', fontWeight: 800 }}>
+                        LIVE RANKING
+                    </div>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {topContributors.length === 0 && (
+                        <div style={{ textAlign: 'center', fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#666', padding: '10px' }}>
+                            BELUM ADA KONTRIBUSI AIR
+                        </div>
+                    )}
+                    {topContributors.map((c, i) => (
+                        <div key={c.id} style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            background: i === 0 ? 'var(--yellow)' : i === 1 ? '#e2e8f0' : i === 2 ? '#edd1b0' : 'white',
+                            border: '2px solid var(--black)',
+                            borderRadius: '10px',
+                            padding: '8px 12px',
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <div style={{
+                                    fontFamily: 'var(--font-display)', fontSize: '18px',
+                                    width: '24px', textAlign: 'center'
+                                }}>
+                                    #{i + 1}
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 800 }}>{c.name}</div>
+                                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#555' }}>{c.division}</div>
+                                </div>
+                            </div>
+                            <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: 'var(--blue-bright)' }}>
+                                {c.contributedWater}<span style={{ fontSize: '10px' }}>L</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }
