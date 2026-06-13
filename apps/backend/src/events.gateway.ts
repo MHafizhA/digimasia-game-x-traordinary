@@ -77,7 +77,23 @@ export class EventsGateway implements OnGatewayInit, OnGatewayConnection {
   }
 
   @SubscribeMessage('water_tap')
-  async handleWaterTap() {
-    await this.sessionService.incrementWater(2);
+  async handleWaterTap(@ConnectedSocket() client: Socket) {
+    const user = (client as any).user;
+    if (user && user.id) {
+      await this.prisma.$transaction(async (tx) => {
+        // Increment user contribution
+        await tx.user.update({
+          where: { id: user.id },
+          data: {
+            contributedWater: { increment: 1 },
+            collectedWater: { decrement: 1 }
+          }
+        });
+        // Update global session water
+        await this.sessionService.incrementWaterInTransaction(tx, 1);
+      });
+    } else {
+      await this.sessionService.incrementWater(1);
+    }
   }
 }

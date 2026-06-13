@@ -234,51 +234,108 @@ export default function TreeMonitorExternal() {
                             background: 'var(--blue-light)',
                             border: '3px solid var(--black)',
                             boxShadow: '6px 6px 0 var(--black)',
-                            padding: '12px 20px',
+                            padding: '16px 20px',
                             borderRadius: '16px',
-                            flexShrink: 0
+                            flexShrink: 0,
+                            maxWidth: '180px'
                         }}>
-                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(10px, 0.8vw, 14px)', color: '#666', marginBottom: '8px' }}>STAGE CURRENT</div>
-                            <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px, 3vw, 42px)', color: 'var(--navy-dark)', lineHeight: 1 }}>
-                                {treeStage + 1} / 10
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(10px, 0.8vw, 12px)', color: '#666', marginBottom: '8px' }}>STAGE CURRENT</div>
+                            <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 4vw, 48px)', color: 'var(--navy-dark)', lineHeight: 1 }}>
+                                {treeStage + 1} <span style={{ fontSize: '0.6em', color: '#888' }}>/ 10</span>
                             </div>
-                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(10px, 1vw, 14px)', color: 'var(--pink-hot)', fontWeight: 800, marginTop: '8px' }}>
+                            <div style={{
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: 'clamp(11px, 1.2vw, 15px)',
+                                color: 'var(--pink-hot)',
+                                fontWeight: 800,
+                                marginTop: '12px',
+                                textWrap: 'balance',
+                                lineHeight: '1.2'
+                            }}>
                                 {TREE_STAGE_LABELS[Math.min(treeStage, 9)]}
                             </div>
                         </div>
                     )}
 
-                    {/* Center Tree */}
+                    {/* Center Tree Area (Always centered & responsive) */}
                     <div style={{
+                        flex: 1,
                         height: '100%',
                         maxHeight: '45vh',
-                        aspectRatio: '1',
                         display: 'flex',
                         justifyContent: 'center',
-                        position: 'relative'
+                        alignItems: 'center',
+                        position: 'relative',
+                        padding: '16px'
                     }}>
-                        <TreeVisual stage={treeStage} size="100%" isLevelingUp={isLevelingUp} />
+                        <div style={{ width: '100%', height: '100%', position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'flex-end' }}>
+                            <TreeVisual stage={treeStage} size="100%" isLevelingUp={isLevelingUp} />
 
-                        {waterDrops.map(drop => (
-                            <div
-                                key={drop.id}
-                                style={{
+                            {/* DROPS */}
+                            {waterDrops.map(drop => (
+                                <div
+                                    key={drop.id}
+                                    style={{
+                                        position: 'absolute',
+                                        top: 0,
+                                        left: `${drop.x}%`,
+                                        fontSize: `clamp(24px, ${4 * drop.size}vh, 48px)`,
+                                        animationName: 'tm-dropFall',
+                                        animationDuration: '1.2s',
+                                        animationDelay: `${drop.delay}s`,
+                                        animationFillMode: 'both',
+                                        animationTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
+                                        pointerEvents: 'none',
+                                        zIndex: 20
+                                    }}
+                                >
+                                    💧
+                                </div>
+                            ))}
+
+                            {/* GRAND TREE OVERLAY INSTEAD OF SIDE CARD */}
+                            {isMaxStage && (
+                                <div style={{
                                     position: 'absolute',
-                                    top: 0,
-                                    left: `${drop.x}%`,
-                                    fontSize: `clamp(24px, ${4 * drop.size}vh, 48px)`,
-                                    animationName: 'tm-dropFall',
-                                    animationDuration: '1.2s',
-                                    animationDelay: `${drop.delay}s`,
-                                    animationFillMode: 'both',
-                                    animationTimingFunction: 'cubic-bezier(0.4, 0, 1, 1)',
-                                    pointerEvents: 'none',
-                                    zIndex: 20
-                                }}
-                            >
-                                💧
-                            </div>
-                        ))}
+                                    top: '40%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                    background: 'var(--lime)',
+                                    border: '4px solid var(--black)',
+                                    boxShadow: '10px 10px 0 var(--black)',
+                                    padding: '24px 32px',
+                                    borderRadius: '24px',
+                                    textAlign: 'center',
+                                    animation: 'pop-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+                                    zIndex: 30,
+                                    width: 'max-content',
+                                    maxWidth: '90%'
+                                }}>
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '12px',
+                                        fontFamily: 'var(--font-display)',
+                                        fontSize: 'clamp(32px, 4vw, 56px)',
+                                        color: 'var(--black)',
+                                        letterSpacing: '3px',
+                                        lineHeight: 1
+                                    }}>
+                                        <img src="/assets/branding/Pohon 10.png" alt="" style={{ height: 'clamp(60px, 8vw, 100px)', filter: 'drop-shadow(4px 4px 0 var(--black))' }} />
+                                        <span>GRAND TREE TERCAPAI!</span>
+                                    </div>
+                                    <div style={{
+                                        fontFamily: 'var(--font-mono)', fontSize: 'clamp(12px, 1.5vw, 16px)', fontWeight: 800,
+                                        background: 'white', border: '3px solid black', padding: '8px 16px',
+                                        borderRadius: '16px', display: 'inline-block', marginTop: '20px'
+                                    }}>
+                                        {totalWater}L AIR TELAH DIKUMPULKAN
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     {!isMaxStage && (
@@ -286,56 +343,23 @@ export default function TreeMonitorExternal() {
                             background: 'var(--blue-light)',
                             border: '3px solid var(--black)',
                             boxShadow: '6px 6px 0 var(--black)',
-                            padding: '12px 20px',
+                            padding: '16px 20px',
                             borderRadius: '16px',
                             textAlign: 'right',
-                            flexShrink: 0
+                            flexShrink: 0,
+                            maxWidth: '180px'
                         }}>
-                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(10px, 0.8vw, 14px)', color: '#666', marginBottom: '8px' }}>TOTAL AIR</div>
-                            <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 3.5vw, 48px)', color: 'var(--blue-bright)', lineHeight: 1 }}>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(10px, 0.8vw, 12px)', color: '#666', marginBottom: '8px' }}>TOTAL AIR</div>
+                            <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px, 4vw, 48px)', color: 'var(--blue-bright)', lineHeight: 1 }}>
                                 {totalWater} L
                             </div>
-                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(10px, 1vw, 14px)', color: 'var(--navy-dark)', fontWeight: 800, marginTop: '8px' }}>
-                                TARGET: 100 L
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(11px, 1.2vw, 15px)', color: 'var(--navy-dark)', fontWeight: 800, marginTop: '12px' }}>
+                                TARGET: {TOTAL_WATER_GOAL}L
                             </div>
                         </div>
                     )}
 
-                    {isMaxStage && (
-                        <div style={{
-                            background: 'var(--lime)',
-                            border: '4px solid var(--black)',
-                            boxShadow: '8px 8px 0 var(--black)',
-                            padding: '16px 24px',
-                            borderRadius: '20px',
-                            textAlign: 'center',
-                            animation: 'pop-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both',
-                            flexShrink: 0,
-                        }}>
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '8px',
-                                fontFamily: 'var(--font-display)',
-                                fontSize: 'clamp(28px, 3vw, 46px)',
-                                color: 'var(--black)',
-                                letterSpacing: '2px',
-                                lineHeight: 1
-                            }}>
-                                <img src="/assets/branding/Pohon 10.png" alt="" style={{ height: '80px', filter: 'drop-shadow(3px 3px 0 var(--black))' }} />
-                                <span>GRAND TREE TERCAPAI!</span>
-                            </div>
-                            <div style={{
-                                fontFamily: 'var(--font-mono)', fontSize: '14px', fontWeight: 800,
-                                background: 'white', border: '3px solid black', padding: '6px 12px',
-                                borderRadius: '12px', display: 'inline-block', marginTop: '16px'
-                            }}>
-                                {totalWater}L AIR TELAH DIKUMPULKAN
-                            </div>
-                        </div>
-                    )}
+
                 </div>
 
                 {/* Right Side Sidebar Leaderboard */}

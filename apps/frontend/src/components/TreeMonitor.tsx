@@ -28,6 +28,7 @@ export default function TreeMonitor() {
     const [waterDrops, setWaterDrops] = useState<WaterDrop[]>([]);
     const [isWatering, setIsWatering] = useState(false);
     const [topContributors, setTopContributors] = useState<{ id: string, name: string, division: string, contributedWater: number }[]>([]);
+    const [stageToast, setStageToast] = useState<string | null>(null);
     const prevWaterRef = useRef(totalWater);
     const prevStageRef = useRef(treeStage);
     const wateringTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -79,6 +80,10 @@ export default function TreeMonitor() {
 
     useEffect(() => {
         if (treeStage > prevStageRef.current) {
+            const label = TREE_STAGE_LABELS[Math.min(treeStage, 9)];
+            setStageToast(`STAGE ${treeStage + 1}|${label}`);
+            setTimeout(() => setStageToast(null), 3000);
+
             setIsLevelingUp(true);
             playStageUp();
             const t = setTimeout(() => setIsLevelingUp(false), 3000);
@@ -133,7 +138,42 @@ export default function TreeMonitor() {
             </div>
 
             {/* Main layout: tall tree hero panel on top */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', position: 'relative' }}>
+
+                {/* Stage-up Toast (Shared styles with Tree.tsx but centered absolutely) */}
+                {stageToast && (() => {
+                    const [stageLabel, treeName] = stageToast.split('|');
+                    return (
+                        <div style={{
+                            position: 'absolute',
+                            top: '40%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            zIndex: 10000,
+                            pointerEvents: 'none',
+                            width: '90%',
+                            maxWidth: '300px',
+                        }}>
+                            <div style={{
+                                background: 'var(--yellow)',
+                                border: '4px solid var(--black)',
+                                boxShadow: '5px 5px 0 var(--black)',
+                                borderRadius: '16px',
+                                padding: '12px 16px',
+                                textAlign: 'center',
+                                animation: 'pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+                            }}>
+                                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '2px', color: '#555', marginBottom: '4px' }}>⬆️ LEVEL UP!</div>
+                                <div style={{ fontFamily: 'var(--font-display)', fontSize: '24px', letterSpacing: '1px', color: 'var(--black)', lineHeight: 1.1 }}>
+                                    {stageLabel}
+                                </div>
+                                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#333', marginTop: '4px', fontWeight: 800 }}>
+                                    {treeName}
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })()}
 
                 {/* Tree image — full-width hero */}
                 <div style={{
@@ -173,6 +213,42 @@ export default function TreeMonitor() {
                             💧
                         </div>
                     ))}
+
+                    {/* GRAND TREE ACHIEVED OVERLAY */}
+                    {isMaxStage && (
+                        <div style={{
+                            position: 'absolute',
+                            top: '40%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            background: 'var(--lime)',
+                            border: '3px solid var(--black)',
+                            boxShadow: '6px 6px 0 var(--black)',
+                            padding: '16px 20px',
+                            borderRadius: '20px',
+                            textAlign: 'center',
+                            animation: 'pop-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+                            zIndex: 30,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            gap: '4px',
+                            width: 'max-content',
+                            maxWidth: '90%'
+                        }}>
+                            <img src="/assets/branding/Pohon 10.png" alt="" style={{ height: '40px', filter: 'drop-shadow(2px 2px 0 var(--black))', marginBottom: '4px' }} />
+                            <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 4vw, 28px)', color: 'var(--black)', letterSpacing: '1px', lineHeight: 1 }}>
+                                GRAND TREE TERCAPAI!
+                            </div>
+                            <div style={{
+                                fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 800,
+                                background: 'white', border: '2px solid black', padding: '4px 10px',
+                                borderRadius: '12px', display: 'inline-block', marginTop: '6px'
+                            }}>
+                                {totalWater}L TERKUMPUL
+                            </div>
+                        </div>
+                    )}
 
                     {/* Stage badge overlay */}
                     <div style={{
@@ -274,36 +350,6 @@ export default function TreeMonitor() {
                     </div>
                 </div>
             )}
-
-            {/* Grand Tree reached */}
-            {isMaxStage && (
-                <div style={{
-                    background: 'var(--lime)',
-                    border: '4px solid var(--black)',
-                    boxShadow: '6px 6px 0 var(--black)',
-                    borderRadius: '14px',
-                    padding: '20px',
-                    textAlign: 'center',
-                    animation: 'pop-in 0.5s ease-out',
-                }}>
-                    <div style={{
-                        fontFamily: 'var(--font-display)',
-                        fontSize: '32px',
-                        letterSpacing: '2px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '12px'
-                    }}>
-                        <img src="/assets/branding/Pohon 10.png" alt="" style={{ height: '48px', filter: 'drop-shadow(2px 2px 0 var(--black))' }} />
-                        <span>GRAND TREE TERCAPAI!</span>
-                    </div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#333', letterSpacing: '1px', marginTop: '6px' }}>
-                        {totalWater}L AIR TELAH DIKUMPULKAN BERSAMA
-                    </div>
-                </div>
-            )}
-
             {/* Top Contributors Leaderboard */}
             <div style={{
                 background: 'var(--blue-light)',

@@ -65,8 +65,9 @@ export class SessionService implements OnModuleInit {
         const session = await tx.session.findUnique({ where: { id: 'singleton' } });
         const newTotal = (session?.totalWater || 0) + amount;
 
-        // 2. Update DB dalam transaksi (Max 10 stages, 10L per stage)
-        const newStage = Math.min(9, Math.floor(newTotal / 10));
+        // 2. Update DB dalam transaksi (Max 10 stages, exact threshold)
+        const GOAL = 100; // Debug max goal
+        const newStage = newTotal >= GOAL ? 9 : Math.min(8, Math.floor(newTotal / (GOAL / 9)));
         await tx.session.update({
             where: { id: 'singleton' },
             data: {
@@ -82,7 +83,8 @@ export class SessionService implements OnModuleInit {
     }
 
     private async internalUpdateWater(total: number) {
-        const newStage = Math.min(9, Math.floor(total / 10));
+        const GOAL = 100;
+        const newStage = total >= GOAL ? 9 : Math.min(8, Math.floor(total / (GOAL / 9)));
         if (this.state.treeStage !== newStage) {
             this.state.treeStage = newStage;
         }
