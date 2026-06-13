@@ -8,7 +8,8 @@ import { useTreeAudio } from '@/hooks/useTreeAudio';
 import { useSocket } from '@/hooks/useSocket';
 import { getBackendUrl } from '@/lib/config';
 
-const TOTAL_WATER_GOAL = 100;
+const TOTAL_WATER_GOAL = 3500;
+const WATER_PER_STAGE = 350;
 
 interface WaterDrop {
     id: number;
@@ -365,7 +366,7 @@ export default function TreeMonitorExternal() {
                 {/* Right Side Sidebar Leaderboard */}
                 <div style={{
                     width: 'clamp(300px, 22vw, 420px)',
-                    background: '#f0fdf4', // Soft green background
+                    background: 'rgba(255, 255, 255, 0.95)', // Clean white panel
                     border: '4px solid var(--black)',
                     boxShadow: '8px 8px 0 var(--black)',
                     borderRadius: '24px',
@@ -374,41 +375,48 @@ export default function TreeMonitorExternal() {
                     overflow: 'hidden'
                 }}>
                     <div style={{
-                        background: '#166534', // Deep leaf green
+                        background: 'var(--blue-bright)', // Matches TV monitor header/logo
                         color: 'white', padding: '16px',
                         borderBottom: '4px solid var(--black)', fontFamily: 'var(--font-display)',
-                        fontSize: '24px', textAlign: 'center'
+                        fontSize: '24px', textAlign: 'center', letterSpacing: '1px'
                     }}>
                         🏆 TOP CONTRIBUTORS
                     </div>
                     <div style={{ flex: 1, overflowY: 'auto', padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                         {topContributors.map((c, i) => {
-                            const initials = c.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                            const seedStr = encodeURIComponent(c.name + c.division);
+                            const avatarUrl = `https://api.dicebear.com/7.x/pixel-art/svg?seed=${seedStr}`;
+
                             return (
                                 <div key={c.id} style={{
                                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                                     background: i === 0 ? 'var(--yellow)' : 'white',
-                                    border: '3px solid var(--black)', borderRadius: '12px', padding: '10px 14px'
+                                    border: '3px solid var(--black)', borderRadius: '16px', padding: '12px 16px',
+                                    boxShadow: '4px 4px 0 rgba(0,0,0,0.1)'
                                 }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                                         <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', width: '28px', color: 'var(--black)' }}>#{i + 1}</div>
-                                        {/* Profile Avatar */}
+                                        {/* Pixel Art Avatar */}
                                         <div style={{
-                                            width: '36px', height: '36px',
+                                            width: '56px', height: '56px',
                                             borderRadius: '50%',
-                                            background: i === 0 ? 'var(--lime)' : '#dcfce3',
-                                            border: '2px solid var(--black)',
+                                            background: i === 0 ? 'var(--lime)' : 'var(--blue-light)',
+                                            border: '3px solid var(--black)',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontFamily: 'var(--font-display)', fontSize: '16px', color: 'var(--black)'
+                                            overflow: 'hidden', flexShrink: 0
                                         }}>
-                                            {initials}
+                                            <img src={avatarUrl} alt="Avatar" style={{ width: '110%', height: '110%', imageRendering: 'pixelated', marginTop: '6px' }} />
                                         </div>
                                         <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', fontWeight: 900, color: 'var(--black)' }}>{c.name}</div>
-                                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#444' }}>{c.division}</div>
+                                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', fontWeight: 900, color: 'var(--black)', lineHeight: 1.2 }}>{c.name.toUpperCase()}</div>
+                                            <div style={{
+                                                fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'white',
+                                                background: 'var(--black)', padding: '2px 6px', borderRadius: '4px',
+                                                marginTop: '4px', alignSelf: 'flex-start'
+                                            }}>{c.division.toUpperCase()}</div>
                                         </div>
                                     </div>
-                                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '22px', color: '#166534' }}>
+                                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '24px', color: 'var(--blue-bright)' }}>
                                         {c.contributedWater}L
                                     </div>
                                 </div>

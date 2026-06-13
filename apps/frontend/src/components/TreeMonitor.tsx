@@ -6,8 +6,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTreeAudio } from '@/hooks/useTreeAudio';
 import { getBackendUrl } from '@/lib/config';
 
-const TOTAL_WATER_GOAL = 100;
-const WATER_PER_STAGE = 10;
+const TOTAL_WATER_GOAL = 3500;
+const WATER_PER_STAGE = 350;
 
 interface WaterDrop {
     id: number;
@@ -359,7 +359,7 @@ export default function TreeMonitor() {
             )}
             {/* Top Contributors Leaderboard */}
             <div style={{
-                background: '#f0fdf4', // Nature-themed green
+                background: 'rgba(255, 255, 255, 0.95)', // Matches TV panel style
                 border: '3px solid var(--black)',
                 boxShadow: '4px 4px 0 var(--black)',
                 borderRadius: '16px',
@@ -367,8 +367,8 @@ export default function TreeMonitor() {
                 marginTop: '8px'
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', letterSpacing: '1px', color: '#166534' }}>🏆 TOP CONTRIBUTORS</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', background: 'var(--lime)', border: '2px solid var(--black)', padding: '2px 8px', borderRadius: '12px', fontWeight: 800, color: 'var(--black)' }}>
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', letterSpacing: '1px', color: 'var(--blue-bright)' }}>🏆 TOP CONTRIBUTORS</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', background: 'var(--yellow)', border: '2px solid var(--black)', padding: '2px 8px', borderRadius: '12px', fontWeight: 800, color: 'var(--black)' }}>
                         LIVE RANKING
                     </div>
                 </div>
@@ -380,7 +380,9 @@ export default function TreeMonitor() {
                         </div>
                     )}
                     {topContributors.map((c, i) => {
-                        const initials = c.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                        const seedStr = encodeURIComponent(c.name + c.division);
+                        const avatarUrl = `https://api.dicebear.com/7.x/pixel-art/svg?seed=${seedStr}`;
+
                         return (
                             <div key={c.id} style={{
                                 display: 'flex',
@@ -388,8 +390,9 @@ export default function TreeMonitor() {
                                 justifyContent: 'space-between',
                                 background: i === 0 ? 'var(--yellow)' : i === 1 ? '#e2e8f0' : i === 2 ? '#edd1b0' : 'white',
                                 border: '2px solid var(--black)',
-                                borderRadius: '10px',
+                                borderRadius: '12px',
                                 padding: '8px 12px',
+                                boxShadow: '2px 2px 0 rgba(0,0,0,0.05)'
                             }}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                     <div style={{
@@ -398,23 +401,27 @@ export default function TreeMonitor() {
                                     }}>
                                         #{i + 1}
                                     </div>
+                                    {/* Pixel Art Avatar */}
                                     <div style={{
-                                        width: '32px', height: '32px',
+                                        width: '42px', height: '42px',
                                         borderRadius: '50%',
-                                        background: i === 0 ? 'var(--lime)' : '#dcfce3',
+                                        background: i === 0 ? 'var(--lime)' : 'var(--blue-light)',
                                         border: '2px solid var(--black)',
                                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        fontFamily: 'var(--font-display)', fontSize: '14px', color: 'var(--black)',
-                                        flexShrink: 0
+                                        overflow: 'hidden', flexShrink: 0
                                     }}>
-                                        {initials}
+                                        <img src={avatarUrl} alt="Avatar" style={{ width: '110%', height: '110%', imageRendering: 'pixelated', marginTop: '6px' }} />
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 800, color: 'var(--black)' }}>{c.name}</div>
-                                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#555' }}>{c.division}</div>
+                                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 800, color: 'var(--black)', lineHeight: 1.1 }}>{c.name.toUpperCase()}</div>
+                                        <div style={{
+                                            fontFamily: 'var(--font-mono)', fontSize: '8px', color: 'white',
+                                            background: 'var(--black)', padding: '1px 4px', borderRadius: '3px',
+                                            marginTop: '2px', alignSelf: 'flex-start'
+                                        }}>{c.division.toUpperCase()}</div>
                                     </div>
                                 </div>
-                                <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: '#166534' }}>
+                                <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', color: 'var(--blue-bright)' }}>
                                     {c.contributedWater}<span style={{ fontSize: '10px' }}>L</span>
                                 </div>
                             </div>
