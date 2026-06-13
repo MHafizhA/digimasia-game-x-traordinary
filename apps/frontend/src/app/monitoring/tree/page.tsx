@@ -293,45 +293,45 @@ export default function TreeMonitorExternal() {
                                 </div>
                             ))}
 
-                            {/* GRAND TREE OVERLAY INSTEAD OF SIDE CARD */}
+                            {/* GRAND TREE FLOATING DECORATION INSTEAD OF BLOCKING OVERLAY */}
                             {isMaxStage && (
                                 <div style={{
                                     position: 'absolute',
-                                    top: '40%',
+                                    top: '5%',
                                     left: '50%',
-                                    transform: 'translate(-50%, -50%)',
-                                    background: 'var(--lime)',
-                                    border: '4px solid var(--black)',
-                                    boxShadow: '10px 10px 0 var(--black)',
-                                    padding: '24px 32px',
-                                    borderRadius: '24px',
-                                    textAlign: 'center',
-                                    animation: 'pop-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+                                    transform: 'translateX(-50%)',
+                                    animation: 'float-up-down 3s ease-in-out infinite',
                                     zIndex: 30,
                                     width: 'max-content',
-                                    maxWidth: '90%'
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    pointerEvents: 'none'
                                 }}>
                                     <div style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        gap: '12px',
                                         fontFamily: 'var(--font-display)',
-                                        fontSize: 'clamp(32px, 4vw, 56px)',
-                                        color: 'var(--black)',
-                                        letterSpacing: '3px',
-                                        lineHeight: 1
+                                        fontSize: 'clamp(28px, 3.5vw, 42px)',
+                                        color: 'var(--yellow)',
+                                        textShadow: '3px 3px 0 var(--black), -1px -1px 0 var(--black), 1px -1px 0 var(--black), -1px 1px 0 var(--black), 1px 1px 0 var(--black)',
+                                        letterSpacing: '2px',
+                                        textAlign: 'center',
+                                        lineHeight: 1.1
                                     }}>
-                                        <img src="/assets/branding/Pohon 10.png" alt="" style={{ height: 'clamp(60px, 8vw, 100px)', filter: 'drop-shadow(4px 4px 0 var(--black))' }} />
-                                        <span>GRAND TREE TERCAPAI!</span>
+                                        POHON TELAH<br />TUMBUH SEMPURNA!
                                     </div>
                                     <div style={{
-                                        fontFamily: 'var(--font-mono)', fontSize: 'clamp(12px, 1.5vw, 16px)', fontWeight: 800,
-                                        background: 'white', border: '3px solid black', padding: '8px 16px',
-                                        borderRadius: '16px', display: 'inline-block', marginTop: '20px'
+                                        marginTop: '12px',
+                                        background: 'var(--lime)',
+                                        border: '3px solid var(--black)',
+                                        boxShadow: '4px 4px 0 var(--black)',
+                                        padding: '8px 16px',
+                                        borderRadius: '20px',
+                                        fontFamily: 'var(--font-mono)',
+                                        fontSize: 'clamp(12px, 1.5vw, 16px)',
+                                        fontWeight: 800,
+                                        color: 'var(--black)'
                                     }}>
-                                        {totalWater}L AIR TELAH DIKUMPULKAN
+                                        🌟 {totalWater}L AIR TERKUMPUL 🌟
                                     </div>
                                 </div>
                             )}
@@ -365,7 +365,7 @@ export default function TreeMonitorExternal() {
                 {/* Right Side Sidebar Leaderboard */}
                 <div style={{
                     width: 'clamp(300px, 22vw, 420px)',
-                    background: 'var(--blue-light)',
+                    background: '#f0fdf4', // Soft green background
                     border: '4px solid var(--black)',
                     boxShadow: '8px 8px 0 var(--black)',
                     borderRadius: '24px',
@@ -374,31 +374,46 @@ export default function TreeMonitorExternal() {
                     overflow: 'hidden'
                 }}>
                     <div style={{
-                        background: 'var(--blue-bright)', color: 'white', padding: '16px',
+                        background: '#166534', // Deep leaf green
+                        color: 'white', padding: '16px',
                         borderBottom: '4px solid var(--black)', fontFamily: 'var(--font-display)',
                         fontSize: '24px', textAlign: 'center'
                     }}>
                         🏆 TOP CONTRIBUTORS
                     </div>
                     <div style={{ flex: 1, overflowY: 'auto', padding: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        {topContributors.map((c, i) => (
-                            <div key={c.id} style={{
-                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                background: i === 0 ? 'var(--yellow)' : 'white',
-                                border: '3px solid var(--black)', borderRadius: '12px', padding: '10px 14px'
-                            }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', width: '28px' }}>#{i + 1}</div>
-                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', fontWeight: 900 }}>{c.name}</div>
-                                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px' }}>{c.division}</div>
+                        {topContributors.map((c, i) => {
+                            const initials = c.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                            return (
+                                <div key={c.id} style={{
+                                    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                    background: i === 0 ? 'var(--yellow)' : 'white',
+                                    border: '3px solid var(--black)', borderRadius: '12px', padding: '10px 14px'
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', width: '28px', color: 'var(--black)' }}>#{i + 1}</div>
+                                        {/* Profile Avatar */}
+                                        <div style={{
+                                            width: '36px', height: '36px',
+                                            borderRadius: '50%',
+                                            background: i === 0 ? 'var(--lime)' : '#dcfce3',
+                                            border: '2px solid var(--black)',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            fontFamily: 'var(--font-display)', fontSize: '16px', color: 'var(--black)'
+                                        }}>
+                                            {initials}
+                                        </div>
+                                        <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', fontWeight: 900, color: 'var(--black)' }}>{c.name}</div>
+                                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#444' }}>{c.division}</div>
+                                        </div>
+                                    </div>
+                                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '22px', color: '#166534' }}>
+                                        {c.contributedWater}L
                                     </div>
                                 </div>
-                                <div style={{ fontFamily: 'var(--font-display)', fontSize: '22px', color: 'var(--blue-bright)' }}>
-                                    {c.contributedWater}L
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </div>

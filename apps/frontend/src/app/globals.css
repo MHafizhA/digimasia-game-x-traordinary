@@ -386,6 +386,18 @@ h4 {
   }
 }
 
+@keyframes float-up-down {
+
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-15px);
+  }
+}
+
 @keyframes cat-travel {
   0% {
     left: -100px;

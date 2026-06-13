@@ -214,38 +214,45 @@ export default function TreeMonitor() {
                         </div>
                     ))}
 
-                    {/* GRAND TREE ACHIEVED OVERLAY */}
+                    {/* GRAND TREE FLOATING DECORATION INSTEAD OF BLOCKING OVERLAY */}
                     {isMaxStage && (
                         <div style={{
                             position: 'absolute',
-                            top: '40%',
+                            top: '5%',
                             left: '50%',
-                            transform: 'translate(-50%, -50%)',
-                            background: 'var(--lime)',
-                            border: '3px solid var(--black)',
-                            boxShadow: '6px 6px 0 var(--black)',
-                            padding: '16px 20px',
-                            borderRadius: '20px',
-                            textAlign: 'center',
-                            animation: 'pop-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both',
+                            transform: 'translateX(-50%)',
+                            animation: 'float-up-down 3s ease-in-out infinite',
                             zIndex: 30,
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            gap: '4px',
+                            pointerEvents: 'none',
                             width: 'max-content',
-                            maxWidth: '90%'
                         }}>
-                            <img src="/assets/branding/Pohon 10.png" alt="" style={{ height: '40px', filter: 'drop-shadow(2px 2px 0 var(--black))', marginBottom: '4px' }} />
-                            <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(20px, 4vw, 28px)', color: 'var(--black)', letterSpacing: '1px', lineHeight: 1 }}>
-                                GRAND TREE TERCAPAI!
+                            <div style={{
+                                fontFamily: 'var(--font-display)',
+                                fontSize: 'clamp(20px, 3.5vw, 32px)',
+                                color: 'var(--yellow)',
+                                textShadow: '2px 2px 0 var(--black), -1px -1px 0 var(--black), 1px -1px 0 var(--black), -1px 1px 0 var(--black), 1px 1px 0 var(--black)',
+                                letterSpacing: '2px',
+                                textAlign: 'center',
+                                lineHeight: 1.1
+                            }}>
+                                POHON TELAH<br />TUMBUH SEMPURNA!
                             </div>
                             <div style={{
-                                fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 800,
-                                background: 'white', border: '2px solid black', padding: '4px 10px',
-                                borderRadius: '12px', display: 'inline-block', marginTop: '6px'
+                                marginTop: '8px',
+                                background: 'var(--lime)',
+                                border: '2px solid var(--black)',
+                                boxShadow: '3px 3px 0 var(--black)',
+                                padding: '4px 12px',
+                                borderRadius: '16px',
+                                fontFamily: 'var(--font-mono)',
+                                fontSize: '12px',
+                                fontWeight: 800,
+                                color: 'var(--black)'
                             }}>
-                                {totalWater}L TERKUMPUL
+                                🌟 {totalWater}L AIR TERKUMPUL 🌟
                             </div>
                         </div>
                     )}
@@ -352,7 +359,7 @@ export default function TreeMonitor() {
             )}
             {/* Top Contributors Leaderboard */}
             <div style={{
-                background: 'var(--blue-light)',
+                background: '#f0fdf4', // Nature-themed green
                 border: '3px solid var(--black)',
                 boxShadow: '4px 4px 0 var(--black)',
                 borderRadius: '16px',
@@ -360,8 +367,8 @@ export default function TreeMonitor() {
                 marginTop: '8px'
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', letterSpacing: '1px' }}>🏆 TOP CONTRIBUTORS</div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', background: 'var(--lime)', border: '2px solid var(--black)', padding: '2px 8px', borderRadius: '12px', fontWeight: 800 }}>
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '20px', letterSpacing: '1px', color: '#166534' }}>🏆 TOP CONTRIBUTORS</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', background: 'var(--lime)', border: '2px solid var(--black)', padding: '2px 8px', borderRadius: '12px', fontWeight: 800, color: 'var(--black)' }}>
                         LIVE RANKING
                     </div>
                 </div>
@@ -372,33 +379,47 @@ export default function TreeMonitor() {
                             BELUM ADA KONTRIBUSI AIR
                         </div>
                     )}
-                    {topContributors.map((c, i) => (
-                        <div key={c.id} style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            background: i === 0 ? 'var(--yellow)' : i === 1 ? '#e2e8f0' : i === 2 ? '#edd1b0' : 'white',
-                            border: '2px solid var(--black)',
-                            borderRadius: '10px',
-                            padding: '8px 12px',
-                        }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <div style={{
-                                    fontFamily: 'var(--font-display)', fontSize: '18px',
-                                    width: '24px', textAlign: 'center'
-                                }}>
-                                    #{i + 1}
+                    {topContributors.map((c, i) => {
+                        const initials = c.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+                        return (
+                            <div key={c.id} style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                background: i === 0 ? 'var(--yellow)' : i === 1 ? '#e2e8f0' : i === 2 ? '#edd1b0' : 'white',
+                                border: '2px solid var(--black)',
+                                borderRadius: '10px',
+                                padding: '8px 12px',
+                            }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <div style={{
+                                        fontFamily: 'var(--font-display)', fontSize: '18px',
+                                        width: '24px', textAlign: 'center', color: 'var(--black)'
+                                    }}>
+                                        #{i + 1}
+                                    </div>
+                                    <div style={{
+                                        width: '32px', height: '32px',
+                                        borderRadius: '50%',
+                                        background: i === 0 ? 'var(--lime)' : '#dcfce3',
+                                        border: '2px solid var(--black)',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        fontFamily: 'var(--font-display)', fontSize: '14px', color: 'var(--black)',
+                                        flexShrink: 0
+                                    }}>
+                                        {initials}
+                                    </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 800, color: 'var(--black)' }}>{c.name}</div>
+                                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#555' }}>{c.division}</div>
+                                    </div>
                                 </div>
-                                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', fontWeight: 800 }}>{c.name}</div>
-                                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', color: '#555' }}>{c.division}</div>
+                                <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: '#166534' }}>
+                                    {c.contributedWater}<span style={{ fontSize: '10px' }}>L</span>
                                 </div>
                             </div>
-                            <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: 'var(--blue-bright)' }}>
-                                {c.contributedWater}<span style={{ fontSize: '10px' }}>L</span>
-                            </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             </div>
         </div>
