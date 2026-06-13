@@ -202,7 +202,7 @@ export default function Tree() {
                         flexDirection: 'column',
                         alignItems: 'center',
                         gap: '6px',
-                        background: 'var(--yellow)',
+                        background: 'var(--lime)',
                         padding: '12px 20px',
                         border: '4px solid var(--black)',
                         borderRadius: '16px',

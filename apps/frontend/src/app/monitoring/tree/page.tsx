@@ -134,7 +134,7 @@ export default function TreeMonitorExternal() {
                         textAlign: 'center', padding: '60px', borderRadius: '20px',
                         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                         minHeight: '300px', border: '5px solid var(--black)', boxShadow: '8px 8px 0 var(--black)',
-                        backgroundImage: "url('/assets/branding/BG1.png')",
+                        backgroundImage: "url('/assets/branding/BG2.png')",
                         backgroundSize: 'cover', backgroundPosition: 'center',
                         position: 'relative', overflow: 'hidden'
                     }}>
@@ -162,13 +162,6 @@ export default function TreeMonitorExternal() {
 
     return (
         <TVFrame>
-            {/* Added BG2 to cover TV bounds behind tree visual */}
-            <div style={{
-                position: 'absolute', inset: 0,
-                backgroundImage: "url('/assets/branding/BG2.png')",
-                backgroundSize: 'cover', backgroundPosition: 'center',
-                zIndex: 0
-            }} />
             <div style={{ position: 'relative', zIndex: 1, height: '100%', display: 'flex', flexDirection: 'column' }}>
 
                 <style>{`
