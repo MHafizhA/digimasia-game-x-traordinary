@@ -39,7 +39,7 @@ export default function TreeMonitorExternal() {
         setMounted(true);
     }, []);
 
-    // Start BGM on first user interaction
+    // Start BGM manually via button
     const startBGMOnce = useCallback(() => {
         if (!bgmStarted.current) {
             bgmStarted.current = true;
@@ -48,15 +48,6 @@ export default function TreeMonitorExternal() {
             }
         }
     }, [audio, treeStage]);
-
-    useEffect(() => {
-        window.addEventListener('click', startBGMOnce, { once: true });
-        window.addEventListener('keydown', startBGMOnce, { once: true });
-        return () => {
-            window.removeEventListener('click', startBGMOnce);
-            window.removeEventListener('keydown', startBGMOnce);
-        };
-    }, [startBGMOnce]);
 
     // Stage-up SFX
     useEffect(() => {
@@ -103,6 +94,8 @@ export default function TreeMonitorExternal() {
         }, 1600);
     }, []);
 
+    const [hasStarted, setHasStarted] = useState(false);
+
     useEffect(() => {
         if (totalWater > prevWaterRef.current && totalWater > 0) {
             spawnDrops();
@@ -118,6 +111,49 @@ export default function TreeMonitorExternal() {
     const progress = Math.min(100, (totalWater / TOTAL_WATER_GOAL) * 100);
     const stageProgress = ((totalWater % WATER_PER_STAGE) / WATER_PER_STAGE) * 100;
     const isMaxStage = treeStage >= 9;
+
+    if (!hasStarted) {
+        return (
+            <TVFrame>
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(40px, 6vw, 100px)', color: 'var(--yellow)', textShadow: '6px 6px 0 var(--black)', textAlign: 'center', lineHeight: 1.1 }}>
+                        GET READY
+                    </div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '20px', color: 'white', marginTop: '16px', letterSpacing: '4px', textShadow: '2px 2px 0 var(--black)' }}>
+                        GROW THE TREE IS STANDING BY
+                    </div>
+                    <button
+                        onClick={() => {
+                            setHasStarted(true);
+                            startBGMOnce();
+                        }}
+                        style={{
+                            marginTop: '60px',
+                            background: 'var(--lime)',
+                            border: '5px solid var(--black)',
+                            boxShadow: '8px 8px 0 var(--black)',
+                            padding: '20px 48px',
+                            borderRadius: '24px',
+                            fontFamily: 'var(--font-display)',
+                            fontSize: '36px',
+                            cursor: 'pointer',
+                            color: 'var(--black)',
+                            animation: 'tv-pulse-glow 2s infinite cubic-bezier(0.4, 0, 0.2, 1)',
+                        }}
+                    >
+                        START BROADCAST
+                    </button>
+                    <style>{`
+                        @keyframes tv-pulse-glow {
+                            0% { transform: scale(1); box-shadow: 8px 8px 0 var(--black); }
+                            50% { transform: scale(1.05); box-shadow: 12px 12px 0 var(--black), 0 0 40px rgba(52, 211, 153, 0.6); }
+                            100% { transform: scale(1); box-shadow: 8px 8px 0 var(--black); }
+                        }
+                    `}</style>
+                </div>
+            </TVFrame>
+        );
+    }
 
     return (
         <TVFrame>

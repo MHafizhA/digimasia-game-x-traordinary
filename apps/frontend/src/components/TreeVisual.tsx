@@ -40,7 +40,7 @@ export default function TreeVisual({ stage, size = '100%', isAnimated = true, is
     if (isLevelingUp) {
         anim = 'marioGrowth 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) both';
     } else if (currentStage === 9 && !noEffects) {
-        anim = 'gentleGrowth 3s ease-in-out infinite';
+        anim = 'tvGentleGrowth 3s ease-in-out infinite';
     } else if (isAnimated) {
         // floating gently
         anim = 'floating 3.5s ease-in-out infinite';
@@ -71,6 +71,7 @@ export default function TreeVisual({ stage, size = '100%', isAnimated = true, is
                     transformOrigin: 'bottom center', // crucial for growth animation from the ground
                     position: 'relative',
                     zIndex: 1,
+                    willChange: 'transform, filter',
                 }}
             />
 
@@ -81,7 +82,7 @@ export default function TreeVisual({ stage, size = '100%', isAnimated = true, is
                     100% { transform: translateY(0); }
                 }
                 
-                @keyframes gentleGrowth {
+                @keyframes tvGentleGrowth {
                     0% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 10px rgba(255,215,0,0.5)); }
                     50% { transform: scale(1.15) translateY(-15px); filter: drop-shadow(0 0 45px rgba(255,215,0,1)) brightness(1.2); }
                     100% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 10px rgba(255,215,0,0.5)); }
