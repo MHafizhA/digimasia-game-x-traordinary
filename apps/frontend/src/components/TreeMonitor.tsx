@@ -85,12 +85,12 @@ export default function TreeMonitor() {
 
             setIsLevelingUp(true);
             playStageUp();
-            const t = setTimeout(() => setIsLevelingUp(false), 3000);
+            setTimeout(() => setIsLevelingUp(false), 3000);
             prevStageRef.current = treeStage;
-            return () => clearTimeout(t);
+        } else {
+            prevStageRef.current = treeStage;
         }
-        prevStageRef.current = treeStage;
-    }, [treeStage, playStageUp]);
+    }, [treeStage]);
 
     // --- All hooks are now above. Safe to early-return below. ---
 
@@ -114,9 +114,10 @@ export default function TreeMonitor() {
                 backgroundSize: 'cover', backgroundPosition: 'center',
                 position: 'relative', overflow: 'hidden'
             }}>
-                {/* Inner card overlay with BG1 color */}
+                {/* Inner card overlay with BG1 image */}
                 <div style={{
-                    position: 'absolute', inset: 0, background: 'rgba(126, 200, 227, 0.85)',
+                    position: 'absolute', inset: 0,
+                    background: "url('/assets/branding/BG1.png') center/cover",
                     borderRadius: '20px'
                 }} />
                 <div style={{ position: 'relative', zIndex: 1 }}>

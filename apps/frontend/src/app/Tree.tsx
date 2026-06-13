@@ -158,7 +158,7 @@ export default function Tree() {
             backgroundSize: 'cover',
             backgroundPosition: 'center',
         }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', maxWidth: '400px', width: '100%', textAlign: 'center', marginTop: '20px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', maxWidth: '400px', width: '100%', textAlign: 'center', marginTop: '30px' }}>
                 <div className="card" style={{
                     width: '100%',
                     padding: '24px 20px',
@@ -170,7 +170,7 @@ export default function Tree() {
                     alignItems: 'center',
                     position: 'relative',
                     zIndex: 1,
-                    background: '#7ec8e3', // BG1-inspired soft sky-blue
+                    background: "url('/assets/branding/BG1.png') center/cover",
                 }}>
                     <div style={{ position: 'absolute', top: '-18px', background: 'var(--lime)', padding: '6px 16px', border: '3px solid var(--black)', borderRadius: '100px', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '2px', color: 'var(--black)', boxShadow: '4px 4px 0 var(--black)', fontWeight: 900, transform: 'rotate(-3deg)' }}>
                         WAITING SYSTEM ⏳
