@@ -129,12 +129,15 @@ export default function TreeMonitorExternal() {
     if (phase === 'PRE_WATERING') {
         return (
             <TVFrame>
-                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%' }}>
+                <div style={{
+                    flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', width: '100%',
+                    backgroundImage: "url('/assets/branding/BG2.png')", backgroundSize: 'cover', backgroundPosition: 'center'
+                }}>
                     <div style={{
                         textAlign: 'center', padding: '60px', borderRadius: '20px',
                         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                         minHeight: '300px', border: '5px solid var(--black)', boxShadow: '8px 8px 0 var(--black)',
-                        backgroundImage: "url('/assets/branding/BG2.png')",
+                        backgroundImage: "url('/assets/branding/BG1.png')",
                         backgroundSize: 'cover', backgroundPosition: 'center',
                         position: 'relative', overflow: 'hidden'
                     }}>
