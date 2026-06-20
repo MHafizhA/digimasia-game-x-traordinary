@@ -13,8 +13,8 @@ interface Droplet {
     y: number;
 }
 
-const TOTAL_WATER_GOAL = 100;
-const WATER_PER_STAGE = 10; // 10 stages × 10L
+const TOTAL_WATER_GOAL = 2000;
+const WATER_PER_STAGE = 200; // 10 stages × 200L
 
 export default function Tree() {
     const {

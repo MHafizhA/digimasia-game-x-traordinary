@@ -61,16 +61,76 @@ async function main() {
     // 4. Create Trivia Questions
     console.log('Seeding trivia questions...');
     const questions = [
-        { index: 1, text: 'Apa warna logo Digimasia?', options: JSON.stringify(['Merah', 'Biru', 'Hijau', 'Kuning']), answer: 1 },
-        { index: 2, text: 'Tahun berapa Digimasia didirikan?', options: JSON.stringify(['2010', '2015', '2018', '2020']), answer: 2 },
-        { index: 3, text: 'Apa core value utama kita?', options: JSON.stringify(['Speed', 'Quality', 'Integrity', 'All of above']), answer: 3 },
-        { index: 4, text: 'Siapa CEO Digimasia saat ini?', options: JSON.stringify(['Bapak A', 'Bapak B', 'Bapak C', 'Bapak D']), answer: 0 },
-        { index: 5, text: 'Berapa jumlah divisi di kantor kita?', options: JSON.stringify(['4', '6', '8', '10']), answer: 2 },
-        { index: 6, text: 'Apa tagline event X-Celerate?', options: JSON.stringify(['Move Fast', 'Grow the Tree', 'Shoot for Star', 'Break the Limit']), answer: 1 },
-        { index: 7, text: 'Di kota mana kantor pusat kita?', options: JSON.stringify(['Jakarta', 'Bandung', 'Surabaya', 'Medan']), answer: 0 },
-        { index: 8, text: 'Apa nama maskot kita?', options: JSON.stringify(['Digi', 'Masia', 'Treey', 'Celer']), answer: 0 },
-        { index: 9, text: 'Platform apa yang kita gunakan untuk chat?', options: JSON.stringify(['Slack', 'Discord', 'WhatsApp', 'Teams']), answer: 0 },
-        { index: 10, text: 'Apa pencapaian terbesar kita tahun ini?', options: JSON.stringify(['Project A', 'Project B', 'IPO', 'X-Celerate']), answer: 3 },
+        {
+            index: 1,
+            text: 'Kapan tanggal bulan dan tahun tepannya ulang tahun digima ASIA?',
+            options: JSON.stringify(['14 Juni 2016', '19 Juni 2016', '25 Juni 2016', '26 Juni 2016']),
+            answer: 0
+        },
+        {
+            index: 2,
+            text: 'Huruf “A” pada HEART sebagai core values digima ASIA mewakili…',
+            options: JSON.stringify(['Achievement', 'Accelerated Growth', 'Adaptability', 'Accountability']),
+            answer: 1
+        },
+        {
+            index: 3,
+            text: 'Apa filosofi di balik penulisan “digima ASIA”?',
+            options: JSON.stringify([
+                'digima dengan huruf kecil melambangkan sikap humble dan ASIA dengan huruf kapital mencerminkan visi untuk dikenal di tingkat Asia',
+                'Saat mau membuat logo, ukuran huruf digima tidak sengaja lebih kecil dan akhirnya diteruskan sampai sekarang',
+                'Penulisan ASIA dengan kapital menjadi reminder bahwa mimpi perusahaan lebih besar dari apapun',
+                'Semua jawaban salah'
+            ]),
+            answer: 0
+        },
+        {
+            index: 4,
+            text: 'digimer dengan stastus PKWT mendapatkan benefit untuk memilih hadiah ulang tahun, salah satunya hadiahnya yaitu...',
+            options: JSON.stringify(['Voucher Makan Bakmi Koga', 'Makan Bergizi Gratis', '1 hari libur', 'Sepatu PUMA baru']),
+            answer: 2
+        },
+        {
+            index: 5,
+            text: 'Apa kepanjangan dari MoLeaWiz?',
+            options: JSON.stringify(['Mobile Learning Wizard', 'More Learning Wizards', 'Mobility Learning Wizard', 'Motivated Learners Wizards']),
+            answer: 2
+        },
+        {
+            index: 6,
+            text: 'Jika sebuah perusahaan ingin meningkatkan kompetensi karyawannya dan datang ke digima ASIA, “paket andalan” apa yang bisa kita tawarkan adalah...',
+            options: JSON.stringify([
+                'Seminar, Outing, Gathering',
+                'LaaS, Learning Content Development, Strategic Execution & Implementation',
+                'Podcast, Vlog, Webinar',
+                'Laptop, Proyektor, Wi-Fi'
+            ]),
+            answer: 1
+        },
+        {
+            index: 7,
+            text: 'Jika ada digimers yang selalu memperhatikan kualitas, detail, dan hasil terbaik dalam pekerjaannya, ia sedang menerapkan nilai…',
+            options: JSON.stringify(['Harmony', 'Excellence', 'Teamwork', 'Accelerated Growth']),
+            answer: 1
+        },
+        {
+            index: 8,
+            text: 'Mana yang paling membuat jantung digimers berdebar?',
+            options: JSON.stringify(['Deadline hari ini', 'Meeting mendadak', 'Pesan “Boleh call sebentar?”', 'Semua benar']),
+            answer: 3
+        },
+        {
+            index: 9,
+            text: 'Selama 10 tahun perjalanan digima ASIA, mana yang paling tidak berubah?',
+            options: JSON.stringify(['Semangat untuk terus berkembang', 'Jumlah revisi project', 'Deadline yang selalu menarik', 'Kebutuhan akan kopi']),
+            answer: 0
+        },
+        {
+            index: 10,
+            text: 'Tim manakah yang saat ini memiliki anggota terbanyak di digima ASIA?',
+            options: JSON.stringify(['HR', 'CD', 'CS', 'SE']),
+            answer: 1
+        },
     ];
 
     for (const q of questions) {

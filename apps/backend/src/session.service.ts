@@ -76,8 +76,8 @@ export class SessionService implements OnModuleInit {
         const newTotal = (session?.totalWater || 0) + amount;
 
         // 2. Update DB dalam transaksi (Max 10 stages, exact threshold)
-        let newStage = Math.floor(newTotal / 10);
-        if (newTotal >= 100) newStage = 9;
+        let newStage = Math.floor(newTotal / 200);
+        if (newTotal >= 2000) newStage = 9;
         else if (newStage >= 9) newStage = 8;
         await tx.session.update({
             where: { id: 'singleton' },
@@ -94,8 +94,8 @@ export class SessionService implements OnModuleInit {
     }
 
     private async internalUpdateWater(total: number) {
-        let newStage = Math.floor(total / 10);
-        if (total >= 100) newStage = 9;
+        let newStage = Math.floor(total / 200);
+        if (total >= 2000) newStage = 9;
         else if (newStage >= 9) newStage = 8;
         if (this.state.treeStage !== newStage) {
             this.state.treeStage = newStage;
