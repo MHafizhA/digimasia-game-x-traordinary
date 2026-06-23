@@ -228,6 +228,40 @@ export default function Tree() {
                     </div>
                 </div>
             </div>
+
+            {/* ── HOW TO PLAY ── */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '400px', width: '100%' }}>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '3px', color: 'var(--white)', fontWeight: 700, textAlign: 'center', opacity: 0.8 }}>
+                    — CARA BERMAIN —
+                </div>
+
+                {/* Step 1 */}
+                <div className="card animate-pop-in" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', border: '3px solid var(--black)', boxShadow: '4px 4px 0 var(--black)', animationDelay: '0.1s' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--yellow)', border: '3px solid var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>🧠</div>
+                    <div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '15px', letterSpacing: '1px', color: 'var(--black)' }}>KUMPULKAN AIR</div>
+                        <div style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#444', marginTop: '2px' }}>Jawab trivia dengan benar untuk mendapat droplet air 💧</div>
+                    </div>
+                </div>
+
+                {/* Step 2 */}
+                <div className="card animate-pop-in" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', border: '3px solid var(--black)', boxShadow: '4px 4px 0 var(--black)', animationDelay: '0.2s' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--blue-bright)', border: '3px solid var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>🚿</div>
+                    <div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '15px', letterSpacing: '1px', color: 'var(--black)' }}>SIRAM POHON</div>
+                        <div style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#444', marginTop: '2px' }}>Tap tombol pompa untuk menyiramkan air ke pohon bersama 🌳</div>
+                    </div>
+                </div>
+
+                {/* Step 3 */}
+                <div className="card animate-pop-in" style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', border: '3px solid var(--black)', boxShadow: '4px 4px 0 var(--black)', background: 'var(--lime)', animationDelay: '0.3s' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--black)', border: '3px solid var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>🌱</div>
+                    <div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '15px', letterSpacing: '1px', color: 'var(--black)' }}>TUMBUH BERSAMA!</div>
+                        <div style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: '#333', marginTop: '2px' }}>Semakin banyak kontribusi tim, semakin cepat pohon tumbuh!</div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
     // ── END PRE-GAME ────────────────────────────────────────────────────

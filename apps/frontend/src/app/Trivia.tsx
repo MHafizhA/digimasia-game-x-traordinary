@@ -187,18 +187,56 @@ export default function Trivia() {
 
     // GET READY: show if quiz hasn't started OR phase is back to TRIVIA but quiz already finished
     if (currentQuestion === 0) return (
-        <div style={{ minHeight: 'calc(100dvh - 120px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-            <div className="card card-lime animate-pop-in" style={{ padding: '40px', textAlign: 'center', border: '5px solid var(--black)', boxShadow: '8px 8px 0 var(--black)' }}>
-                <div style={{ fontSize: '48px', marginBottom: '16px' }}>🧠</div>
-                <div style={{ fontFamily: 'var(--font-display)', fontSize: '32px', color: 'var(--black)', letterSpacing: '2px', lineHeight: 1.1 }}>
-                    TRIVIA DIMULAI SEBENTAR LAGI
+        <div style={{ minHeight: 'calc(100dvh - 120px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px 16px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', maxWidth: '440px', width: '100%' }}>
+
+                {/* Hero Title */}
+                <div className="card card-navy animate-pop-in" style={{ textAlign: 'center', padding: '24px 20px', border: '5px solid var(--black)', boxShadow: '8px 8px 0 var(--black)' }}>
+                    <div style={{ fontSize: '40px', marginBottom: '10px' }}>🧠</div>
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '36px', color: 'var(--yellow)', letterSpacing: '3px', textShadow: '2px 2px 0 var(--black)', lineHeight: 1 }}>
+                        TRIVIA TIME!
+                    </div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(255,255,255,0.7)', marginTop: '10px', letterSpacing: '2px', fontWeight: 700 }}>
+                        TUNGGU INSTRUKSI ADMIN UNTUK MULAI
+                    </div>
                 </div>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#333', marginTop: '16px', letterSpacing: '1px', fontWeight: 800 }}>
-                    Tunggu instruksi Admin!
+
+                {/* Tutorial Section */}
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '3px', color: 'var(--white)', fontWeight: 700, textAlign: 'center', opacity: 0.8 }}>
+                    — CARA BERMAIN —
                 </div>
+
+                {/* Step 1 */}
+                <div className="card animate-pop-in" style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '14px 16px', border: '3px solid var(--black)', boxShadow: '5px 5px 0 var(--black)', animationDelay: '0.1s' }}>
+                    <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'var(--pink-hot)', border: '3px solid var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>📖</div>
+                    <div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '16px', letterSpacing: '1px', color: 'var(--black)' }}>BACA PERTANYAAN</div>
+                        <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#444', marginTop: '2px' }}>Bacalah pertanyaan yang muncul dengan teliti sebelum menjawab.</div>
+                    </div>
+                </div>
+
+                {/* Step 2 */}
+                <div className="card animate-pop-in" style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '14px 16px', border: '3px solid var(--black)', boxShadow: '5px 5px 0 var(--black)', animationDelay: '0.2s' }}>
+                    <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'var(--yellow)', border: '3px solid var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>☝️</div>
+                    <div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '16px', letterSpacing: '1px', color: 'var(--black)' }}>PILIH JAWABAN</div>
+                        <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#444', marginTop: '2px' }}>Pilih salah satu dari 4 pilihan. Jawaban bisa diubah selama timer masih berjalan!</div>
+                    </div>
+                </div>
+
+                {/* Step 3 */}
+                <div className="card animate-pop-in" style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '14px 16px', border: '3px solid var(--black)', boxShadow: '5px 5px 0 var(--black)', background: 'var(--lime)', animationDelay: '0.3s' }}>
+                    <div style={{ width: '44px', height: '44px', borderRadius: '50%', background: 'var(--black)', border: '3px solid var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', flexShrink: 0 }}>💧</div>
+                    <div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '16px', letterSpacing: '1px', color: 'var(--black)' }}>CEPAT = POIN LEBIH!</div>
+                        <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#333', marginTop: '2px' }}>Jawaban benar + lebih cepat = lebih banyak droplet air untuk menyiram pohon! 🌳</div>
+                    </div>
+                </div>
+
             </div>
         </div>
     );
+
 
     // REMOVED: Full-page isLoading return to permit Header/Timer to render immediately
 
