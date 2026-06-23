@@ -19,13 +19,21 @@ export default function VotingMonitoringPage() {
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', flex: 1, minHeight: 0 }}>
                     <div className="card" style={{ padding: '20px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                        <div className="section-label" style={{ flexShrink: 0 }}>👥 TEAM NOMINEES</div>
+                        <img
+                            src="/assets/branding/Logo_X-Traordinary Team.png"
+                            alt="Team Nominees"
+                            style={{ height: '60px', width: 'auto', marginBottom: '10px', alignSelf: 'center' }}
+                        />
                         <div style={{ flex: 1, overflowY: 'auto' }}>
                             <NomineeMonitor category="team" />
                         </div>
                     </div>
                     <div className="card" style={{ padding: '20px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                        <div className="section-label" style={{ background: 'var(--blue-bright)', flexShrink: 0 }}>🌟 DIGIMER NOMINEES</div>
+                        <img
+                            src="/assets/branding/Logo_X-Traordinary Digimers.png"
+                            alt="Digimer Nominees"
+                            style={{ height: '60px', width: 'auto', marginBottom: '10px', alignSelf: 'center' }}
+                        />
                         <div style={{ flex: 1, overflowY: 'auto' }}>
                             <NomineeMonitor category="digimer" />
                         </div>

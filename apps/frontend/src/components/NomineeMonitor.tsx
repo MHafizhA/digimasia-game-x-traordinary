@@ -128,15 +128,8 @@ export default function NomineeMonitor({ category }: { category: 'team' | 'digim
                 )}
             </div>
 
-            {/* ── MIDDLE: Header badge row ────────────────────── */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingInline: '2px' }}>
-                <img
-                    src={category === 'team'
-                        ? '/assets/branding/Logo_X-Traordinary Team.png'
-                        : '/assets/branding/Logo_X-Traordinary Digimers.png'}
-                    alt=""
-                    style={{ height: '40px', width: 'auto' }}
-                />
+            {/* ── MIDDLE: Metrics row ────────────────────── */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', paddingInline: '2px' }}>
                 <span style={{
                     fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 700,
                     letterSpacing: '1px', background: 'var(--black)', color: 'white',
