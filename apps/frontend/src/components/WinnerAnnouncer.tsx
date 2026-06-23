@@ -88,7 +88,7 @@ const NomineeList = memo(function NomineeList({ data, accentColor, textColor, ma
                             color: 'var(--black)', letterSpacing: '1px',
                             whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                         }}>{item.name}</div>
-                        {item.division && (
+                        {item.division && type === 'digimer' && (
                             <div style={{
                                 fontFamily: 'var(--font-mono)', fontSize: 'clamp(9px, 0.9vw, 11px)',
                                 color: '#555', letterSpacing: '1px', marginTop: '2px', fontWeight: 600
@@ -189,7 +189,7 @@ const CardNomineeList = memo(function CardNomineeList({ data, accentColor, textC
                     }}>{winner.name}</div>
 
                     {/* Division */}
-                    {winner.division && (
+                    {winner.division && type === 'digimer' && (
                         <div style={{
                             background: 'var(--black)', color: accentColor,
                             padding: '3px 12px', borderRadius: '8px',

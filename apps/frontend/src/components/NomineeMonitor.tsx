@@ -99,7 +99,7 @@ export default function NomineeMonitor({ category }: { category: 'team' | 'digim
                         <div style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: '#888', letterSpacing: '1px', marginBottom: '6px' }}>
                             RECENT VOTERS
                         </div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', maxHeight: '64px', overflowY: 'auto' }}>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', maxHeight: '150px', overflowY: 'auto' }}>
                             {metadata.voterNames.map((name, i) => (
                                 <span key={i} className="badge badge-blue" style={{ animation: 'fadeIn 0.4s ease-out' }}>
                                     {name}
@@ -150,7 +150,7 @@ export default function NomineeMonitor({ category }: { category: 'team' | 'digim
                                 <div className="cand-name" style={{ fontSize: '14px', filter: 'blur(5px)', userSelect: 'none', letterSpacing: '2px', color: '#222' }}>
                                     {'▓▓▓▓▓▓▓'}
                                 </div>
-                                {item.division && (
+                                {item.division && category === 'digimer' && (
                                     <span className="cand-div" style={{ fontSize: '9px', filter: 'blur(4px)', userSelect: 'none' }}>
                                         {'▒▒▒▒▒'}
                                     </span>

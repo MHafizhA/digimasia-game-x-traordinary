@@ -133,7 +133,8 @@ export default function Vote({ type }: { type: 'team' | 'digimer' }) {
                 {candidates.map((c, idx) => {
                     const isSelected = selectedId === c.id;
                     const isVoted = votedId === c.id;
-                    const isOwnTeam = type === 'team' && c.division === user?.division;
+                    // Fix: The DB Candidate ID or Name needs to match the user's explicit division because teams are grouped
+                    const isOwnTeam = type === 'team' && user?.division && c.name.toLowerCase().includes(user.division.toLowerCase());
                     const isSelf = type === 'digimer' && c.id === user?.id;
                     const avatarColor = AVATAR_COLORS[idx % AVATAR_COLORS.length];
                     const isDisabled = Boolean(votedId) || isOwnTeam || isSelf;
@@ -144,18 +145,18 @@ export default function Vote({ type }: { type: 'team' | 'digimer' }) {
                             className={`candidate animate-pop-in${isSelected ? ' selected' : ''}${isDisabled && !isVoted ? ' locked' : ''}`}
                             style={{
                                 position: 'relative',
-                                padding: 'clamp(16px, 4vw, 24px) clamp(10px, 2vw, 16px) clamp(12px, 3vw, 20px)',
+                                padding: type === 'team' ? '12px 8px' : 'clamp(16px, 4vw, 24px) clamp(10px, 2vw, 16px) clamp(12px, 3vw, 20px)',
                                 border: isVoted ? '4px solid var(--navy-dark)' : isSelected ? '4px solid var(--blue-bright)' : '3px solid var(--black)',
                                 background: isVoted ? 'var(--lime)' : isSelected ? 'var(--blue-light)' : 'var(--blue-light)',
                                 opacity: (votedId && c.id !== votedId) ? 0.55 : 1,
                                 filter: (votedId && c.id !== votedId) ? 'grayscale(0.7)' : 'none',
-                                width: 'clamp(140px, 42vw, 180px)',
+                                width: type === 'team' ? 'clamp(140px, 45vw, 280px)' : 'clamp(140px, 42vw, 180px)',
                                 minWidth: '130px',
                                 textAlign: 'center',
                                 display: 'flex',
                                 flexDirection: 'column',
                                 alignItems: 'center',
-                                gap: '12px',
+                                gap: type === 'team' ? '8px' : '12px',
                                 animationDelay: `${idx * 0.05}s`,
                                 cursor: isDisabled ? 'default' : 'pointer',
                                 borderRadius: '16px',
@@ -187,7 +188,7 @@ export default function Vote({ type }: { type: 'team' | 'digimer' }) {
                             {/* Full-width Profile Photo */}
                             <div style={{
                                 width: '100%',
-                                aspectRatio: '1',
+                                aspectRatio: type === 'team' ? '16/9' : '1',
                                 borderRadius: '12px',
                                 border: '3px solid var(--black)',
                                 overflow: 'hidden',
@@ -204,8 +205,8 @@ export default function Vote({ type }: { type: 'team' | 'digimer' }) {
 
                             {/* Name + Division below */}
                             <div>
-                                <div className="cand-name" style={{ fontSize: '14px', lineHeight: '1.2' }}>{c.name}</div>
-                                <span className="cand-div" style={{ marginTop: '6px', display: 'inline-block' }}>{c.division}</span>
+                                <div className="cand-name" style={{ fontSize: type === 'team' ? '12px' : '14px', lineHeight: '1.2' }}>{c.name}</div>
+                                {type === 'digimer' && <span className="cand-div" style={{ marginTop: '6px', display: 'inline-block' }}>{c.division}</span>}
                             </div>
                         </div>
                     );
