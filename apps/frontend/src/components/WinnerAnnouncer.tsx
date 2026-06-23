@@ -168,7 +168,7 @@ const CardNomineeList = memo(function CardNomineeList({ data, accentColor, textC
 
                     {/* Big Photo */}
                     <div style={{
-                        width: type === 'team' ? 'clamp(320px, 56vh, 560px)' : 'clamp(180px, 32vh, 320px)',
+                        width: 'clamp(320px, 56vh, 560px)',
                         height: 'clamp(180px, 32vh, 320px)',
                         borderRadius: '24px', border: `5px solid var(--black)`,
                         overflow: 'hidden', boxShadow: `5px 5px 0 ${accentColor}`,
@@ -366,7 +366,7 @@ const AwardPanel = memo(function AwardPanel({ title, accentColor, textColor = 'v
                         <div style={{ position: 'relative', marginTop: '10px' }}>
                             <div style={{ fontSize: 'clamp(40px, 5vh, 64px)', position: 'absolute', top: '-24px', left: '50%', transform: 'translateX(-50%)', animation: 'crownFloat 2.5s infinite', zIndex: 1 }}>👑</div>
                             <div style={{
-                                width: type === 'team' ? 'clamp(240px, 42vh, 420px)' : 'clamp(140px, 24vh, 240px)',
+                                width: 'clamp(240px, 42vh, 420px)',
                                 height: 'clamp(140px, 24vh, 240px)',
                                 borderRadius: '24px', border: `6px solid var(--black)`,
                                 overflow: 'hidden', boxShadow: `8px 8px 0 ${accentColor}`
