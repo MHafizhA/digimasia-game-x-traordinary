@@ -8,6 +8,7 @@ interface NomineeStats {
     name: string;
     count: number;
     division?: string;
+    imageUrl?: string;
 }
 
 interface ParticipationMetadata {
@@ -133,7 +134,7 @@ export default function NomineeMonitor({ category }: { category: 'team' | 'digim
                                 border: '2px solid var(--black)',
                             }}>
                                 <img
-                                    src={PLACEHOLDER_IMAGES[idx % PLACEHOLDER_IMAGES.length]}
+                                    src={item.imageUrl || PLACEHOLDER_IMAGES[idx % PLACEHOLDER_IMAGES.length]}
                                     alt="Mystery Candidate"
                                     style={{
                                         width: '100%',

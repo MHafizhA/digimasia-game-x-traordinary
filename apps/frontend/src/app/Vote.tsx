@@ -196,7 +196,7 @@ export default function Vote({ type }: { type: 'team' | 'digimer' }) {
                                 boxShadow: '2px 2px 0 var(--black)'
                             }}>
                                 <img
-                                    src={PLACEHOLDER_IMAGES[idx % PLACEHOLDER_IMAGES.length]}
+                                    src={c.imageUrl || PLACEHOLDER_IMAGES[idx % PLACEHOLDER_IMAGES.length]}
                                     alt={c.name}
                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                 />

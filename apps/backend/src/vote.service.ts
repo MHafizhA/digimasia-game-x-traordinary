@@ -66,6 +66,8 @@ export class VoteService {
         return {
             id: winner?.id || '',
             name: winner?.name || 'Unknown',
+            division: winner?.division,
+            imageUrl: winner?.imageUrl,
             count: results[0]._count.id,
         };
     }
