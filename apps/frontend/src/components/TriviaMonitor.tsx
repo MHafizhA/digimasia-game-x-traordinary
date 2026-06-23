@@ -105,6 +105,45 @@ export default function TriviaMonitor({ muteSFX = false }: { muteSFX?: boolean }
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: '16px', color: 'var(--white)', letterSpacing: '4px', fontWeight: 800 }}>
                     KUIS TRIVIA SEGERA DIMULAI
                 </div>
+
+                {/* Tutorial Section untuk Monitor Admin */}
+                <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '10px' }}>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', letterSpacing: '3px', color: 'rgba(255,255,255,0.6)', fontWeight: 700, margin: '10px 0' }}>
+                        — CARA BERMAIN —
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', textAlign: 'left' }}>
+                        {/* Step 1 */}
+                        <div className="card" style={{ padding: '20px', border: '3px solid var(--black)', boxShadow: '5px 5px 0 var(--black)', background: 'var(--white)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--pink-hot)', border: '2px solid var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>📖</div>
+                                <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: 'var(--black)' }}>BACA PERTANYAAN</div>
+                            </div>
+                            <div style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#444' }}>Bacalah pertanyaan yang muncul di layar dengan teliti.</div>
+                        </div>
+
+                        {/* Step 2 */}
+                        <div className="card" style={{ padding: '20px', border: '3px solid var(--black)', boxShadow: '5px 5px 0 var(--black)', background: 'var(--white)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--yellow)', border: '2px solid var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>☝️</div>
+                                <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: 'var(--black)' }}>PILIH JAWABAN</div>
+                            </div>
+                            <div style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#444' }}>Pilih jawaban di hapemu. Bisa diubah selama timer berjalan!</div>
+                        </div>
+
+                        {/* Step 3 */}
+                        <div className="card" style={{ padding: '20px', border: '3px solid var(--black)', boxShadow: '5px 5px 0 var(--black)', background: 'var(--lime)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                                <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--black)', color: 'var(--lime)', border: '2px solid var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>💧</div>
+                                <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: 'var(--black)' }}>CEPAT = MAKIN BESAR!</div>
+                            </div>
+                            <div style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#222' }}>Jawaban benar & makin cepat = air lebih banyak untuk timmu! 🌳</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style={{ width: '80%', height: '2px', background: 'rgba(255,255,255,0.1)', margin: '16px 0' }}></div>
+
                 <button
                     onClick={handleStartTriviaFromMonitor}
                     style={{
