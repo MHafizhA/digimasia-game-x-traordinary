@@ -134,7 +134,7 @@ export default function TreeMonitorExternal() {
                     backgroundImage: "url('/assets/branding/BG2.png')", backgroundSize: 'cover', backgroundPosition: 'center'
                 }}>
                     <div style={{
-                        textAlign: 'center', padding: '60px', borderRadius: '20px',
+                        textAlign: 'center', padding: '30px 20px', borderRadius: '20px',
                         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                         minHeight: '300px', border: '5px solid var(--black)', boxShadow: '8px 8px 0 var(--black)',
                         backgroundImage: "url('/assets/branding/BG1.png')",
@@ -147,6 +147,45 @@ export default function TreeMonitorExternal() {
                         <div style={{ fontFamily: 'var(--font-display)', fontSize: '56px', color: 'var(--yellow)', textShadow: '2px 2px 0 var(--black)', marginTop: '20px', position: 'relative', zIndex: 1, textAlign: 'center' }}>
                             READY FOR THE GROWTH?
                         </div>
+
+                        {/* Tutorial Section untuk Monitor Admin */}
+                        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '16px', margin: '20px 0', position: 'relative', zIndex: 1 }}>
+                            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', letterSpacing: '3px', color: 'rgba(255,255,255,0.6)', fontWeight: 700, margin: '10px 0' }}>
+                                — CARA BERMAIN —
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', textAlign: 'left' }}>
+                                {/* Step 1 */}
+                                <div className="card" style={{ padding: '16px', border: '3px solid var(--black)', boxShadow: '5px 5px 0 var(--black)', background: 'var(--white)' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--yellow)', border: '2px solid var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>🧠</div>
+                                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: 'var(--black)' }}>KUMPULKAN AIR</div>
+                                    </div>
+                                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#444' }}>Kumpulkan droplet air dari sesi Trivia sebelumnya.</div>
+                                </div>
+
+                                {/* Step 2 */}
+                                <div className="card" style={{ padding: '16px', border: '3px solid var(--black)', boxShadow: '5px 5px 0 var(--black)', background: 'var(--white)' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--blue-bright)', border: '2px solid var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>🚿</div>
+                                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: 'var(--black)' }}>SIRAM POHON</div>
+                                    </div>
+                                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#444' }}>Tap terus tombol pompa di hapemu untuk menyiram.</div>
+                                </div>
+
+                                {/* Step 3 */}
+                                <div className="card" style={{ padding: '16px', border: '3px solid var(--black)', boxShadow: '5px 5px 0 var(--black)', background: 'var(--lime)' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                                        <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'var(--black)', color: 'var(--lime)', border: '2px solid var(--black)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>🌱</div>
+                                        <div style={{ fontFamily: 'var(--font-display)', fontSize: '18px', color: 'var(--black)' }}>TUMBUH BERSAMA</div>
+                                    </div>
+                                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#222' }}>Siramanmu membantu pohon tumbuh besar bersama! 🌳</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style={{ width: '80%', height: '2px', background: 'rgba(255,255,255,0.1)', margin: '8px 0', position: 'relative', zIndex: 1 }}></div>
+
                         <button
                             onClick={handleStartWatering}
                             className="btn btn-primary"

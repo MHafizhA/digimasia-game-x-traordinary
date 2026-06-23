@@ -98,7 +98,7 @@ export default function TriviaMonitor({ muteSFX = false }: { muteSFX?: boolean }
             } catch { alert('Gagal start trivia'); }
         };
         return (
-            <div className="card card-navy" style={{ textAlign: 'center', padding: '60px', border: '5px solid var(--black)', boxShadow: '10px 10px 0 var(--black)', borderRadius: '20px', margin: '40px auto', maxWidth: '800px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
+            <div className="card card-navy" style={{ textAlign: 'center', padding: '40px 30px', border: '5px solid var(--black)', boxShadow: '10px 10px 0 var(--black)', borderRadius: '20px', margin: '20px auto', maxWidth: '850px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
                 <div style={{ fontFamily: 'var(--font-display)', fontSize: '56px', color: 'var(--yellow)', textShadow: '3px 3px 0 var(--black)' }}>
                     GET READY!
                 </div>
