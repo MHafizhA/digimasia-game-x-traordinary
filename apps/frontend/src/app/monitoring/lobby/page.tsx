@@ -128,7 +128,7 @@ export default function LobbyMonitorPage() {
                                                 fontFamily: 'var(--font-mono)', fontSize: '7px',
                                                 fontWeight: 800, color: 'var(--black)',
                                                 boxShadow: '1px 1px 0 var(--black)', whiteSpace: 'nowrap',
-                                                maxWidth: `${avatarSize + 16}px`, overflow: 'hidden', textOverflow: 'ellipsis',
+                                                maxWidth: `${avatarSize + 40}px`, textAlign: 'center'
                                             }}>
                                                 {entry.division.toUpperCase()}
                                             </div>
@@ -141,8 +141,7 @@ export default function LobbyMonitorPage() {
                                             fontFamily: 'var(--font-body)', fontSize: nameFontSize,
                                             fontWeight: 800, color: 'var(--black)',
                                             boxShadow: '2px 2px 0 var(--black)',
-                                            textAlign: 'center', maxWidth: '100px',
-                                            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                                            textAlign: 'center', minWidth: '80px', maxWidth: '120px',
                                         }}>
                                             {entry.name.toUpperCase()}
                                         </div>
