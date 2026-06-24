@@ -66,8 +66,6 @@ export default function RegistrationLobby() {
                 flexWrap: 'wrap',
                 gap: '24px',
                 justifyContent: 'center',
-                maxHeight: '450px',
-                overflowY: 'auto',
                 padding: '16px',
                 background: 'rgba(255,255,255,0.05)',
                 border: '2px dashed rgba(0,0,0,0.1)',
